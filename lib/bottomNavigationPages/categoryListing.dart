@@ -103,7 +103,7 @@ class _mainItemListWidgetState extends State<mainItemListWidget> {
           ),
           SizedBox(height: 10,),
           FutureBuilder<List<Item>>(
-            future: bloc.getItems(),
+            future: bloc.itemList,
             builder: (context, snapshot) {
               if (snapshot.connectionState != ConnectionState.done) {
                 //print('project snapshot data is: ${projectSnap.data}');
