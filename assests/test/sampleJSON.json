@@ -1,0 +1,59 @@
+{
+  "data": [
+    {
+      "name": "apple",
+      "primaryKey": 1234456,
+      "imageURL": "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      "unit": "gm",
+      "variations": {
+        "250": 50,
+        "500": 90,
+        "1000": 150
+      }
+    },
+    {
+      "name": "apple",
+      "primaryKey": 1234456,
+      "imageURL": "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      "unit": "gm",
+      "variations": {
+        "250": 50,
+        "500": 90,
+        "1000": 150
+      }
+    },
+    {
+      "name": "apple",
+      "primaryKey": 1234456,
+      "imageURL": "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      "unit": "gm",
+      "variations": {
+        "250": 50,
+        "500": 90,
+        "1000": 150
+      }
+    },
+    {
+      "name": "apple",
+      "primaryKey": 1234456,
+      "imageURL": "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      "unit": "gm",
+      "variations": {
+        "250": 50,
+        "500": 90,
+        "1000": 150
+      }
+    },
+    {
+      "name": "apple",
+      "primaryKey": 1234456,
+      "imageURL": "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      "unit": "gm",
+      "variations": {
+        "250": 50,
+        "500": 90,
+        "1000": 150
+      }
+    }
+  ]
+}
