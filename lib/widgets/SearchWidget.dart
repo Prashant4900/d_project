@@ -28,6 +28,9 @@ class searchWidget extends StatelessWidget {
             builder: (context) => SearchScreen(searchElement: value),
             ),
             );
+            if(searchPage){
+              //do something
+            }
             }
         },
         decoration: InputDecoration(

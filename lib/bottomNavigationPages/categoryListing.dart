@@ -93,7 +93,7 @@ class _mainItemListWidgetState extends State<mainItemListWidget> {
                       crossAxisSpacing: 5.0,
                       mainAxisSpacing: 10.0,
                       children: widget.category.subCategories.map((value){
-                        return subCategoriesWidget(name: value.name, color: value.color,icon: value.icon,);
+                        return subCategoriesWidget(name: value.name, color: value.color,icon: value.icon,sub: value,);
                       }).toList(),
                     ),
                   ],

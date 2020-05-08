@@ -58,16 +58,15 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-//                            Text("₹"+item.marketPrice.toString(), style: TextStyle(
-//                              fontSize: 15.0,
-//                              fontWeight: FontWeight.w300,
-//                              decoration: TextDecoration.lineThrough,
-//                            ),),
-                            SizedBox(width: 10.0,),
                             Padding(
                               padding: EdgeInsets.all(5.0),
                                 child: Text("₹"+item.ourPrice.toString(), style: TextStyle(fontSize: 17.0),)),
+                            Text("₹"+item.marketPrice.toString(), style: TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w300,
+                            ),),
                           ],
                         ),
                         Container(
@@ -82,7 +81,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              InkWell(
+                              count > 0 ? InkWell(
                                 onTap: () {
                                   if(count != 0){
                                     count--;
@@ -90,8 +89,8 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                   bloc.reduceToCart(item.upcCode);
                                 },
                                 child: Icon(Icons.remove, size: 30.0,),
-                              ),
-                              Text(count.toString(), style: TextStyle(fontSize: 20.0),),
+                              ) : SizedBox(),
+                              Text(count == 0 ? "Add to Cart":count.toString(), style: TextStyle(fontSize: 15.0),),
                               InkWell(
                                 onTap: () {
                                   count++;

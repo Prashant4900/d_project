@@ -4,20 +4,20 @@ import 'package:d_project/widgets/SearchWidget.dart';
 import 'package:d_project/utils/scrollBehaviour.dart';
 import 'package:provider/provider.dart';
 import 'package:d_project/utils/listOfItem.dart';
+import 'package:d_project/modals/subCategoryModal.dart';
 
-class SearchScreen extends StatefulWidget {
-  SearchScreen({this.searchElement});
-  @required String searchElement;
+class SubCategoryScreen extends StatefulWidget {
+  SubCategoryScreen({this.sub});
+  @required subCategory sub;
 
 
   @override
-  _SearchScreenState createState() => _SearchScreenState();
+  _SubCategoryScreenState createState() => _SubCategoryScreenState();
 
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SubCategoryScreenState extends State<SubCategoryScreen> {
 
-  String searchValue;
   @override
   Widget build(BuildContext context) {
 
@@ -28,7 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Padding(
           padding: EdgeInsets.only(top: 10.0,right: 10.0, left: 10.0),
           child: FutureBuilder<Widget>(
-            future: getSearchResult(widget.searchElement, context),
+            future: getSearchResult(widget.sub, context),
             builder: (context, snapshot){
               if(snapshot.connectionState != ConnectionState.done){
                 return CircularProgressIndicator();
@@ -43,10 +43,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
 
 
-  Future<Widget> getSearchResult(String query, BuildContext context) async{
+  Future<Widget> getSearchResult(subCategory sub, BuildContext context) async{
     var bloc = Provider.of<ListOfItems>(context);
     var originalList = await bloc.itemList;
-    List short = originalList.where((l) => l.name.contains(query)).toList();
+    List short = originalList.where((l) => true).toList();
     return ListView.builder(
         physics: ClampingScrollPhysics(),
         shrinkWrap: true,

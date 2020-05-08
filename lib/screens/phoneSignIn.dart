@@ -16,6 +16,7 @@ class PhoneSignInScreen extends StatefulWidget {
 }
 
 class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
+  final NumbersnackBar = SnackBar(content: Text('Please Enter a Valid Mobile Number'));
   loginHelper LoginHelper = loginHelper();
   String btnText = "Request OTP";
   String phoneNumber = "";
@@ -47,9 +48,12 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                           padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
                           child: RaisedButton(
                             onPressed: () async{
-                              final progress = ProgressHUD.of(context);
-                              progress.showWithText("Sending OTP");
-                              String result;
+                              Pattern pattern = r'^(?:[+0]9)?[0-9]{10}$';
+                              RegExp regex = new RegExp(pattern);
+                              if (regex.hasMatch(phoneNumber)){
+                                final progress = ProgressHUD.of(context);
+                                progress.showWithText("Sending OTP");
+                                String result;
                                 try{
                                   result = await LoginHelper.sendOTP(phoneNumber);
                                 }
@@ -57,16 +61,20 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                                   print(e);
                                 }
                                 finally{
-                                    progress.dismiss();
-                                    if(result != null){
-                                      var jsonFile = json.decode(result.toString());
-                                      var code = jsonFile["otp"];
-                                      print("Code" + code.toString());
-                                      Navigator.pushReplacement(context, MaterialPageRoute(
-                                          builder: (context) => PinEntryScreen(phoneNumber: phoneNumber),
-                                      ));
-                                    }
-                                  };
+                                  progress.dismiss();
+                                  if(result != null){
+                                    var jsonFile = json.decode(result.toString());
+                                    var code = jsonFile["otp"];
+                                    print("Code" + code.toString());
+                                    Navigator.pushReplacement(context, MaterialPageRoute(
+                                      builder: (context) => PinEntryScreen(phoneNumber: phoneNumber),
+                                    ));
+                                  }
+                                }
+                              }
+                              else{
+                                Scaffold.of(context).showSnackBar(NumbersnackBar);
+                              }
                             },
                             child: Text(
                               btnText,
@@ -88,3 +96,5 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
     );
   }
 }
+
+

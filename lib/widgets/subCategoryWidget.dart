@@ -2,14 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
+import 'package:d_project/modals/subCategoryModal.dart';
 
 class subCategoriesWidget extends StatelessWidget {
-  subCategoriesWidget({Key key, this.color, this.icon, this.name});
+  subCategoriesWidget({Key key, this.color, this.icon, this.name, this.sub});
 
   final Color color;
   final String icon;
   final String name;
-
+  final subCategory sub;
 
 
   @override

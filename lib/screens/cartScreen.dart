@@ -4,6 +4,7 @@ import 'package:d_project/utils/cart_data.dart';
 import 'package:provider/provider.dart';
 import 'package:d_project/modals/itemModal.dart';
 import 'package:d_project/widgets/cartItemView.dart';
+import 'package:d_project/screens/payment.dart';
 
 class CartScreen extends StatefulWidget {
   CartScreen();
@@ -91,7 +92,11 @@ class _CartScreenState extends State<CartScreen> {
                     padding: EdgeInsets.all(10.0),
                     child: RaisedButton(
                       color: Colors.blueGrey,
-                      onPressed: null,
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => MyApp(),
+                        ));
+                      },
                       child: Center(child: Text(bloc.calculateTotalPrice() == 0 ? "Your Cart is empty " : "Place Order", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
                     ),
                   ),

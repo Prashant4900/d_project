@@ -1,4 +1,5 @@
 import 'package:d_project/screens/mainPage.dart';
+import 'package:d_project/screens/phoneSignIn.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/utils/scrollBehaviour.dart';
@@ -16,12 +17,19 @@ class PinEntryScreen extends StatefulWidget {
 }
 
 class _PinEntryScreenState extends State<PinEntryScreen> {
+  final ResendsnackBar = SnackBar(content: Text('Resend OTP'));
+  final InvalidsnackBar = SnackBar(content: Text('OTP Invalid'));
+  final ProperlysnackBar = SnackBar(content: Text('Invalid OTP Format'));
+
+
   final TextEditingController _pinPutController = TextEditingController();
+
   final FocusNode _pinPutFocusNode = FocusNode();
 
   String errorMessage = "Please type the verification code sent to +7999xxxxxx";
   Color boxBorder = Colors.white;
   Color errorText = Colors.black;
+  Color btnColor = Colors.blueAccent;
   int userOTP;
   bool entered = false;
 
@@ -52,10 +60,47 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left:  screenWidth(context, dividedBy: 5), right: screenWidth(context, dividedBy: 5)),
-                      child: onlySelectedBorderPinPut(),
+                      padding: EdgeInsets.only(left:  screenWidth(context, dividedBy: 5), right: screenWidth(context, dividedBy: 5), top: 10.0),
+                      child: Column(
+                        children: <Widget>[
+                          onlySelectedBorderPinPut(),
+                          SizedBox(height: 20.0,),
+                          Container(
+                            padding: EdgeInsets.all(20.0),
+                            width: double.infinity,
+                            child: CircleAvatar(
+                              radius: 30.0,
+                              backgroundColor: btnColor,
+                              child: IconButton(
+                                color: Colors.white,
+                                onPressed: () async{
+                                  final progress = ProgressHUD.of(context);
+                                  progress.showWithText("Verifying OTP");
+                                  if(entered){
+                                    //condition for checking otp
+                                    var result = await LoginHelper.verifyOtp(userOTP.toString(), widget.phoneNumber);
+                                    if(result != -1){
+                                      print("Auth sucess");
+                                      sharedPreferences = await SharedPreferences.getInstance();
+                                      await sharedPreferences.setInt("token", result);
+                                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => MainScreen()), (Route<dynamic> route) => false);
+                                    }
+                                    else{
+                                      Scaffold.of(context).showSnackBar(InvalidsnackBar);
+                                    }
+                                  }
+                                  else{
+                                    Scaffold.of(context).showSnackBar(ProperlysnackBar);
+                                  }
+                                  progress.dismiss();
+                                },
+                                icon: Icon(Icons.arrow_forward, color: Colors.white,semanticLabel: "Submit",),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 40.0,),
                     SizedBox(height: 40.0,),
                     Column(
                       children: <Widget>[
@@ -63,43 +108,26 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                           padding: EdgeInsets.only(left: 20.0, right: 20.0),
                           width: double.infinity,
                           child: RaisedButton(
-                            color: Colors.orange,
+                            color: Colors.deepOrangeAccent,
                             onPressed: () async{
                               final progress = ProgressHUD.of(context);
-                              progress.showWithText("Verifying OTP");
-                              if(entered){
-                                //condition for checking otp
-                                var result = await LoginHelper.verifyOtp(userOTP.toString(), widget.phoneNumber);
-                                if(result != -1){
-                                  print("Auth sucess");
-                                  sharedPreferences = await SharedPreferences.getInstance();
-                                  await sharedPreferences.setInt("token", result);
-                                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => MainScreen()), (Route<dynamic> route) => false);
-                                }
-                                else{
-                                  errorMessage = "Wrong OTP Entered";
-                                  errorText = Colors.red;
-                                  boxBorder = Colors.red;
+                              progress.showWithText("Sending OTP");
+                              String result;
+                              try{
+                                result = await LoginHelper.sendOTP(widget.phoneNumber);
+                              }
+                              catch(e){
+                                print(e);
+                              }
+                              finally{
+                                progress.dismiss();
+                                if(result != null){
+                                  Scaffold.of(context).showSnackBar(ResendsnackBar);
                                 }
                               }
-                              else{
-                                setState(() {
-                                  errorMessage = "Enter OTP Properly";
-                                  errorText = Colors.red;
-                                  boxBorder = Colors.red;
-                                });
-                              }
-                              progress.dismiss();
+
                             },
-                            child: Text("Submit OTP"),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                          width: double.infinity,
-                          child: RaisedButton(
-                            color: Colors.deepOrangeAccent,
-                            onPressed: null,
+
                             child: Text("Resend OTP"),
                           ),
                         ),
@@ -108,7 +136,11 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                           width: double.infinity,
                           child: RaisedButton(
                             color: Colors.deepOrange,
-                            onPressed: () => print("Change Mobile Number"),
+                            onPressed: () {
+                              Navigator.pushReplacement(context, MaterialPageRoute(
+                                builder: (context) => PhoneSignInScreen(),
+                              ));
+                            },
                             child: Text("Change Mobile Number"),
                           ),
                         )

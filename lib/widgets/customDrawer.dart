@@ -5,6 +5,7 @@ import 'package:d_project/screens/helpScreen.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:d_project/screens/mainPage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class CustomDrawer extends StatelessWidget {
   @override
@@ -123,6 +124,13 @@ class CustomDrawer extends StatelessWidget {
                 onTap: () async{
                   final progress = ProgressHUD.of(context);
                   progress.showWithText("Logging out");
+                  try {
+                    var _googleSignIn = GoogleSignIn();
+                    await _googleSignIn.signOut();
+                  } on Exception catch (e) {
+                    print(e);
+                  }
+
                   SharedPreferences sharedPreferences;
                   sharedPreferences = await SharedPreferences.getInstance();
                   sharedPreferences.clear();
