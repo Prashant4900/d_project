@@ -51,24 +51,19 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                         fontSize: 20.0,
                         fontWeight: FontWeight.w300
                     ),),
-
+                    Text(item.unit,overflow: TextOverflow.ellipsis, style: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w300,
+                    ),),
                     buildDropdownButton(item),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
                             Padding(
                               padding: EdgeInsets.all(5.0),
                                 child: Text("₹"+item.ourPrice.toString(), style: TextStyle(fontSize: 17.0),)),
-                            Text("₹"+item.marketPrice.toString(), style: TextStyle(
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.w300,
-                            ),),
-                          ],
-                        ),
                         Container(
 
                           width: 120.0,
@@ -131,6 +126,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
           setState(() {
             widget.item.ourPrice = item.ouuPrice;
             widget.item.upcCode = item.upcCode;
+            widget.item.unit = item.unit;
             this._value = item;
           });
         },

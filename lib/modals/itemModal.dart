@@ -20,7 +20,10 @@ class Item{
         this.upcCode,
         this.brandName,
         this.itemId,
-        this.subItems
+        this.subItems,
+        this.MainCategory,
+        this.unit,
+        this.MainSubCategory,
   }){
     makeSubCategories();
   }
@@ -34,6 +37,9 @@ class Item{
   @required double  ourPrice;
   mainCategory category;
   var subItems;
+  String MainCategory;
+  String MainSubCategory;
+  String unit;
   List<subItem> subItemsList = [];
   bool subCategories = false;
 
@@ -44,7 +50,7 @@ class Item{
       if(rest.length > 0){
         subCategories = true;
         subItemsList = rest.map<subItem>((json) => subItem.fromJson(json)).toList();
-        subItem original = subItem(upcCode: upcCode, ouuPrice: ourPrice);
+        subItem original = subItem(upcCode: upcCode, ouuPrice: ourPrice, unit: unit);
         subItemsList.add(original);
       }
     }
@@ -87,7 +93,11 @@ class Item{
         name: json["main_product"]["item_name"],
         ourPrice: json["main_product"]["price_per_unit"],
         brandName: json["main_product"]["brand_name"],
-        upcCode: json["main_product"]["item_upc"]);
+        upcCode: json["main_product"]["item_upc"],
+        MainCategory : json["main_product"]["category"],
+        unit : json["main_product"]["unit"],
+        MainSubCategory: json["main_product"]["sub_category"]
+    );
   }
 }
 
@@ -110,13 +120,15 @@ class subItem{
   String brandName;
   double ouuPrice;
   String upcCode;
+  String unit;
 
 
   subItem({
     this.name,
     this.brandName,
     this.ouuPrice,
-    this.upcCode
+    this.upcCode,
+    this.unit
 });
 
 
@@ -125,6 +137,7 @@ class subItem{
         name: json["item_name"],
         ouuPrice : json["price_per_unit"],
         brandName: json["brand_name"],
-        upcCode: json["item_upc"]);
+        upcCode: json["item_upc"],
+        unit : json["unit"]);
   }
 }

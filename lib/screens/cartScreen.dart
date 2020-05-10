@@ -94,7 +94,7 @@ class _CartScreenState extends State<CartScreen> {
                       color: Colors.blueGrey,
                       onPressed: (){
                         Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => MyApp(),
+                          builder: (context) => PaymentSuccessfulScreen(),
                         ));
                       },
                       child: Center(child: Text(bloc.calculateTotalPrice() == 0 ? "Your Cart is empty " : "Place Order", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
