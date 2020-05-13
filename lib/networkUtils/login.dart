@@ -35,12 +35,31 @@ class loginHelper{
     print('Response body: ${response.body}');
     if(code == "OTP Valid"){
       print("returned");
-      return 1;
+      return id;
     }
     else{
-      return 1;
+      return null;
     }
   }
+
+  Future<bool> reverifyPhone(String number, String userid) async{
+    var url = 'http://13.127.202.246/api/update_phone';
+    var response = await http.post(url, body: {
+      "user_id" : userid,
+      "phone_no" : number,
+    });
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+    var jsonFile = json.decode(response.body.toString());
+    var error = jsonFile["error"];
+    if(error == true){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
 
 
 }

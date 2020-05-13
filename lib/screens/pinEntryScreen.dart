@@ -26,7 +26,7 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
 
   final FocusNode _pinPutFocusNode = FocusNode();
 
-  String errorMessage = "Please type the verification code sent to +7999xxxxxx";
+  String errorMessage = "Please type the verification code sent to your Mobile Number";
   Color boxBorder = Colors.white;
   Color errorText = Colors.black;
   Color btnColor = Colors.blueAccent;
@@ -79,10 +79,10 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                                   if(entered){
                                     //condition for checking otp
                                     var result = await LoginHelper.verifyOtp(userOTP.toString(), widget.phoneNumber);
-                                    if(result != -1){
+                                    if(result != null){
                                       print("Auth sucess");
                                       sharedPreferences = await SharedPreferences.getInstance();
-                                      await sharedPreferences.setInt("token", result);
+                                      await sharedPreferences.setString("token", result.toString());
                                       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => MainScreen()), (Route<dynamic> route) => false);
                                     }
                                     else{

@@ -1,3 +1,4 @@
+import 'package:d_project/utils/userData.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash/animated_splash.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,8 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create :  (context) => CardData(),),
-      ChangeNotifierProvider(create: (context) => ListOfItems(),)
+      ChangeNotifierProvider(create: (context) => ListOfItems(),),
+      ChangeNotifierProvider(create: (context) => UserData(),)
     ],
     child: MaterialApp(
       theme: ThemeData(

@@ -46,7 +46,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Future<Widget> getSearchResult(String query, BuildContext context) async{
     var bloc = Provider.of<ListOfItems>(context);
     var originalList = await bloc.itemList;
-    List short = originalList.where((l) => l.name.contains(query)).toList();
+    List short = originalList.where((l) => l.name.toLowerCase().contains(query.toLowerCase())).toList();
     return ListView.builder(
         physics: ClampingScrollPhysics(),
         shrinkWrap: true,

@@ -1,3 +1,5 @@
+import 'package:d_project/utils/cart_data.dart';
+import 'package:d_project/utils/userData.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/widgets/categoriesWidget.dart';
@@ -24,20 +26,24 @@ class _MainScreenState extends State<MainScreen> {
   ListOfItems list = new ListOfItems();
   List<int> crack = [0, 1 ,2 , 3, 4, 5, 6, 7];
 
+  UserData userData = UserData();
 
   @override
   void initState() {
     super.initState();
     checkLoginStatus();
+    userData.checkLoginStatus();
   }
 
 
   SharedPreferences sharedPreferences;
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if(sharedPreferences.getInt("token") == null) {
+    if(sharedPreferences.getString("token") == null) {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LandingPage()), (Route<dynamic> route) => false);
     }
+    CardData cartData = CardData();
+    await cartData.SyncMaps();
   }
 
   @override
@@ -61,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
                     children: <Widget>[
                       appbarWidget(()=> _drawerKey.currentState.openDrawer()),
 
-                      Text("Hi, User",textAlign : TextAlign.start, style: TextStyle(
+                      Text(userData.name == null  || userData.name == "" ? "Hi, User" : "Hi, " + userData.name,overflow : TextOverflow.ellipsis,textAlign : TextAlign.start, style: TextStyle(
                         fontSize: 40.0,
                         fontWeight: FontWeight.w200,
                       ),),
@@ -105,7 +111,7 @@ class _MainScreenState extends State<MainScreen> {
                   children: <Widget>[
                     Padding(
                       padding : EdgeInsets.only(left: 15.0),
-                      child: Text("Popular", style: TextStyle(
+                      child: Text("", style: TextStyle(
                           fontSize: 15.0,
                           fontWeight: FontWeight.w500
                       ),),

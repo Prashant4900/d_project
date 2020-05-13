@@ -1,3 +1,9 @@
+import 'dart:ui';
+import 'package:d_project/screens/address.dart';
+import 'package:d_project/screens/previewOrderScreen.dart';
+import 'package:random_string/random_string.dart';
+import 'package:d_project/utils/userData.dart';
+import 'package:d_project/widgets/changeLocationWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/utils/cart_data.dart';
@@ -5,6 +11,9 @@ import 'package:provider/provider.dart';
 import 'package:d_project/modals/itemModal.dart';
 import 'package:d_project/widgets/cartItemView.dart';
 import 'package:d_project/screens/payment.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+import 'addressEntry.dart';
 
 class CartScreen extends StatefulWidget {
   CartScreen();
@@ -20,7 +29,9 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
+    double amount;
     var bloc = Provider.of<CardData>(context);
+    var userData = Provider.of<UserData>(context);
     var cart = bloc.cartItems;
     return Scaffold(
       appBar :widget.backButton ? AppBar(
@@ -43,8 +54,8 @@ class _CartScreenState extends State<CartScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("Deliver to :", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0),),
-                        Text("Address")
+                       userData.selectedAddress != null ? Text("Deliver to : " + userData.selectedAddress.areaDetails + " ," + userData.selectedAddress.city + "," + userData.selectedAddress.pinCode, maxLines: 2, overflow: TextOverflow.ellipsis,):Text("Please provide a delivery address", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0),),
+                      //  Text(address == null ? "" :address.city + " , " + address.pinCode),
                       ],
                     ),
                   ),
@@ -52,25 +63,41 @@ class _CartScreenState extends State<CartScreen> {
                     padding: EdgeInsets.all(10.0),
                     child: RaisedButton(
                         textColor: Colors.blue,
-                        onPressed: ()=>print("Heelo"),
+                        onPressed:() async{
+                          Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AddressListing(),
+                                ));
+                        },
                         child: Text("Change"),
                     ),
                   ),
+
                 ],
               ),
             ),
             Divider(height: 5.0,color: Colors.grey,),
-            Expanded(
-              child: ListView.builder(
-                  physics: ClampingScrollPhysics(),
-                  itemCount: cart.length,
-                  itemBuilder: (context , index){
-                    String currentItem = cart.keys.toList()[index];
-                    int count = cart[currentItem];
-                    return CartItemView(item: currentItem, count: count,);
-                  }),
+            FutureBuilder<Map<Item , int>>(
+              future: bloc.SyncMaps(),
+              builder: (context, snapshot) {
+                if(snapshot.connectionState != ConnectionState.done){
+                  return CircularProgressIndicator();
+                }
+                return Expanded(
+                  child: ListView.builder(
+                      physics: ClampingScrollPhysics(),
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context , index){
+                        Item currentItem = snapshot.data.keys.toList()[index];
+                        int count = cart[currentItem.upcCode];
+                        return CartItemView(item: currentItem, count: count);
+                      }),
+                );
+              }
             ),
             Container(
+
               width: double.infinity,
               color: Colors.lightBlue,
               height: 60.0,
@@ -83,21 +110,50 @@ class _CartScreenState extends State<CartScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("Sumtotal " + "₹" + bloc.calculateTotalPrice().toString(),style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                        Text("Saved " + bloc.calculateSaving().toString(),style: TextStyle(color: Colors.black,)),
+                        FutureBuilder<double>(
+                          future: bloc.calculateTotalPrice(),
+                          builder: (context, snapshot) {
+                            if(snapshot.connectionState != ConnectionState.done){
+                              return Text("Calculating.." ,style: TextStyle(color: Colors.white, fontSize: 20.0),);
+                            }
+                            amount = snapshot.data;
+                            return Text("Sumtotal " + "₹" + snapshot.data.toString(),style: TextStyle(color: Colors.white, fontSize: 20.0),);
+                          }
+                        ),
                       ],
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(10.0),
-                    child: RaisedButton(
-                      color: Colors.blueGrey,
-                      onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => PaymentSuccessfulScreen(),
-                        ));
-                      },
-                      child: Center(child: Text(bloc.calculateTotalPrice() == 0 ? "Your Cart is empty " : "Place Order", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
+                    child: FutureBuilder<double>(
+                      future: bloc.calculateTotalPrice(),
+                      builder: (context, snapshot) {
+                        if(snapshot.connectionState != ConnectionState.done){
+                          return RaisedButton(
+                            color: Colors.blueGrey,
+                            onPressed: null,
+                            child: Center(child: Text("Your Cart is empty ", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
+                          );
+                        }
+                        return RaisedButton(
+                          color: Colors.blueGrey,
+                          onPressed: (){
+                           if(userData.selectedAddress != null){
+                             Navigator.push(context, MaterialPageRoute(
+                               //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
+                                 builder: (context) => PreviewOrder(userid: userData.userid.toString(),amount: amount.toString(),orderid: createOrderId()),
+                             ));
+                           }
+                           else{
+                             Scaffold.of(context).showSnackBar(SnackBar(
+                               content: Text("Please Enter Address"),
+                             ));
+
+                           }
+                          },
+                          child: Center(child: Text("Proceed to Payment", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
+                        );
+                      }
                     ),
                   ),
                 ],
@@ -107,5 +163,13 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
     );
+  }
+
+  String createOrderId(){
+    String orderId = '';
+    orderId += randomAlpha(4).toUpperCase();
+    orderId += "20";
+    orderId += randomNumeric(6);
+    return orderId;
   }
 }

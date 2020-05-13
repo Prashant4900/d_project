@@ -1,3 +1,4 @@
+import 'package:d_project/utils/userData.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/screens/orderScreen.dart';
 import 'package:d_project/screens/contactUsScreen.dart';
@@ -8,6 +9,7 @@ import 'package:d_project/screens/mainPage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class CustomDrawer extends StatelessWidget {
+  UserData userData = UserData();
   @override
   Widget build(BuildContext context) {
     return ProgressHUD(
@@ -18,10 +20,10 @@ class CustomDrawer extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: <Widget>[
               UserAccountsDrawerHeader(
-                accountName: Text('Some User'),
-                accountEmail: Text("email@email.com"),
+                accountName: Text(userData.phoneNo == null ? "" : userData.phoneNo),
+                accountEmail: Text(userData.name == null || userData.name == ""  ? "User" : userData.name, overflow: TextOverflow.ellipsis,),
                 currentAccountPicture: CircleAvatar(
-                  child: Text("S", style: TextStyle(fontSize: 40.0),),
+                  child: Text(userData.name == null || userData.name == "" ? "U" : userData.name.substring(0,1), style: TextStyle(fontSize: 40.0),),
                 ),
                 decoration: BoxDecoration(
                   color: Colors.red,

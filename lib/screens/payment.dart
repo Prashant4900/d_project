@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:d_project/screens/paymentDoneScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:random_string/random_string.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
@@ -133,6 +136,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
 }
 
 class PaymentSuccessfulScreen extends StatefulWidget {
+
+  PaymentSuccessfulScreen({
+    this.orderId,
+    this.userId,
+    this.amount,
+});
+
+  String orderId;
+  String userId;
+  String amount;
   @override
   _PaymentSuccessfulScreenState createState() => _PaymentSuccessfulScreenState();
 }
@@ -148,16 +161,23 @@ class _PaymentSuccessfulScreenState extends State<PaymentSuccessfulScreen> {
       data = data.replaceAll("\\n", "");
       data = data.replaceAll("\\", "");
       data = "{" + data + "}";
-      print(data);
       var decodedJSON = jsonDecode(data);
       print(decodedJSON);
       final error = decodedJSON["error"];
       final order_id = decodedJSON["order_id"];
-      if (error != false) {
+      print(error);
+      if (error == "false") {
         print("Success");
+        Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context) => PaymentDoneScreen(success : true, orderId: order_id, amount: widget.amount,customerId: widget.userId,),
+        ));
         dispose();
-      } else {
-        print("Unsucessful");
+      }
+      else {
+        Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context) => PaymentDoneScreen(success : false),
+        ));
+        dispose();
       }
       this.setState((){});
     });
@@ -165,17 +185,21 @@ class _PaymentSuccessfulScreenState extends State<PaymentSuccessfulScreen> {
 
 
 
+
+
   WebViewController _webController;
 
   String hashPrime;
+
+  bool loading = true;
 
   Future<void> createHash() async{
     final response = await http.post(PAYMENT_URL, headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     }, body: {
-      "amount": '20.00',
-      "order_id": 'this12w345689',
-      "customer_id": '1'
+      "amount": widget.amount,
+      "order_id": widget.orderId,
+      "customer_id": widget.userId
     });
     var data = json.decode(response.body);
     var hash = data['CHECKSUMHASH'];
@@ -184,12 +208,13 @@ class _PaymentSuccessfulScreenState extends State<PaymentSuccessfulScreen> {
     print(hashPrime.length);
   }
 
+
   String _loadHTML() {
-    return "<html> <body onload='document.f.submit();'> <form id='f' name='f' method='post' action='https://securegw-stage.paytm.in/theia/processTransaction'>"
+    return "<html> <body onload='document.f.submit();'><h1>Redirecting to Payment Gateway</h1> <form id='f' name='f' method='post' action='https://securegw-stage.paytm.in/theia/processTransaction'>"
         "<input type='hidden' name='MID' value='hRKZHE36260544645209'/>" +
-        "<input  type='hidden' name='ORDER_ID' value='this12w345689' />" +
-        "<input  type='hidden' name='TXN_AMOUNT' value='20.00' />" +
-        "<input  type='hidden' name='CUST_ID' value='1' />" +
+        "<input  type='hidden' name='ORDER_ID' value='${widget.orderId}' />" +
+        "<input  type='hidden' name='TXN_AMOUNT' value='${widget.amount}' />" +
+        "<input  type='hidden' name='CUST_ID' value='${widget.userId}' />" +
         "<input  type='hidden' name='INDUSTRY_TYPE_ID' value='Retail' />" +
         "<input  type='hidden' name='WEBSITE' value='WEBSTAGING' />" +
         "<input  type='hidden' name='CHANNEL_ID' value='WEB' />" +
@@ -223,7 +248,6 @@ class _PaymentSuccessfulScreenState extends State<PaymentSuccessfulScreen> {
                         .toString());
               },
               onPageFinished: (page) {
-                print(page);
                 if (page.contains("/handle_app_request")){
                   print("This triggered");
                   print(_webController.toString());

@@ -1,3 +1,4 @@
+import 'package:d_project/utils/userData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'changeLocationWidget.dart';
@@ -16,6 +17,7 @@ class appbarWidget extends StatefulWidget {
 }
 
 class _appbarWidgetState extends State<appbarWidget> {
+  UserData userData = UserData();
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CardData>(context);
@@ -41,7 +43,7 @@ class _appbarWidgetState extends State<appbarWidget> {
               children: <Widget>[
                 Text("Location ▼"),
                 Text(
-                  "Indore, Madhya Pradesh",
+                  userData.selectedAddress != null ? userData.selectedAddress.city + "," + userData.selectedAddress.pinCode: "Indore, Madhya Pradesh",
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
               ],

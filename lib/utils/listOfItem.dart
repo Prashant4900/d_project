@@ -14,11 +14,12 @@ class ListOfItems with ChangeNotifier{
 
   ListOfItems._internal(){
     itemList = getItems();
+    itemList.then((val) => itemListStatic = val);
   }
 
   Future<List<Item>> itemList;
 
-
+  List<Item> itemListStatic;
 
   Future<List<Item>> getItems() async{
     List<Item> itemList1;

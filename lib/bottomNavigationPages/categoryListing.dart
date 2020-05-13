@@ -123,7 +123,10 @@ class _mainItemListWidgetState extends State<mainItemListWidget> {
                     shrinkWrap: true,
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext ctxt, int index){
-                      return itemCardCategoryPage(item: snapshot.data[index],);
+                      if(snapshot.data[index].MainCategory.toString().toLowerCase().contains(widget.category.searchToken)){
+                        return itemCardCategoryPage(item: snapshot.data[index],);
+                      }
+                      return SizedBox();
                     }),
               );
             }

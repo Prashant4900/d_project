@@ -37,7 +37,7 @@ class searchWidget extends StatelessWidget {
           prefixIcon: Icon(Icons.search),
           border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
           hintText: 'Search your item',
-          contentPadding: EdgeInsets.only(top: 10.0),
+          contentPadding: EdgeInsets.only(top: 15.0),
         ),
       ),
     );

@@ -22,13 +22,13 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(title: Text("Search Results", overflow: TextOverflow.fade,),),
+      appBar: AppBar(title: Text(widget.sub.name, overflow: TextOverflow.fade,),),
       body: ScrollConfiguration(
         behavior: MyBehavior(),
         child: Padding(
           padding: EdgeInsets.only(top: 10.0,right: 10.0, left: 10.0),
           child: FutureBuilder<Widget>(
-            future: getSearchResult(widget.sub, context),
+            future: getSearchResult(widget.sub.searchToken, context),
             builder: (context, snapshot){
               if(snapshot.connectionState != ConnectionState.done){
                 return CircularProgressIndicator();
@@ -43,18 +43,18 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
 
 
 
-  Future<Widget> getSearchResult(subCategory sub, BuildContext context) async{
+  Future<Widget> getSearchResult(String sub, BuildContext context) async{
     var bloc = Provider.of<ListOfItems>(context);
     var originalList = await bloc.itemList;
-    List short = originalList.where((l) => true).toList();
+    List short = originalList.where((l) => l.MainSubCategory.toLowerCase().contains(sub)).toList();
+    if(short.length == 0){
+      return Center(child: Text("No Products Found", style: TextStyle(fontSize: 20.0),));
+    }
     return ListView.builder(
         physics: ClampingScrollPhysics(),
         shrinkWrap: true,
         itemCount: short.length,
         itemBuilder: (BuildContext ctxt, int index){
-          if(short.length == 0){
-            return Text("No Products Found");
-          }
           return itemCardCategoryPage(item: short[index],);
         });
   }

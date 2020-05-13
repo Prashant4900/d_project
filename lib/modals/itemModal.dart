@@ -32,9 +32,9 @@ class Item{
   @required String upcCode;
   @required String name;
   String brandName;
-  @required int itemId;
+  int itemId;
   double marketPrice;
-  @required double  ourPrice;
+  double  ourPrice;
   mainCategory category;
   var subItems;
   String MainCategory;

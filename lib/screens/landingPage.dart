@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'mainPage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -17,6 +18,9 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  bool termsAndConditionCheck = false;
+
+
   final EmailsnackBar = SnackBar(content: Text('Google Login Failed!'));
   final NumbersnackBar = SnackBar(content: Text('Enter a valid Mobile Number'));
   SharedPreferences sharedPreferences;
@@ -26,6 +30,7 @@ class _LandingPageState extends State<LandingPage> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -55,6 +60,24 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                   Column(
                     children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Checkbox(
+                            value: termsAndConditionCheck,
+                            onChanged: (bool val){
+                              setState(() {
+                                termsAndConditionCheck = val;
+                              });
+                            },
+                          ),
+                          Text("Accept"),
+                          InkWell(
+                            onTap: _launchURL,
+                            child: Text(" Terms and Conditons", style: TextStyle(color: Colors.blue),),
+                          )
+                        ],
+                      ),
                       Container(
                         height: 40.0,
                         width: double.infinity,
@@ -68,12 +91,19 @@ class _LandingPageState extends State<LandingPage> {
                             ),
                           ),
                           onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PhoneSignInScreen(),
-                                ),
-                              );
+                              if(termsAndConditionCheck){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PhoneSignInScreen(),
+                                  ),
+                                );
+                              }
+                              else{
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text("Please accept Terms and Conditions"),
+                                ));
+                              }
                           },
                           elevation: 10.0,
                         ),
@@ -92,36 +122,43 @@ class _LandingPageState extends State<LandingPage> {
                             ),
                           ),
                           onPressed: () async {
-                            var _googleSignIn = GoogleSignIn();
-                            GoogleSignInAccount user =
-                                await _googleSignIn.signIn();
-                            if (user != null) {
-                              var url = 'http://13.127.202.246/api/create_user';
-                              var response = await http.post(url, body: {
-                                "user_id": user.id,
-                                "user_name": user.displayName
-                              });
-                              var jsonFile =
-                                  json.decode(response.body.toString());
-                              var error = jsonFile["error"];
-                              if (error !=  "False") {
-                                var id = jsonFile["customer_id"];
-                                sharedPreferences = await SharedPreferences.getInstance();
-                                await sharedPreferences.setInt("token", id);
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            MainScreen()),
-                                    (Route<dynamic> route) => false);
+                            if(termsAndConditionCheck){
+                              var _googleSignIn = GoogleSignIn();
+                              GoogleSignInAccount user =
+                              await _googleSignIn.signIn();
+                              if (user != null) {
+                                var url = 'http://13.127.202.246/api/create_user';
+                                var response = await http.post(url, body: {
+                                  "user_id": user.id,
+                                  "user_name": user.displayName
+                                });
+                                var jsonFile =
+                                json.decode(response.body.toString());
+                                var error = jsonFile["error"];
+                                if (error !=  "False") {
+                                  var id = jsonFile["customer_id"];
+                                  sharedPreferences = await SharedPreferences.getInstance();
+                                  await sharedPreferences.setString("token", id);
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              MainScreen()),
+                                          (Route<dynamic> route) => false);
+                                }
                               }
-                            }
-                            Scaffold.of(context).showSnackBar(EmailsnackBar);
+                              Scaffold.of(context).showSnackBar(EmailsnackBar);
 //                            Navigator.push(
 //                              context,
 //                              MaterialPageRoute(
 //                                builder: (context) => PhoneSignInScreen(),
 //                              ),
 //                            );
+                            }
+                            else{
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text("Please accept Terms and Conditions"),
+                              ));
+                            }
                           },
                           elevation: 10.0,
                         ),
@@ -135,5 +172,16 @@ class _LandingPageState extends State<LandingPage> {
         ),
       ),
     );
+  }
+
+  _launchURL() async {
+    print("OnTap Clicked");
+    const url = 'http://13.127.202.246/terms';
+    await launch(url);
+//    if (await canLaunch(url)) {
+//      await launch(url);
+//    } else {
+//      throw 'Could not launch $url';
+//    }
   }
 }

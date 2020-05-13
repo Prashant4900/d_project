@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:d_project/modals/subCategoryModal.dart';
+import 'package:d_project/screens/subCategoryScreen.dart';
 
 class subCategoriesWidget extends StatelessWidget {
   subCategoriesWidget({Key key, this.color, this.icon, this.name, this.sub});
@@ -22,7 +23,12 @@ class subCategoriesWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: InkWell(
-        onTap: null,
+        onTap: () =>Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SubCategoryScreen(sub: sub),
+          ),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

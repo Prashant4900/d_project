@@ -31,7 +31,7 @@ class _HelpScreenState extends State<HelpScreen> {
                     )
                   ],
                 ),
-               Text("Here We Will Provide Users help")
+               Center(child: Text("Here We Will Provide Users help"))
               ],
             ),
           ),

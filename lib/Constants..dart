@@ -1,4 +1,4 @@
-const PAYMENT_URL = "YOUR_FUNCTIONS_URL/payment";
+const PAYMENT_URL = "http://13.127.202.246/api/generate_checksum";
 
 const ORDER_DATA = {
   "custID": "USER_1122334455",

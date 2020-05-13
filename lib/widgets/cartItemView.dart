@@ -4,12 +4,14 @@ import 'package:d_project/modals/itemModal.dart';
 import 'package:provider/provider.dart';
 import 'package:d_project/utils/cart_data.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 class CartItemView extends StatelessWidget {
   CartItemView({this.item, this.count});
 
-  String item;
-  final int count;
+  int count;
+  Item item;
 
   @override
   Widget build(BuildContext context) {
@@ -31,56 +33,68 @@ class CartItemView extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              CircleAvatar(child: Icon(Icons.category), radius: 40.0,),
+              CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: CachedNetworkImage(
+                imageUrl: item.imagePath,
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ), radius: 40.0,),
               Container(
                 width: screenWidth(context, dividedBy: 1.5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(item+ " x ", style: TextStyle(fontSize: 20.0),),
-                        Text("₹" + (bloc.cartItems[item] * 1).toString(), style: TextStyle(fontSize: 18.0)),
-                        Container(
-                          padding: EdgeInsets.all(2.0),
-                          width: 120.0,
-                          margin: EdgeInsets.only(top: 10.0,),
-                          decoration: BoxDecoration(
-                            color: Colors.black26,
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              InkWell(
-                                onTap: ()=>bloc.reduceToCart(item),
-                                child: Icon(Icons.remove, size: 30.0,),
-                              ),
-                              Text(bloc.cartItems[item] == null ? '0' : bloc.cartItems[item].toString(), style: TextStyle(fontSize: 20.0),),
-                              InkWell(
-                                onTap:() => bloc.addToCart(item),
-                                child: Icon(Icons.add , size: 30.0),
-                              ),
+                    Container(
+                      width : screenWidth(context, dividedBy: 2.4),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(item.name, style: TextStyle(fontSize: 15.0),overflow: TextOverflow.ellipsis,),
+                          Text((item.unit).toString(), style: TextStyle(fontSize: 12.0)),
+                          Text("₹" + (item.ourPrice * count).toString(), style: TextStyle(fontSize: 12.0)),
+                          Container(
+                            padding: EdgeInsets.all(2.0),
+                            width: 120.0,
+                            margin: EdgeInsets.only(top: 10.0,),
+                            decoration: BoxDecoration(
+                              color: Colors.black26,
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                InkWell(
+                                  onTap: ()=>bloc.reduceToCart(item.upcCode),
+                                  child: Icon(Icons.remove, size: 25.0,),
+                                ),
+                                Text(bloc.cartItems[item.upcCode] == null ? '0' : bloc.cartItems[item.upcCode].toString(), style: TextStyle(fontSize: 15.0),),
+                                InkWell(
+                                  onTap:() => bloc.addToCart(item.upcCode),
+                                  child: Icon(Icons.add , size: 25.0),
+                                ),
 
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
 
-                      ],
+                        ],
+                      ),
                     ),
                     Container(
                       height: double.infinity,
                       width: 80.0,
                       child: InkWell(
-                          onTap: ()=> bloc.clear(item),
+                          onTap: ()=> bloc.clear(item.upcCode),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Icon(Icons.remove_shopping_cart, size: 30.0,),
-                              Text("REMOVE")
+                              Icon(Icons.remove_shopping_cart, size: 20.0,color: Colors.redAccent,) ,
+                              Padding(
+                                padding: EdgeInsets.all(5.0),
+                                  child: Text("REMOVE", style: TextStyle(fontSize: 10, color: Colors.redAccent),))
                             ],
                           )),
                     )
