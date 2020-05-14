@@ -1,5 +1,7 @@
+import 'package:d_project/modals/itemModal.dart';
 import 'package:d_project/utils/cart_data.dart';
 import 'package:d_project/utils/userData.dart';
+import 'package:d_project/widgets/ItemCardCategoryPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/widgets/categoriesWidget.dart';
@@ -48,6 +50,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var bloc = Provider.of<ListOfItems>(context);
     return Scaffold(
       key : _drawerKey,
       resizeToAvoidBottomPadding: false,
@@ -111,27 +114,41 @@ class _MainScreenState extends State<MainScreen> {
                   children: <Widget>[
                     Padding(
                       padding : EdgeInsets.only(left: 15.0),
-                      child: Text("", style: TextStyle(
+                      child: Text("Popular", style: TextStyle(
                           fontSize: 15.0,
                           fontWeight: FontWeight.w500
                       ),),
                     ),
                     SizedBox(height: 10.0,),
                     Container(
-                      height: 150.0,
-                      child: ListView(
-                        shrinkWrap: true,
-                        physics: ClampingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        children: <Widget>[
-//                          PopularWidget(item: list.itemList[0],),
-//                          PopularWidget(item: list.itemList[0],),
-//                          PopularWidget(item: list.itemList[0],),
-//                          PopularWidget(item: list.itemList[0],),
-//                          PopularWidget(item: list.itemList[0],),
-//                          PopularWidget(item: list.itemList[0],),
-                        ],
-                      ),
+                      height: 180.0,
+                      child: FutureBuilder<List<Item>>(
+                          future: bloc.itemList,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState != ConnectionState.done) {
+                              //print('project snapshot data is: ${projectSnap.data}');
+                              return SizedBox(
+                                width: 10.0,
+                                height: 120.0,
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.cyan,
+                                  strokeWidth: 5,
+                                ),
+                              );
+                            }
+                            return Padding(
+                              padding: EdgeInsets.only(left : 10.0, right: 10.0),
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  physics: ClampingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (BuildContext ctxt, int index){
+                                      return itemCardCategoryPage(item: snapshot.data[index],);
+                                  }),
+                            );
+                          }
+                      )
                     ),
                   ],
                 )

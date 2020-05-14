@@ -27,6 +27,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+
   @override
   Widget build(BuildContext context) {
     double amount;
@@ -106,55 +107,20 @@ class _CartScreenState extends State<CartScreen> {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(left : 10.0),
-                    child : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        FutureBuilder<double>(
-                          future: bloc.calculateTotalPrice(),
-                          builder: (context, snapshot) {
-                            if(snapshot.connectionState != ConnectionState.done){
-                              return Text("Calculating.." ,style: TextStyle(color: Colors.white, fontSize: 20.0),);
-                            }
-                            amount = snapshot.data;
-                            return Text("Sumtotal " + "₹" + snapshot.data.toString(),style: TextStyle(color: Colors.white, fontSize: 20.0),);
-                          }
-                        ),
-                      ],
-                    ),
+                    child : Text("Sumtotal " + "₹" + bloc.sumTotal.toString(),style: TextStyle(color: Colors.white, fontSize: 20.0),),
                   ),
                   Padding(
                     padding: EdgeInsets.all(10.0),
-                    child: FutureBuilder<double>(
-                      future: bloc.calculateTotalPrice(),
-                      builder: (context, snapshot) {
-                        if(snapshot.connectionState != ConnectionState.done){
-                          return RaisedButton(
-                            color: Colors.blueGrey,
-                            onPressed: null,
-                            child: Center(child: Text("Your Cart is empty ", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
-                          );
-                        }
-                        return RaisedButton(
+                    child: RaisedButton(
                           color: Colors.blueGrey,
                           onPressed: (){
-                           if(userData.selectedAddress != null){
                              Navigator.push(context, MaterialPageRoute(
                                //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
                                  builder: (context) => PreviewOrder(userid: userData.userid.toString(),amount: amount.toString(),orderid: createOrderId()),
                              ));
-                           }
-                           else{
-                             Scaffold.of(context).showSnackBar(SnackBar(
-                               content: Text("Please Enter Address"),
-                             ));
-
-                           }
                           },
                           child: Center(child: Text("Proceed to Payment", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
-                        );
-                      }
-                    ),
+                        ),
                   ),
                 ],
               ),

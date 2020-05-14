@@ -21,6 +21,12 @@ class _OrderScreenState extends State<OrderScreen> {
   UserData userData = UserData();
 
   @override
+  void initState() {
+    userData.checkLoginStatus();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
@@ -41,7 +47,7 @@ class _OrderScreenState extends State<OrderScreen> {
                     onPressed: ()=>Navigator.pop(context),
                   ),
                 ],),
-                userData.orderList.length == 0 ? Center(child: Text("No saved Address"),) : ListView.builder(
+                userData.orderList.length == 0 ? Center(child: Text("No Orders"),) : ListView.builder(
                   physics: ClampingScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: userData.orderList.length,

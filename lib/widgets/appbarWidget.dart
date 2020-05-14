@@ -64,21 +64,43 @@ class _appbarWidgetState extends State<appbarWidget> {
                     Icons.shopping_cart,
                     size: 35.0,
                   ),
-                  Padding(
-                      padding: const EdgeInsets.only(left: 2.0),
-                      child: CircleAvatar(
-                        radius: 8.0,
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                        child: Text(
-                          bloc.cartSize().toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12.0,
+                  FutureBuilder<int>(
+                    future: bloc.cartSize(),
+                    builder: (context, snapshot) {
+                      if(snapshot.connectionState != ConnectionState.done){
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 2.0),
+                          child: CircleAvatar(
+                            radius: 8.0,
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            child: Text(
+                              "",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12.0,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
+                        );
+                      }
+                      return Padding(
+                          padding: const EdgeInsets.only(left: 2.0),
+                          child: CircleAvatar(
+                            radius: 8.0,
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            child: Text(
+                              snapshot.data == 0 ? "" : snapshot.data.toString(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12.0,
+                              ),
+                            ),
+                          ),
+                        );
+                    }
+                  ),
                 ],
               )),
         ],

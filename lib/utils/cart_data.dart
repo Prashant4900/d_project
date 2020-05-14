@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CardData with ChangeNotifier{
   ListOfItems listOfItems = ListOfItems();
-  var sumTotal = 0;
+  int sumTotal = 0;
 
 
   static final CardData _cartData = CardData._internal();
@@ -19,10 +19,12 @@ class CardData with ChangeNotifier{
 
   CardData._internal(){
     getCardData();
+    calculateTotalPrice();
   }
 
 
   String userid;
+  double totalAmount = 0;
 
    void getCardData() async{
     print("GetCardData Called");
@@ -61,11 +63,14 @@ class CardData with ChangeNotifier{
         item.then((val){
           print(val.toString());
           if(val != null){
-            mainCartItems[val] = v;
+            if(v != 0){
+              mainCartItems[val] = v;
+            }
           }
         });
       }
     });
+    print(totalAmount.toString());
     return mainCartItems;
   }
 
@@ -100,49 +105,57 @@ class CardData with ChangeNotifier{
     } else {
       cartItems[upcCode] = 1;
     }
-    updateCart(upcCode,cartItems[upcCode]);
+    await updateCart(upcCode,cartItems[upcCode]);
+    calculateTotalPrice();
     notifyListeners();
   }
 
 
 
-  void clear(String upcCode) {
+  void clear(String upcCode) async{
       cartItems.remove(upcCode);
+      calculateTotalPrice();
       notifyListeners();
-      updateCart(upcCode,0);
+      await updateCart(upcCode,0);
   }
 
 
 
-  void reduceToCart(String upcCode) {
+  void reduceToCart(String upcCode) async{
     if (cartItems.containsKey(upcCode)) {
       if(cartItems[upcCode] > 1){
         cartItems[upcCode] -= 1;
-        updateCart(upcCode,cartItems[upcCode]);
+        await updateCart(upcCode,cartItems[upcCode]);
       }
-      if(cartItems[upcCode] == 1){
+      else if(cartItems[upcCode] == 1){
         clear(upcCode);
       }
     } else {
       clear(upcCode);
     }
+    calculateTotalPrice();
     notifyListeners();
   }
 
-  Future<double> calculateTotalPrice()  async{
-    Map<Item, int> itemListProduct = await SyncMaps();
-    double totalPrice = 0;
-      var list = itemListProduct.keys.toList();
+  void calculateTotalPrice()  async{
+    Future<Map<Item, int>> itemListProduct = SyncMaps();
+    itemListProduct.then((itemList){
+      double totalPrice = 0;
+      var list = itemList.keys.toList();
       if(list.length > 0){
         for (int i = 0; i < cartItems.length; i++) {
-          totalPrice += list[i].ourPrice * itemListProduct[list[i]];
+          print(i.toString() + " " + list[i].ourPrice.toString() + " " +  itemList[list[i]].toString());
+          totalPrice += list[i].ourPrice * itemList[list[i]];
+          print("Total Price" + totalPrice.toString());
         }
       }
-    return totalPrice;
+      totalAmount = totalPrice;
+    });
   }
 
-  int cartSize(){
-    return cartItems.length;
+  Future<int> cartSize() async{
+    Map<Item, int> itemListProduct = await SyncMaps();
+    return itemListProduct.length;
   }
 
   double calculateSaving(){
@@ -158,7 +171,7 @@ class CardData with ChangeNotifier{
   }
 
 
-  void updateCart(String upcCode, int qty) async{
+  Future<void> updateCart(String upcCode, int qty) async{
     var url = 'http://13.127.202.246/api/update_cart';
     try{
       var response = await http.post(url, body: {

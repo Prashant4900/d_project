@@ -124,8 +124,9 @@ class _LandingPageState extends State<LandingPage> {
                           onPressed: () async {
                             if(termsAndConditionCheck){
                               var _googleSignIn = GoogleSignIn();
-                              GoogleSignInAccount user =
-                              await _googleSignIn.signIn();
+                              Future<bool> status = _googleSignIn.isSignedIn();
+                              status.then((val) => val == true ? _googleSignIn.signOut() : 2+ 2);
+                              GoogleSignInAccount user = await _googleSignIn.signIn();
                               if (user != null) {
                                 var url = 'http://13.127.202.246/api/create_user';
                                 var response = await http.post(url, body: {
@@ -135,10 +136,10 @@ class _LandingPageState extends State<LandingPage> {
                                 var jsonFile =
                                 json.decode(response.body.toString());
                                 var error = jsonFile["error"];
-                                if (error !=  "False") {
+                                if (error !=  "true") {
                                   var id = jsonFile["customer_id"];
                                   sharedPreferences = await SharedPreferences.getInstance();
-                                  await sharedPreferences.setString("token", id);
+                                  await sharedPreferences.setString("token", id.toString());
                                   Navigator.of(context).pushAndRemoveUntil(
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>

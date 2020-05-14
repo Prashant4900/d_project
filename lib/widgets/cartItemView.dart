@@ -7,12 +7,17 @@ import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 
-class CartItemView extends StatelessWidget {
+class CartItemView extends StatefulWidget {
   CartItemView({this.item, this.count});
 
   int count;
   Item item;
 
+  @override
+  _CartItemViewState createState() => _CartItemViewState();
+}
+
+class _CartItemViewState extends State<CartItemView> {
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CardData>(context);
@@ -36,7 +41,7 @@ class CartItemView extends StatelessWidget {
               CircleAvatar(
                 backgroundColor: Colors.transparent,
                 child: CachedNetworkImage(
-                imageUrl: item.imagePath,
+                imageUrl: widget.item.imagePath,
                 placeholder: (context, url) => CircularProgressIndicator(),
                 errorWidget: (context, url, error) => Icon(Icons.error),
               ), radius: 40.0,),
@@ -51,9 +56,9 @@ class CartItemView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(item.name, style: TextStyle(fontSize: 15.0),overflow: TextOverflow.ellipsis,),
-                          Text((item.unit).toString(), style: TextStyle(fontSize: 12.0)),
-                          Text("₹" + (item.ourPrice * count).toString(), style: TextStyle(fontSize: 12.0)),
+                          Text(widget.item.name, style: TextStyle(fontSize: 15.0),overflow: TextOverflow.ellipsis,),
+                          Text((widget.item.unit).toString(), style: TextStyle(fontSize: 12.0)),
+                          Text("₹" + (widget.item.ourPrice * widget.count).toString(), style: TextStyle(fontSize: 12.0)),
                           Container(
                             padding: EdgeInsets.all(2.0),
                             width: 120.0,
@@ -67,12 +72,12 @@ class CartItemView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 InkWell(
-                                  onTap: ()=>bloc.reduceToCart(item.upcCode),
+                                  onTap: ()=>bloc.reduceToCart(widget.item.upcCode),
                                   child: Icon(Icons.remove, size: 25.0,),
                                 ),
-                                Text(bloc.cartItems[item.upcCode] == null ? '0' : bloc.cartItems[item.upcCode].toString(), style: TextStyle(fontSize: 15.0),),
+                                Text(bloc.cartItems[widget.item.upcCode] == null ? '0' : bloc.cartItems[widget.item.upcCode].toString(), style: TextStyle(fontSize: 15.0),),
                                 InkWell(
-                                  onTap:() => bloc.addToCart(item.upcCode),
+                                  onTap:() => bloc.addToCart(widget.item.upcCode),
                                   child: Icon(Icons.add , size: 25.0),
                                 ),
 
@@ -87,7 +92,7 @@ class CartItemView extends StatelessWidget {
                       height: double.infinity,
                       width: 80.0,
                       child: InkWell(
-                          onTap: ()=> bloc.clear(item.upcCode),
+                          onTap: ()=> bloc.clear(widget.item.upcCode),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
