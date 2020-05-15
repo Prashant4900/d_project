@@ -17,7 +17,7 @@ class _AddressListingState extends State<AddressListing> {
     var userData = Provider.of<UserData>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Saved Address"),
+        title: Text("Select a Delivery Address"),
       ),
       body: Column(
         children: <Widget>[
@@ -45,9 +45,9 @@ class _AddressListingState extends State<AddressListing> {
                             Text(userData.addressList[index].city,overflow: TextOverflow.ellipsis,)
                           ],
                         ),
-                        IconButton(icon : Icon(Icons.forward),onPressed: (){
+                        IconButton(icon : Icon(Icons.forward, color: userData.addressList[index] == userData.selectedAddress ? Colors.blue : Colors.black,),onPressed: (){
                           userData.selectedAddress = userData.addressList[index];
-                          Navigator.pop(context);
+                          Navigator.pop(context, userData.addressList[index]);
                         }),
                       ],
                     ),
@@ -65,17 +65,7 @@ class _AddressListingState extends State<AddressListing> {
                     MaterialPageRoute(
                       builder: (context) => AddressEntry(),
                     ));
-                Address addr = await result;
-                if(addr == null){
-                  print(userData.selectedAddress);
-                }
-                else{
-                  print(addr.city);
-                  userData.addressList.add(addr);
-                  userData.selectedAddress = addr;
-                }
-
-              },
+                },
               child: Center(
                 child: Text(
                   "Add New Address",

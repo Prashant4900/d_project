@@ -42,17 +42,18 @@ class loginHelper{
     }
   }
 
-  Future<bool> reverifyPhone(String number, String userid) async{
+  Future<bool> reverifyPhone(String number, String userid, String otp) async{
     var url = 'http://13.127.202.246/api/update_phone';
     var response = await http.post(url, body: {
       "user_id" : userid,
       "phone_no" : number,
+      "otp" : otp
     });
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
     var jsonFile = json.decode(response.body.toString());
     var error = jsonFile["error"];
-    if(error == true){
+    if(error != true){
       return true;
     }
     else{

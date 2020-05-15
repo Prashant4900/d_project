@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:d_project/screens/mainPage.dart';
-import 'package:d_project/utils/userData.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:http/http.dart' as http;
 import 'package:d_project/utils/Screen_size_reducer.dart';
@@ -11,13 +10,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:d_project/screens/pinEntryScreen.dart';
 import 'package:d_project/networkUtils/login.dart';
 
-class PhoneSignInScreen extends StatefulWidget {
+import 'VerifiyPinEntryScreen.dart';
+
+class ReverifyPhoneSignInScreen extends StatefulWidget {
   @override
-  _PhoneSignInScreenState createState() => _PhoneSignInScreenState();
+  _ReverifyPhoneSignInScreenState createState() => _ReverifyPhoneSignInScreenState();
 }
 
-class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
-  UserData userData = UserData();
+class _ReverifyPhoneSignInScreenState extends State<ReverifyPhoneSignInScreen> {
   final NumbersnackBar = SnackBar(content: Text('Please Enter a Valid Mobile Number'));
   loginHelper LoginHelper = loginHelper();
   String btnText = "Request OTP";
@@ -36,9 +36,12 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     SvgPicture.asset('assests/DoorakartIcon.svg', width: screenWidth(context, dividedBy: 2),),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text("Please Verify Your Phone Number Before Placing Order", maxLines: 2, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),),
+                    ),
                     Column(
                       children: <Widget>[
-                        Text("Please Verify Phone Number before ordering"),
                         ListTile(
                           title: TextField(
                             decoration: InputDecoration(labelText: "Enter Phone Number", icon: Icon(Icons.phone)),
@@ -56,9 +59,9 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                               if (regex.hasMatch(phoneNumber)){
                                 final progress = ProgressHUD.of(context);
                                 progress.showWithText("Sending OTP");
-                                bool result;
+                                String result;
                                 try{
-                                  result = await LoginHelper.reverifyPhone(phoneNumber, userData.userid);
+                                  result = await LoginHelper.sendOTP(phoneNumber);
                                 }
                                 catch(e){
                                   print(e);
@@ -70,7 +73,7 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                                     var code = jsonFile["otp"];
                                     print("Code" + code.toString());
                                     Navigator.pushReplacement(context, MaterialPageRoute(
-                                      builder: (context) => PinEntryScreen(phoneNumber: phoneNumber),
+                                      builder: (context) => VerifyPinEntryScreen(phoneNumber: phoneNumber),
                                     ));
                                   }
                                 }

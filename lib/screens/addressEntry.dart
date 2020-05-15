@@ -86,19 +86,6 @@ class _AddressEntryState extends State<AddressEntry> {
                   child: TextFormField(
                     decoration: InputDecoration(
                       labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
-                      labelText: "Locality",
-                      hoverColor: Colors.green,
-                    ),
-                    onChanged: (value){
-                      address.locality= value;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
                       labelText: "Landmark for easy reach out",
                       hoverColor: Colors.green,
                     ),

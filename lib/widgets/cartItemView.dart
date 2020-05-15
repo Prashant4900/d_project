@@ -23,11 +23,10 @@ class _CartItemViewState extends State<CartItemView> {
     var bloc = Provider.of<CardData>(context);
 
     return Container(
-
       width: double.infinity,
       height: 120.0,
       child: Card(
-        elevation: 2.0,
+        elevation: 0.5,
         color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
@@ -61,11 +60,11 @@ class _CartItemViewState extends State<CartItemView> {
                           Text("₹" + (widget.item.ourPrice * widget.count).toString(), style: TextStyle(fontSize: 12.0)),
                           Container(
                             padding: EdgeInsets.all(2.0),
-                            width: 120.0,
+                            width: 100.0,
                             margin: EdgeInsets.only(top: 10.0,),
                             decoration: BoxDecoration(
-                              color: Colors.black26,
                               borderRadius: BorderRadius.circular(4.0),
+                              border: Border.all(color: Colors.green),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,

@@ -38,7 +38,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                 child: CachedNetworkImage(
                   imageUrl: item.imagePath == null ? "http://via.placeholder.com/350x150"  : item.imagePath,
                   placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => Icon(Icons.terrain),
                 ),
               ),
               Container(
@@ -66,11 +66,11 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                 child: Text("₹"+item.ourPrice.toString(), style: TextStyle(fontSize: 17.0),)),
                         Container(
 
-                          width: 120.0,
+                          width: 100.0,
                           margin: EdgeInsets.only(top: 10.0,),
                           decoration: BoxDecoration(
-                            color: Colors.grey,
                             borderRadius: BorderRadius.circular(4.0),
+                            border: Border.all(color: Colors.green),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
@@ -85,7 +85,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                 },
                                 child: Icon(Icons.remove, size: 30.0,),
                               ) : SizedBox(),
-                              Text(count == 0 ? "Add to Cart":count.toString(), style: TextStyle(fontSize: 15.0),),
+                              Text(count == 0 ? "Add to Cart":count.toString(), style: TextStyle(fontSize: 12.0),),
                               InkWell(
                                 onTap: () {
                                   count++;

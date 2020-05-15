@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:d_project/screens/address.dart';
 import 'package:d_project/screens/previewOrderScreen.dart';
+import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:random_string/random_string.dart';
 import 'package:d_project/utils/userData.dart';
 import 'package:d_project/widgets/changeLocationWidget.dart';
@@ -27,11 +28,13 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  Address address;
 
   @override
   Widget build(BuildContext context) {
     double amount;
     var bloc = Provider.of<CardData>(context);
+    bool addressSelected = false;
     var userData = Provider.of<UserData>(context);
     var cart = bloc.cartItems;
     return Scaffold(
@@ -43,47 +46,12 @@ class _CartScreenState extends State<CartScreen> {
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            Container(
-              height: 60.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: 10.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                       userData.selectedAddress != null ? Text("Deliver to : " + userData.selectedAddress.areaDetails + " ," + userData.selectedAddress.city + "," + userData.selectedAddress.pinCode, maxLines: 2, overflow: TextOverflow.ellipsis,):Text("Please provide a delivery address", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0),),
-                      //  Text(address == null ? "" :address.city + " , " + address.pinCode),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: RaisedButton(
-                        textColor: Colors.blue,
-                        onPressed:() async{
-                          Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AddressListing(),
-                                ));
-                        },
-                        child: Text("Change"),
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
-            Divider(height: 5.0,color: Colors.grey,),
             FutureBuilder<Map<Item , int>>(
               future: bloc.SyncMaps(),
               builder: (context, snapshot) {
                 if(snapshot.connectionState != ConnectionState.done){
-                  return CircularProgressIndicator();
+                  return Expanded(
+                      child: CircularProgressIndicator());
                 }
                 return Expanded(
                   child: ListView.builder(
@@ -98,29 +66,111 @@ class _CartScreenState extends State<CartScreen> {
               }
             ),
             Container(
+              color: Colors.lightBlue,
+              height: 40.0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        userData.selectedAddress != null ? Text("Deliver to : " + userData.selectedAddress.houseNumber + "," + userData.selectedAddress.areaDetails, overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 15.0),):Center(child: Text("Please provide a delivery address", style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16.0),),),
+                        userData.selectedAddress != null ? Text( userData.selectedAddress.city + "," + userData.selectedAddress.pinCode, overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300, fontSize: 13.0),):Text("", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0),),
+                        //  Text(address == null ? "" :address.city + " , " + address.pinCode),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right : 10.0, top : 4.0),
+                    child: RaisedButton(
+                      elevation: 0.0,
+                      color: Colors.lightBlue,
+                      textColor: Colors.yellow[600],
+                      onPressed:() async{
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddressListing(),
+                            ));
+                      },
+                      child: Text("Change"),
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+            Container(
 
               width: double.infinity,
               color: Colors.lightBlue,
-              height: 60.0,
+              height: 50.0,
               child:Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left : 10.0),
-                    child : Text("Sumtotal " + "₹" + bloc.sumTotal.toString(),style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: RaisedButton(
-                          color: Colors.blueGrey,
-                          onPressed: (){
-                             Navigator.push(context, MaterialPageRoute(
-                               //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
-                                 builder: (context) => PreviewOrder(userid: userData.userid.toString(),amount: amount.toString(),orderid: createOrderId()),
-                             ));
-                          },
-                          child: Center(child: Text("Proceed to Payment", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
+                  FutureBuilder<double>(
+                      future: bloc.calculateTotalPrice(),
+                    builder: (context, snapshot) {
+                        if(snapshot.connectionState != ConnectionState.done){
+                          return Padding(
+                            padding: EdgeInsets.only(left : 10.0),
+                            child : Text("Calculating ",style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                          );
+                        }
+                      return Padding(
+                        padding: EdgeInsets.only(left : 10.0),
+                        child : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Sumtotal ",style: TextStyle(color: Colors.white, fontSize: 10.0),),
+                            Text("₹" + snapshot.data.toString(),style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                          ],
                         ),
+                      );
+                    }
+                  ),
+                  FutureBuilder<double>(
+                    future: bloc.calculateTotalPrice(),
+                    builder: (context, snapshot) {
+                      if(snapshot.connectionState != ConnectionState.done || snapshot.data == 0.0){
+                        return Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: RaisedButton(
+                            color: Colors.blueGrey,
+                            onPressed: (){
+                              print("Cart Empty");
+                            },
+                            child: Center(child: Text("Cart Empty", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
+                          ),
+                        );
+                      }
+                      return Container(
+                        width: screenWidth(context, dividedBy: 2),
+                        child: RaisedButton(
+                              color: Colors.blueGrey,
+                              onPressed: () async{
+                                 if(address == null){
+                                   address = await Navigator.push(context, MaterialPageRoute(
+                                     //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
+                                     builder: (context) => AddressListing(),
+                                   ));
+                                 }
+                                 else{
+                                   Navigator.push(context, MaterialPageRoute(
+                                     //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
+                                     builder: (context) => PreviewOrder(address : address,userid: userData.userid.toString(),amount: snapshot.data.toString(),orderid: createOrderId()),
+                                   ));
+                                 }
+                              },
+                              child: Center(child: Text(address == null ? "Enter Delivery Address" : "Proceed to Payment", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
+                            ),
+                      );
+                    }
                   ),
                 ],
               ),

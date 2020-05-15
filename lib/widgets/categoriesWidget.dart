@@ -1,3 +1,4 @@
+import 'package:d_project/bottomNavigationPages/categoryListing.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/screens/CategoriesPage.dart';
 import 'package:d_project/modals/categoryModal.dart';
@@ -26,7 +27,7 @@ class categoriesWidget extends StatelessWidget {
       Navigator.push(
       context,
       MaterialPageRoute(
-      builder: (context) => CategoriesPage(category: category,categoryColor: color),
+      builder: (context) => CategoriesPage(category: category),
       ),
       );
       },

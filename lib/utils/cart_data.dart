@@ -18,7 +18,6 @@ class CardData with ChangeNotifier{
   }
 
   CardData._internal(){
-    getCardData();
     calculateTotalPrice();
   }
 
@@ -55,8 +54,8 @@ class CardData with ChangeNotifier{
   Map<String , int> cartItems = {};
 
   Future<Map<Item, int>> SyncMaps() async{
-    getCardData();
     Map<Item, int> mainCartItems = {};
+    getCardData();
     cartItems.forEach((k, v) {
       if(v != 0){
         Future<Item> item = getItemWithUpc(k);
@@ -70,7 +69,6 @@ class CardData with ChangeNotifier{
         });
       }
     });
-    print(totalAmount.toString());
     return mainCartItems;
   }
 
@@ -106,7 +104,6 @@ class CardData with ChangeNotifier{
       cartItems[upcCode] = 1;
     }
     await updateCart(upcCode,cartItems[upcCode]);
-    calculateTotalPrice();
     notifyListeners();
   }
 
@@ -114,7 +111,6 @@ class CardData with ChangeNotifier{
 
   void clear(String upcCode) async{
       cartItems.remove(upcCode);
-      calculateTotalPrice();
       notifyListeners();
       await updateCart(upcCode,0);
   }
@@ -133,24 +129,21 @@ class CardData with ChangeNotifier{
     } else {
       clear(upcCode);
     }
-    calculateTotalPrice();
     notifyListeners();
   }
 
-  void calculateTotalPrice()  async{
-    Future<Map<Item, int>> itemListProduct = SyncMaps();
-    itemListProduct.then((itemList){
-      double totalPrice = 0;
-      var list = itemList.keys.toList();
-      if(list.length > 0){
-        for (int i = 0; i < cartItems.length; i++) {
-          print(i.toString() + " " + list[i].ourPrice.toString() + " " +  itemList[list[i]].toString());
-          totalPrice += list[i].ourPrice * itemList[list[i]];
-          print("Total Price" + totalPrice.toString());
-        }
+  Future<double> calculateTotalPrice()  async{
+    Map<Item, int> itemListProduct = await SyncMaps();
+    double totalPrice = 0;
+    var list = itemListProduct.keys.toList();
+    if(list.length > 0){
+      for (int i = 0; i < list.length; i++) {
+        print(i.toString() + " " + list[i].ourPrice.toString() + " " +  itemListProduct[list[i]].toString());
+        totalPrice += list[i].ourPrice * itemListProduct[list[i]];
+        print("Total Price" + totalPrice.toString());
       }
-      totalAmount = totalPrice;
-    });
+    }
+    return totalPrice;
   }
 
   Future<int> cartSize() async{

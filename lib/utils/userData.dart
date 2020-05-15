@@ -14,7 +14,6 @@ class UserData  with ChangeNotifier{
     checkLoginStatus();
   }
 
-
   String userid;
   String name;
   String phoneNo;
@@ -36,9 +35,10 @@ class UserData  with ChangeNotifier{
         "user_id" : userid,
       });
       var data = json.decode(response.body);
+      print(data);
       if(data["error"] != true){
         name = data["user_name"];
-        phoneNo = data["phone_numer"];
+        phoneNo = data["phone_number"];
         addressData = data["address"];
         orderData = data["orders"];
         makeAddressList();
@@ -53,7 +53,6 @@ class UserData  with ChangeNotifier{
       if(rest.length > 0){
         //selectedAddress = addressDat;
         addressList = rest.map<Address>((json) => Address.fromJson(json)).toList();
-        selectedAddress = addressList[addressList.length - 1];
       }
     }
   }
