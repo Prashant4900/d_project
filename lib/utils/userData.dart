@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -26,9 +28,12 @@ class UserData  with ChangeNotifier{
   Address selectedAddress;
 
   checkLoginStatus() async {
+    userid = null;
     SharedPreferences sharedPreferences;
     sharedPreferences = await SharedPreferences.getInstance();
     userid = sharedPreferences.getString("token");
+    orderList = [];
+    addressList = [];
     if(userid != null){
       var url = 'http://13.127.202.246/api/get_user';
       var response = await http.post(url, body: {

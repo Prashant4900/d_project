@@ -83,9 +83,11 @@ class _VerifyPinEntryScreenState extends State<VerifyPinEntryScreen> {
                                     var result = await LoginHelper.reverifyPhone(widget.phoneNumber, userData.userid,userOTP.toString());
 
                                     if(result != false){
+                                      progress.dismiss();
                                         Navigator.pop(context, true);
                                        }
                                     else{
+                                      progress.dismiss();
                                       Scaffold.of(context).showSnackBar(InvalidsnackBar);
                                     }
                                   }

@@ -34,6 +34,8 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     double amount;
     var bloc = Provider.of<CardData>(context);
+    bloc.getCardData();
+    bloc.calculateTotalPrice();
     bool addressSelected = false;
     var userData = Provider.of<UserData>(context);
     var cart = bloc.cartItems;
@@ -66,7 +68,14 @@ class _CartScreenState extends State<CartScreen> {
               }
             ),
             Container(
-              color: Colors.lightBlue,
+              decoration: BoxDecoration(
+                  color: Color(0xF0F6F7FF),
+//                border: Border(
+//                  top: BorderSide(
+//                    color: Colors.blue,
+//                  ),
+//                )
+              ),
               height: 40.0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,26 +87,28 @@ class _CartScreenState extends State<CartScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        userData.selectedAddress != null ? Text("Deliver to : " + userData.selectedAddress.houseNumber + "," + userData.selectedAddress.areaDetails, overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 15.0),):Center(child: Text("Please provide a delivery address", style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16.0),),),
-                        userData.selectedAddress != null ? Text( userData.selectedAddress.city + "," + userData.selectedAddress.pinCode, overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300, fontSize: 13.0),):Text("", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0),),
+                        userData.selectedAddress != null ? Text("Deliver to : " + userData.selectedAddress.houseNumber + "," + userData.selectedAddress.areaDetails, overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15.0),):Center(child: Text("Please provide a delivery address", style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16.0),),),
+                        userData.selectedAddress != null ? Text( userData.selectedAddress.city + "," + userData.selectedAddress.pinCode, overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300, fontSize: 13.0),):Text("", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0),),
                         //  Text(address == null ? "" :address.city + " , " + address.pinCode),
                       ],
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(right : 10.0, top : 4.0),
-                    child: RaisedButton(
-                      elevation: 0.0,
-                      color: Colors.lightBlue,
-                      textColor: Colors.yellow[600],
-                      onPressed:() async{
+                    child: InkWell(
+                      onTap :() async{
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => AddressListing(),
                             ));
                       },
-                      child: Text("Change"),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Text("Change", style: TextStyle(color: Colors.blue),),
+                        ],
+                      ),
                     ),
                   ),
 
@@ -107,7 +118,7 @@ class _CartScreenState extends State<CartScreen> {
             Container(
 
               width: double.infinity,
-              color: Colors.lightBlue,
+              color: Color(0xF0F6F7FF),
               height: 50.0,
               child:Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,7 +129,7 @@ class _CartScreenState extends State<CartScreen> {
                         if(snapshot.connectionState != ConnectionState.done){
                           return Padding(
                             padding: EdgeInsets.only(left : 10.0),
-                            child : Text("Calculating ",style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                            child : Text("Calculating ",style: TextStyle(color: Colors.black, fontSize: 20.0),),
                           );
                         }
                       return Padding(
@@ -127,8 +138,8 @@ class _CartScreenState extends State<CartScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text("Sumtotal ",style: TextStyle(color: Colors.white, fontSize: 10.0),),
-                            Text("₹" + snapshot.data.toString(),style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                            Text("Sumtotal ",style: TextStyle(color: Colors.black, fontSize: 10.0),),
+                            Text("₹" + snapshot.data.toString(),style: TextStyle(color: Colors.black, fontSize: 20.0),),
                           ],
                         ),
                       );
@@ -138,8 +149,8 @@ class _CartScreenState extends State<CartScreen> {
                     future: bloc.calculateTotalPrice(),
                     builder: (context, snapshot) {
                       if(snapshot.connectionState != ConnectionState.done || snapshot.data == 0.0){
-                        return Padding(
-                          padding: EdgeInsets.all(10.0),
+                        return Container(
+                          width: screenWidth(context, dividedBy: 2),
                           child: RaisedButton(
                             color: Colors.blueGrey,
                             onPressed: (){

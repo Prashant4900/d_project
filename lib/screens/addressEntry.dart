@@ -38,7 +38,7 @@ class _AddressEntryState extends State<AddressEntry> {
                       child: TextFormField(
                         decoration: InputDecoration(
                           labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
-                          labelText: "*House no",
+                          labelText: "House no",
                           hoverColor: Colors.green,
                         ),
                         onChanged: (value){
@@ -64,6 +64,12 @@ class _AddressEntryState extends State<AddressEntry> {
                         onChanged: (value){
                           address.apartmentName = value;
                         },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter Apartment Name';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                   ],
@@ -79,6 +85,12 @@ class _AddressEntryState extends State<AddressEntry> {
                     onChanged: (value){
                       address.streetDetails = value;
                     },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please Provide Your Street Details';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 Padding(
@@ -91,6 +103,12 @@ class _AddressEntryState extends State<AddressEntry> {
                     ),
                     onChanged: (value){
                       address.landMark = value;
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please Provide Some Landmark';
+                      }
+                      return null;
                     },
                   ),
                 ),
@@ -107,7 +125,7 @@ class _AddressEntryState extends State<AddressEntry> {
                     },
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'Please enter area details';
+                        return 'Please Enter Area Details';
                       }
                       return null;
                     },
@@ -141,7 +159,7 @@ class _AddressEntryState extends State<AddressEntry> {
                       child: TextFormField(
                         decoration: InputDecoration(
                           labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
-                          labelText: "*Pincode",
+                          labelText: "Pincode",
                           hoverColor: Colors.green,
                         ),
                         onChanged: (value){
@@ -149,7 +167,7 @@ class _AddressEntryState extends State<AddressEntry> {
                         },
                         validator: (value) {
                           Pattern pattern = r'^[1-9][0-9]{5}$';
-                          RegExp regex = new RegExp(value);
+                          RegExp regex = new RegExp(pattern);
                           if (!regex.hasMatch(value)) {
                             return 'Please enter pincode';
                           }

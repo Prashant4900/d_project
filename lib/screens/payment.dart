@@ -169,7 +169,7 @@ class _PaymentSuccessfulScreenState extends State<PaymentSuccessfulScreen> {
       if (error == "false") {
         print("Success");
         Navigator.pushReplacement(context, MaterialPageRoute(
-          builder: (context) => PaymentDoneScreen(success : true, orderId: order_id, amount: widget.amount,customerId: widget.userId,),
+          builder: (context) => PaymentDoneScreen(success : true, orderId: order_id, amount: widget.amount,customerId: widget.userId, type: "ONLINE",),
         ));
         dispose();
       }
@@ -249,7 +249,6 @@ class _PaymentSuccessfulScreenState extends State<PaymentSuccessfulScreen> {
               },
               onPageFinished: (page) {
                 if (page.contains("/handle_app_request")){
-                  print("This triggered");
                   print(_webController.toString());
                   getData();
                 }

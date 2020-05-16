@@ -32,19 +32,34 @@ class CardData with ChangeNotifier{
     userid = sharedPreferences.getString("token").toString();
     print(userid);
     if(userid != null){
-      var url = 'http://13.127.202.246/api/get_cart';
-      var response = await http.post(url, body: {
-        "user_id" : userid,
-      });
-      var data = json.decode(response.body);
-      if(data["error"] != true){
-        var rest = data['items'] as List;
-        List<CartItemModal> itemList = rest.map<CartItemModal>((json) => CartItemModal.fromJson(json)).toList();
-        for (int j = 0; j < itemList.length; j++){
-          CartItemModal i = itemList[j];
-          cartItems[i.upcCode] = i.qty;
+      try {
+        var url = 'http://13.127.202.246/api/get_cart';
+        var response = await http.post(url, body: {
+          "user_id" : userid,
+        });
+        var data = json.decode(response.body);
+        print(data);
+        if(data["error"] != "true"){
+          if(data["items"] == "Cart is Empty"){
+            cartItems.clear();
+          }
+          if(data["items"] != "Cart is Empty"){
+            var rest = data['items'] as List;
+            print(rest);
+            List<CartItemModal> itemList = rest.map<CartItemModal>((json) => CartItemModal.fromJson(json)).toList();
+            for (int j = 0; j < itemList.length; j++){
+              CartItemModal i = itemList[j];
+              cartItems[i.upcCode] = i.qty;
+            }
+            print(cartItems);
+          }
         }
-        print(cartItems);
+        else{
+          cartItems.clear();
+        }
+      } on Exception catch (e) {
+        print(e);
+        cartItems.clear();
       }
     }
   }
@@ -172,13 +187,14 @@ class CardData with ChangeNotifier{
         "item_upc" : upcCode,
         "qty" : qty. toString(),
       });
+      print("Add to Cart " + response.body);
     }
     catch(e){
       print(e);
+      print("Unable to Update Cart");
     }
     print("Cart Updated");
 }
-
 }
 
 

@@ -29,6 +29,7 @@ class PaymentDoneScreen extends StatefulWidget {
 
 class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
 
+  UserData userData = UserData();
   @override
   void initState() {
     updateOrdertoServer();
@@ -44,51 +45,65 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
         appBar: AppBar(title: Text("Order Confirmation"),leading: IconButton(icon : Icon(Icons.arrow_back),onPressed: (){
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => MainScreen()), (Route<dynamic> route) => false);
         }),),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              widget.success == true ? Text("Your Order is Successful", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300), ): Text("Your Order failed, Contact Support",overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),),
-              widget.success == true ? Icon(Icons.check_circle, color: Colors.green,size: 60.0,) : Icon(Icons.block, color: Colors.red, size: 60.0,),
-              widget.success == true ? Text("Your orderId is " + widget.orderId, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),) : SizedBox(),
-            ],
-          ),
+        body: FutureBuilder<bool>(
+          future: updateOrdertoServer(),
+          builder: (context, snapshot) {
+            if(snapshot.connectionState != ConnectionState.done){
+              return Container(
+                height: double.infinity,
+                width: double.infinity,
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  widget.success == true && snapshot.data == true ? Text("Your Order is Successful", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300), ): Text("Your Order failed, Contact Support",overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),),
+                  widget.success ==true && snapshot.data == true ? Icon(Icons.check_circle, color: Colors.green,size: 60.0,) : Icon(Icons.block, color: Colors.red, size: 60.0,),
+                  widget.success ==true && snapshot.data == true ? Text("Your orderId is " + widget.orderId, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),) : SizedBox(),
+                ],
+              ),
+            );
+          }
         ),
       ),
     );
   }
 
 
-  updateOrdertoServer() async{
-    print("Reached Here");
+  Future<bool> updateOrdertoServer() async{
     if(widget.success){
       var url = 'http://13.127.202.246/api/create_order';
       try {
         var response = await http.post(url, body: {
-          "amount" : widget.amount.toString(),
+          "amount" : widget.amount,
           "order_id" : widget.orderId,
-          "name" : "test",
-          "phone" : "1234567890",
-          "house_no" : "test",
-          "apartment" : "test",
-          "street" : "test",
-          "area" : "test",
-          "city" : "test",
-          "zip_code" : "123456",
-          "address_type" : "test",
-          "user_id" : widget.customerId,
+          "name" : userData.name != null ? userData.name : "No Name",
+          "phone" : userData.phoneNo,
+          "house_no" : userData.selectedAddress.houseNumber,
+          "apartment" : userData.selectedAddress.apartmentName,
+          "street" : userData.selectedAddress.streetDetails,
+          "area" : userData.selectedAddress.areaDetails,
+          "city" : userData.selectedAddress.city,
+          "zip_code" : userData.selectedAddress.pinCode.toString(),
+          "address_type" : "home",
+          "user_id" : userData.userid,
           "payment_mode": widget.type
         });
-
-        var data = json.decode(response.body);
+        var data = json.decode(response.body.toString());
         print(data);
+        print(data["error"]);
+        if(data["error"] == false || data["error"] == "false"){
+          return true;
+        }
       } on Exception catch (e) {
-        print(e);
+        print("Payment Failed");
+        return false;
       }
     }
-    else{
-      print("Failed writing order to server");
-    }
+    print("Failed writing order to server");
+    return false;
     }
 }
