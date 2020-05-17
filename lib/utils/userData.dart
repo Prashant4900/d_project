@@ -122,18 +122,21 @@ class Order{
   String orderId;
   String name;
   double amount;
+  String orderTime;
 
   Order({
     this.name,
     this.amount,
-    this.orderId
+    this.orderId,
+    this.orderTime
 });
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
       name : json["name"],
       orderId: json["order_id"],
-      amount: json["bill_amount"]
+      amount: json["bill_amount"],
+      orderTime: json["order_time"],
     );
   }
 

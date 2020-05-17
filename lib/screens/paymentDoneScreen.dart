@@ -60,9 +60,9 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  widget.success == true && snapshot.data == true ? Text("Your Order is Successful", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300), ): Text("Your Order failed, Contact Support",overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),),
-                  widget.success ==true && snapshot.data == true ? Icon(Icons.check_circle, color: Colors.green,size: 60.0,) : Icon(Icons.block, color: Colors.red, size: 60.0,),
-                  widget.success ==true && snapshot.data == true ? Text("Your orderId is " + widget.orderId, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),) : SizedBox(),
+                  widget.success == true || snapshot.data == true ? Text("Your Order is Successful", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300), ): Text("Your Order failed, Contact Support",overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),),
+                  widget.success ==true || snapshot.data == true ? Icon(Icons.check_circle, color: Colors.green,size: 60.0,) : Icon(Icons.block, color: Colors.red, size: 60.0,),
+                  widget.success ==true || snapshot.data == true ? Text("Your orderId is " + widget.orderId, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),) : SizedBox(),
                 ],
               ),
             );
@@ -74,9 +74,8 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
 
 
   Future<bool> updateOrdertoServer() async{
-    if(widget.success){
+    if(!widget.success){
       var url = 'http://13.127.202.246/api/create_order';
-      try {
         var response = await http.post(url, body: {
           "amount" : widget.amount,
           "order_id" : widget.orderId,
@@ -98,12 +97,10 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
         if(data["error"] == false || data["error"] == "false"){
           return true;
         }
-      } on Exception catch (e) {
-        print("Payment Failed");
-        return false;
-      }
+        else{
+          return false;
+        }
     }
-    print("Failed writing order to server");
-    return false;
+    return true;
     }
 }

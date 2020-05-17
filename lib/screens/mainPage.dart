@@ -44,8 +44,6 @@ class _MainScreenState extends State<MainScreen> {
     if(sharedPreferences.getString("token") == null) {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LandingPage()), (Route<dynamic> route) => false);
     }
-    CardData cartData = CardData();
-    await cartData.SyncMaps();
   }
 
   @override

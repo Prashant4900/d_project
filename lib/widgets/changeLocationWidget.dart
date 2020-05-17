@@ -1,6 +1,8 @@
 import 'package:d_project/screens/address.dart';
+import 'package:d_project/screens/addressEntry.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:d_project/utils/scrollBehaviour.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
@@ -51,30 +53,44 @@ class _ChangeLocationState extends State<ChangeLocation> {
 //                  ),
 //                ),
 //              ),
-              Divider(),
-              InkWell(
-                onTap: (){
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => AddressListing(),
-                    ));
-                  },
-                child: Card(
-                  child: Container(
-                    height: 80.0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Padding(
-                            padding: EdgeInsets.only(left: 10.0),
-                            child: Text("Enter/Select Address", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300),),),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Icon(Icons.arrow_forward),
-                        ),
-                      ],
+              Container(
+                padding: EdgeInsets.only(bottom : 10.0),
+                child: Text("Change Location".toUpperCase(), style: TextStyle(color: Colors.green, fontWeight: FontWeight.w600),),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  InkWell(
+                    onTap: (){
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => AddressListing(),
+                        ));
+                      },
+                    child: Container(
+                        color: Colors.green,
+                        padding: EdgeInsets.all(5.0),
+                        width: screenWidth(context, dividedBy: 2.3),
+                        height: 40.0,
+                        child : Center(child: Text("Select Address", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, color: Colors.white),)),
                     ),
                   ),
-                ),
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => AddressEntry(),
+                      ));
+                    },
+                    child: Container(
+                        height: 40.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4.0),
+                          border: Border.all(color: Colors.green),
+                        ),
+                        width: screenWidth(context, dividedBy: 2.3),
+                        child:Center(child: Text("Enter Address", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, color: Colors.green),)),
+                    ),
+                  ),
+                ],
               )
             ],
           )

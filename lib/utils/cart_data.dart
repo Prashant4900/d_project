@@ -18,7 +18,6 @@ class CardData with ChangeNotifier{
   }
 
   CardData._internal(){
-    calculateTotalPrice();
   }
 
 
@@ -67,7 +66,6 @@ class CardData with ChangeNotifier{
 
 
   Map<String , int> cartItems = {};
-
   Future<Map<Item, int>> SyncMaps() async{
     Map<Item, int> mainCartItems = {};
     getCardData();

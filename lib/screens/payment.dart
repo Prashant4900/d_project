@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:d_project/screens/paymentDoneScreen.dart';
+import 'package:d_project/utils/Screen_size_reducer.dart';
+import 'package:d_project/utils/userData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:random_string/random_string.dart';
@@ -13,125 +15,88 @@ import 'package:d_project/Constants..dart';
 String HashCode = "";
 
 class PaymentScreen extends StatefulWidget {
+  PaymentScreen({
+    this.orderId,
+    this.userId,
+    this.amount,
+  });
+
+  String orderId;
+  String userId;
+  String amount;
+
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-//  WebViewController _webController;
-//  bool _loadingPayment = true;
-//  String _responseStatus = STATUS_LOADING;
-//
-//
-//  String _loadHTML() {
-//    return "<html> <body onload='document.f.submit();'> <form id='f' name='f' method='post' action='$PAYMENT_URL'>"
-//        "<input type='hidden' name='order_id' value='ORDER_${ORDER_DATA["order_id"]}'/>" +
-//        "<input  type='hidden' name='customer_id' value='${ORDER_DATA["custID"]}' />" +
-//        "<input  type='hidden' name='amount' value='${ORDER_DATA["amount"]}' />" +
-//        "</form> </body> </html>";
-//  }
-//
-//  void getData() {
-//    _webController.evaluateJavascript("document.body.innerText").then((data) {
-//      print(data);
-//      var decodedJSON = jsonDecode(data);
-//      print(decodedJSON);
-//      Map<String, dynamic> responseJSON = jsonDecode(decodedJSON);
-//      final error = responseJSON["error"];
-//      final checkSumHash = responseJSON["data"];
-//      if (error != false) {
-//          _responseStatus = STATUS_SUCCESSFUL;
-//      } else {
-//        _responseStatus = STATUS_FAILED;
-//      }
-//      this.setState((){});
-//    });
-//  }
-//
-//  Widget getResponseScreen() {
-//    switch (_responseStatus) {
-//      case STATUS_SUCCESSFUL:
-//        return PaymentSuccessfulScreen();
-//      case STATUS_CHECKSUM_FAILED:
-//        return CheckSumFailedScreen();
-//      case STATUS_FAILED:
-//        return PaymentFailedScreen();
-//    }
-//    return PaymentSuccessfulScreen();
-//  }
-//
-//  @override
-//  void dispose() {
-//    _webController = null;
-//    super.dispose();
-//  }
+  UserData userData = UserData();
+  String Hash;
+
+  @override
+  void initState() async {
+    bool createOrder = await updateOrdertoServer();
+    if(Hash.length > 100 && createOrder == true){
+      Navigator.pushReplacement(context,MaterialPageRoute(
+        builder: (context) => PaymentSuccessfulScreen(orderId: widget.orderId, amount: widget.amount, userId: widget.userId,),
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Container(
-            child: Column(
-              children: <Widget>[
-                Text(HashCode),
-                RaisedButton(
-                  child: Text("Get Hash Code"),
-                  onPressed: () async {
-                    final response = await http.post(PAYMENT_URL, headers: {
-                      "Content-Type": "application/x-www-form-urlencoded"
-                    }, body: {
-                      "amount": "20.0",
-                      "order_id": "test1234",
-                      "customer_id": "1"
-                    });
-                    var data = json.decode(response.body);
-                    var hash = data['CHECKSUMHASH'];
-                    setState(() {
-                      HashCode = hash;
-                    });
-                    return PaymentSuccessfulScreen();
-                  },
-                ),
-              ],
-            )),
-
-//          body: Stack(
-//            children: <Widget>[
-//              Container(
-//                width: MediaQuery.of(context).size.width,
-//                height: MediaQuery.of(context).size.height,
-//                child: WebView(
-//                  debuggingEnabled: false,
-//                  javascriptMode: JavascriptMode.unrestricted,
-//                  onWebViewCreated: (controller){
-//                    _webController = controller;
-//                    _webController
-//                        .loadUrl(new Uri.dataFromString(_loadHTML(), mimeType: 'text/html').toString());
-//                  },
-//                  onPageFinished: (page){
-//                    if (page.contains("/process")) {
-//                      if (_loadingPayment) {
-//                        this.setState(() {
-//                          _loadingPayment = false;
-//                        });
-//                      }
-//                    }
-//                    if (page.contains("/paymentReceipt")) {
-//                      getData();
-//                    }
-//                  },
-//                ),
-//              ),
-//              (_loadingPayment)
-//                  ? Center(
-//                child: CircularProgressIndicator(),
-//              )
-//                  : Center(),
-//              (_responseStatus != STATUS_LOADING) ? Center(child:getResponseScreen()) : Center()
-//            ],
-//          )
+            width: screenWidth(context),
+            height: screenHeight(context),
+            child: CircularProgressIndicator();
+        ),
       ),
     );
+  }
+
+  Future<void> createHash() async{
+    final response = await http.post(PAYMENT_URL, headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }, body: {
+      "amount": widget.amount,
+      "order_id": widget.orderId,
+      "customer_id": widget.userId
+    });
+    var data = json.decode(response.body);
+    var hash = data['CHECKSUMHASH'];
+    Hash = hash;
+    print(hash);
+    print(hash.length);
+  }
+
+  Future<bool> updateOrdertoServer() async{
+      var url = 'http://13.127.202.246/api/create_order';
+      var response = await http.post(url, body: {
+        "amount" : widget.amount,
+        "order_id" : widget.orderId,
+        "name" : userData.name != null ? userData.name : "No Name",
+        "phone" : userData.phoneNo,
+        "house_no" : userData.selectedAddress.houseNumber,
+        "apartment" : userData.selectedAddress.apartmentName,
+        "street" : userData.selectedAddress.streetDetails,
+        "area" : userData.selectedAddress.areaDetails,
+        "city" : userData.selectedAddress.city,
+        "zip_code" : userData.selectedAddress.pinCode.toString(),
+        "address_type" : "home",
+        "user_id" : userData.userid,
+        "payment_mode": "ONLINE"
+      });
+      var data = json.decode(response.body.toString());
+      print(data);
+      print(data["error"]);
+      if(data["error"] == false || data["error"] == "false"){
+        return true;
+      }
+      else{
+        return false;
+      }
   }
 }
 

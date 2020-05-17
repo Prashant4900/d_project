@@ -34,8 +34,6 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     double amount;
     var bloc = Provider.of<CardData>(context);
-    bloc.getCardData();
-    bloc.calculateTotalPrice();
     bool addressSelected = false;
     var userData = Provider.of<UserData>(context);
     var cart = bloc.cartItems;

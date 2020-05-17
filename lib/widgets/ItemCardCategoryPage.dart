@@ -118,7 +118,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
         items : item.subItemsList.map((subItem item){
           return DropdownMenuItem<subItem>(
             value: item,
-            child: new Text(item.ouuPrice.toString()),
+            child: new Text(item.unit.toString()),
           );
         }).toList(),
         value: _value,
