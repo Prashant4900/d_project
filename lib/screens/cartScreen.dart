@@ -163,6 +163,7 @@ class _CartScreenState extends State<CartScreen> {
                         child: RaisedButton(
                               color: Colors.blueGrey,
                               onPressed: () async{
+                                  address = await userData.selectedAddress;
                                  if(address == null){
                                    address = await Navigator.push(context, MaterialPageRoute(
                                      //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),

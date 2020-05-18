@@ -5,7 +5,6 @@ import 'package:d_project/widgets/ItemCardCategoryPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/widgets/categoriesWidget.dart';
-import 'package:d_project/widgets/popularWidget.dart';
 import 'package:d_project/widgets/appbarWidget.dart';
 import 'package:d_project/utils/categoryHelper.dart';
 import 'package:d_project/widgets/SearchWidget.dart';

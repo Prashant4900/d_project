@@ -45,7 +45,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         body: Container(
             width: screenWidth(context, dividedBy: 2),
             height: screenWidth(context, dividedBy: 2),
-            child: CircularProgressIndicator(),
+            child: Center(child: CircularProgressIndicator()),
         ),
       ),
     );

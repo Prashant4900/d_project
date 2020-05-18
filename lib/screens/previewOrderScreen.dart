@@ -179,14 +179,6 @@ class _PreviewOrderState extends State<PreviewOrder> {
                           builder: (context) => ReverifyPhoneSignInScreen(),
                         ));
                     print(result);
-                    if (result == true) {
-                      phoneVerified = true;
-                      Scaffold.of(context).showSnackBar(
-                          SnackBar(content: Text('Mobile Number Verified')));
-                    } else {
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text('Mobile Number Verification Failed')));
-                    }
                   } else {
                     if (!cashOnDelievry) {
                       try {
