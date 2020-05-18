@@ -47,7 +47,7 @@ class _AddressListingState extends State<AddressListing> {
                         ),
                         IconButton(icon : Icon(Icons.forward, color: userData.addressList[index] == userData.selectedAddress ? Colors.blue : Colors.black,),onPressed: (){
                           userData.selectedAddress = userData.addressList[index];
-                          Navigator.pop(context, userData.addressList[index]);
+                          Navigator.pop(context);
                         }),
                       ],
                     ),
@@ -60,7 +60,7 @@ class _AddressListingState extends State<AddressListing> {
             width: screenWidth(context),
             child: InkWell(
               onTap: () async{
-                var result = await Navigator.push(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => AddressEntry(),

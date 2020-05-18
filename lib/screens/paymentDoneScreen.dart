@@ -32,7 +32,6 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
   UserData userData = UserData();
   @override
   void initState() {
-    updateOrdertoServer();
     super.initState();
   }
 
@@ -75,33 +74,37 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
 
   Future<bool> updateOrdertoServer() async{
     if(!widget.success){
-      var url = 'http://13.127.202.246/api/create_order';
-        var response = await http.post(url, body: {
-          "amount" : widget.amount,
-          "order_id" : widget.orderId,
-          "name" : userData.name != null ? userData.name : "No Name",
-          "phone" : userData.phoneNo,
-          "house_no" : userData.selectedAddress.houseNumber,
-          "apartment" : userData.selectedAddress.apartmentName,
-          "street" : userData.selectedAddress.streetDetails,
-          "area" : userData.selectedAddress.areaDetails,
-          "city" : userData.selectedAddress.city,
-          "zip_code" : userData.selectedAddress.pinCode.toString(),
-          "address_type" : userData.selectedAddress.addressType,
-          "user_id" : userData.userid,
-          "payment_mode": widget.type
-        });
-        var data = json.decode(response.body.toString());
-        print(data);
-        print(data["error"]);
-        if(data["error"] == false || data["error"] == "false"){
-          print("True returned");
-          return true;
-        }
-        else{
-          print("false returned");
-          return false;
-        }
+      try {
+        var url = 'http://13.127.202.246/api/create_order';
+          var response = await http.post(url, body: {
+            "amount" : widget.amount,
+            "order_id" : widget.orderId,
+            "name" : userData.name != null ? userData.name : "No Name",
+            "phone" : userData.phoneNo,
+            "house_no" : userData.selectedAddress.houseNumber,
+            "apartment" : userData.selectedAddress.apartmentName,
+            "street" : userData.selectedAddress.streetDetails,
+            "area" : userData.selectedAddress.areaDetails,
+            "city" : userData.selectedAddress.city,
+            "zip_code" : userData.selectedAddress.pinCode.toString(),
+            "address_type" : userData.selectedAddress.addressType,
+            "user_id" : userData.userid,
+            "payment_mode": widget.type
+          });
+          var data = json.decode(response.body.toString());
+          print(data);
+          print(data["error"]);
+          if(data["error"] == false || data["error"] == "false"){
+            print("True returned");
+            return true;
+          }
+          else{
+            print("false returned");
+            return false;
+          }
+      } on Exception catch (e) {
+            print(e.toString());
+      }
     }
     print("Why this kolaveri di");
     return true;

@@ -206,6 +206,7 @@ class _AddressEntryState extends State<AddressEntry> {
                           "address_type" : selectedAddressType,
                           "user_id" : userData.userid
                         });
+                        address.addressType = selectedAddressType;
                         userData.addressList.add(address);
                         userData.selectedAddress = address;
                         Navigator.pop(context, address);

@@ -165,7 +165,7 @@ class _CartScreenState extends State<CartScreen> {
                               onPressed: () async{
                                   address = await userData.selectedAddress;
                                  if(address == null){
-                                   address = await Navigator.push(context, MaterialPageRoute(
+                                   Navigator.push(context, MaterialPageRoute(
                                      //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
                                      builder: (context) => AddressListing(),
                                    ));
@@ -173,7 +173,7 @@ class _CartScreenState extends State<CartScreen> {
                                  else{
                                    Navigator.push(context, MaterialPageRoute(
                                      //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
-                                     builder: (context) => PreviewOrder(address : address,userid: userData.userid.toString(),amount: snapshot.data.toString(),orderid: createOrderId()),
+                                     builder: (context) => PreviewOrder(userid: userData.userid.toString(),amount: snapshot.data.toString(),orderid: createOrderId()),
                                    ));
                                  }
                               },

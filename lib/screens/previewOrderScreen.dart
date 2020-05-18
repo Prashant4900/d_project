@@ -11,11 +11,10 @@ import 'package:provider/provider.dart';
 import 'package:d_project/screens/paymentDoneScreen.dart';
 
 class PreviewOrder extends StatefulWidget {
-  PreviewOrder({this.amount, this.userid, this.orderid, this.address});
+  PreviewOrder({this.amount, this.userid, this.orderid});
   String amount;
   String userid;
   String orderid;
-  Address address;
   @override
   _PreviewOrderState createState() => _PreviewOrderState();
 }
