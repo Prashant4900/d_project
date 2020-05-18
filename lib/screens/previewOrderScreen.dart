@@ -189,15 +189,19 @@ class _PreviewOrderState extends State<PreviewOrder> {
                     }
                   } else {
                     if (!cashOnDelievry) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PaymentSuccessfulScreen(
-                              userId: userData.userid.toString(),
-                              amount: widget.amount,
-                              orderId: widget.orderid,
-                            ),
-                          ));
+                      try {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PaymentScreen(
+                                userId: userData.userid.toString(),
+                                amount: widget.amount,
+                                orderId: widget.orderid,
+                              ),
+                            ));
+                      } catch (e, s) {
+                        print(s);
+                      }
                     } else {
                       Navigator.pushReplacement(
                           context,

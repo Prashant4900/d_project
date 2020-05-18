@@ -23,10 +23,11 @@ class CustomDrawer extends StatelessWidget {
                 accountName: Text(userData.phoneNo == null ? "" : userData.phoneNo),
                 accountEmail: Text(userData.name == null || userData.name == ""  ? "User" : userData.name, overflow: TextOverflow.ellipsis,),
                 currentAccountPicture: CircleAvatar(
+                  backgroundColor: Color(0xF0F6F7FF),
                   child: Text(userData.name == null || userData.name == "" ? "U" : userData.name.substring(0,1), style: TextStyle(fontSize: 40.0),),
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: Colors.blueGrey,
                 ),
               ),
               ListTile(

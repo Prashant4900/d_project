@@ -23,43 +23,49 @@ class CardData with ChangeNotifier{
 
   String userid;
   double totalAmount = 0;
+  bool lockCart = false;
 
    void getCardData() async{
-    print("GetCardData Called");
-    SharedPreferences sharedPreferences;
-    sharedPreferences = await SharedPreferences.getInstance();
-    userid = sharedPreferences.getString("token").toString();
-    print(userid);
-    if(userid != null){
-      try {
-        var url = 'http://13.127.202.246/api/get_cart';
-        var response = await http.post(url, body: {
-          "user_id" : userid,
-        });
-        var data = json.decode(response.body);
-        print(data);
-        if(data["error"] != "true"){
-          if(data["items"] == "Cart is Empty"){
+    if(lockCart == false){
+      lockCart = true;
+      print("GetCardData Called");
+      SharedPreferences sharedPreferences;
+      sharedPreferences = await SharedPreferences.getInstance();
+      userid = sharedPreferences.getString("token").toString();
+      print(userid);
+      if(userid != null){
+        try {
+          var url = 'http://13.127.202.246/api/get_cart';
+          var response = await http.post(url, body: {
+            "user_id" : userid,
+          });
+          var data = json.decode(response.body);
+          print(data);
+          if(data["error"] != "true"){
+            if(data["items"] == "Cart is Empty"){
+              cartItems.clear();
+            }
+            if(data["items"] != "Cart is Empty"){
+              var rest = data['items'] as List;
+              print(rest);
+              List<CartItemModal> itemList = rest.map<CartItemModal>((json) => CartItemModal.fromJson(json)).toList();
+              for (int j = 0; j < itemList.length; j++){
+                CartItemModal i = itemList[j];
+                cartItems[i.upcCode] = i.qty;
+              }
+              print(cartItems);
+            }
+          }
+          else{
             cartItems.clear();
           }
-          if(data["items"] != "Cart is Empty"){
-            var rest = data['items'] as List;
-            print(rest);
-            List<CartItemModal> itemList = rest.map<CartItemModal>((json) => CartItemModal.fromJson(json)).toList();
-            for (int j = 0; j < itemList.length; j++){
-              CartItemModal i = itemList[j];
-              cartItems[i.upcCode] = i.qty;
-            }
-            print(cartItems);
-          }
-        }
-        else{
+        } on Exception catch (e) {
+          print(e);
+          lockCart = false;
           cartItems.clear();
         }
-      } on Exception catch (e) {
-        print(e);
-        cartItems.clear();
       }
+      lockCart = false;
     }
   }
 

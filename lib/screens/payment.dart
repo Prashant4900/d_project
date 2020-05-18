@@ -34,13 +34,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   String Hash;
 
   @override
-  void initState() async {
-    bool createOrder = await updateOrdertoServer();
-    if(Hash.length > 100 && createOrder == true){
-      Navigator.pushReplacement(context,MaterialPageRoute(
-        builder: (context) => PaymentSuccessfulScreen(orderId: widget.orderId, amount: widget.amount, userId: widget.userId,),
-      ));
-    }
+  void initState(){
+    navigateToOtherPage();
   }
 
   @override
@@ -48,9 +43,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-            width: screenWidth(context),
-            height: screenHeight(context),
-            child: CircularProgressIndicator();
+            width: screenWidth(context, dividedBy: 2),
+            height: screenWidth(context, dividedBy: 2),
+            child: CircularProgressIndicator(),
         ),
       ),
     );
@@ -84,7 +79,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         "area" : userData.selectedAddress.areaDetails,
         "city" : userData.selectedAddress.city,
         "zip_code" : userData.selectedAddress.pinCode.toString(),
-        "address_type" : "home",
+        "address_type" : userData.selectedAddress.addressType,
         "user_id" : userData.userid,
         "payment_mode": "ONLINE"
       });
@@ -98,6 +93,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
         return false;
       }
   }
+
+  void navigateToOtherPage() async{
+    bool createOrder = await updateOrdertoServer();
+    var a = await createHash();
+    if(Hash.length > 100 && createOrder == true){
+      Navigator.pushReplacement(context,MaterialPageRoute(
+        builder: (context) => PaymentSuccessfulScreen(orderId: widget.orderId, amount: widget.amount, userId: widget.userId,hashprime: Hash,),
+      ));
+    }
+  }
 }
 
 class PaymentSuccessfulScreen extends StatefulWidget {
@@ -106,11 +111,13 @@ class PaymentSuccessfulScreen extends StatefulWidget {
     this.orderId,
     this.userId,
     this.amount,
+    this.hashprime,
 });
 
   String orderId;
   String userId;
   String amount;
+  String hashprime;
   @override
   _PaymentSuccessfulScreenState createState() => _PaymentSuccessfulScreenState();
 }
@@ -154,24 +161,9 @@ class _PaymentSuccessfulScreenState extends State<PaymentSuccessfulScreen> {
 
   WebViewController _webController;
 
-  String hashPrime;
 
   bool loading = true;
 
-  Future<void> createHash() async{
-    final response = await http.post(PAYMENT_URL, headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    }, body: {
-      "amount": widget.amount,
-      "order_id": widget.orderId,
-      "customer_id": widget.userId
-    });
-    var data = json.decode(response.body);
-    var hash = data['CHECKSUMHASH'];
-    hashPrime = hash;
-    print(hashPrime);
-    print(hashPrime.length);
-  }
 
 
   String _loadHTML() {
@@ -184,7 +176,7 @@ class _PaymentSuccessfulScreenState extends State<PaymentSuccessfulScreen> {
         "<input  type='hidden' name='WEBSITE' value='WEBSTAGING' />" +
         "<input  type='hidden' name='CHANNEL_ID' value='WEB' />" +
         "<input  type='hidden' name='CALLBACK_URL' value='http://13.127.202.246/api/handle_app_request' />" +
-        "<input  type='hidden' name='CHECKSUMHASH' value=$hashPrime />" +
+        "<input  type='hidden' name='CHECKSUMHASH' value=${widget.hashprime} />" +
         "</form> </body> </html>";
   }
 
@@ -206,7 +198,6 @@ class _PaymentSuccessfulScreenState extends State<PaymentSuccessfulScreen> {
               debuggingEnabled: false,
               javascriptMode: JavascriptMode.unrestricted,
               onWebViewCreated: (controller) async{
-                await createHash();
                 _webController = controller;
                 _webController.loadUrl(
                     new Uri.dataFromString(_loadHTML(), mimeType: 'text/html')

@@ -87,7 +87,7 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
           "area" : userData.selectedAddress.areaDetails,
           "city" : userData.selectedAddress.city,
           "zip_code" : userData.selectedAddress.pinCode.toString(),
-          "address_type" : "home",
+          "address_type" : userData.selectedAddress.addressType,
           "user_id" : userData.userid,
           "payment_mode": widget.type
         });
@@ -95,12 +95,15 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
         print(data);
         print(data["error"]);
         if(data["error"] == false || data["error"] == "false"){
+          print("True returned");
           return true;
         }
         else{
+          print("false returned");
           return false;
         }
     }
+    print("Why this kolaveri di");
     return true;
     }
 }

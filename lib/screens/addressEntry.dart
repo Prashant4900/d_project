@@ -13,6 +13,8 @@ class AddressEntry extends StatefulWidget {
 }
 
 class _AddressEntryState extends State<AddressEntry> {
+  List<String> addressTypes = ["Home", "Office", "Other"];
+  String selectedAddressType = "Home";
   final _formKey = GlobalKey<FormState>();
   Address address = Address();
   UserData userData = UserData();
@@ -177,7 +179,14 @@ class _AddressEntryState extends State<AddressEntry> {
                     ),
                   ],
                 ),
-
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.all(10.0),
+                        child: buildDropdownButton()),
+                  ],
+                ),
                 Padding(
                   padding: const EdgeInsets.only(top : 40.0),
                   child: RaisedButton(
@@ -194,7 +203,7 @@ class _AddressEntryState extends State<AddressEntry> {
                           "area" : address.areaDetails.toString(),
                           "city" : address.city.toString(),
                           "zip_code" : address.pinCode,
-                          "address_type" : "test",
+                          "address_type" : selectedAddressType,
                           "user_id" : userData.userid
                         });
                         userData.addressList.add(address);
@@ -209,10 +218,28 @@ class _AddressEntryState extends State<AddressEntry> {
                 ),
               ],
             ),
-
           ),
         ),
       ),
     );
   }
+
+
+  Widget buildDropdownButton() {
+      return DropdownButton<String>(
+        items : addressTypes.map((String type){
+          return DropdownMenuItem<String>(
+            value: type,
+            child: new Text(type),
+          );
+        }).toList(),
+        value: selectedAddressType,
+        onChanged: (String str){
+          setState(() {
+          selectedAddressType = str;
+          });
+        },
+        hint: Text("Variations"),
+      );
+    }
 }

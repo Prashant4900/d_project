@@ -58,7 +58,8 @@ class _OrderScreenState extends State<OrderScreen> {
                         child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text("Time  : " + userData.orderList[index].orderTime + ",", overflow: TextOverflow.ellipsis,),
+                                Text("Date  : " + userData.orderList[index].orderTime.split("T")[0], overflow: TextOverflow.ellipsis,),
+                                Text("Time : " + userData.orderList[index].orderTime.split("T")[1].split(".")[0 ], overflow: TextOverflow.ellipsis,),
                                 Text("OrderId : " + userData.orderList[index].orderId,overflow: TextOverflow.ellipsis,),
                                 Text("Amount : " + userData.orderList[index].amount.toString(),overflow: TextOverflow.ellipsis,)
                               ],
