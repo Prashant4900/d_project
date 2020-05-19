@@ -1,3 +1,4 @@
+import 'package:d_project/screens/searchScreen.dart';
 import 'package:d_project/widgets/ItemCardCategoryPage.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/widgets/SearchWidget.dart';
@@ -22,7 +23,21 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.sub.name, overflow: TextOverflow.fade,),),
+      appBar: AppBar(title: Text(widget.sub.name, overflow: TextOverflow.fade,),
+      actions: <Widget>[
+        IconButton(
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SearchScreen(),
+              ),
+            );
+          },
+          icon: Icon(Icons.search),
+        ),
+
+      ],),
       body: ScrollConfiguration(
         behavior: MyBehavior(),
         child: Padding(

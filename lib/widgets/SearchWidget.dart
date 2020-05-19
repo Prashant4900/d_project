@@ -16,7 +16,14 @@ class searchWidget extends StatelessWidget {
       alignment: Alignment(1.0,1.0),
       child: TextField(
         controller: controller,
-        onChanged: null,
+        onTap: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SearchScreen(),
+            ),
+          );
+        },
         onEditingComplete : () {
             String value = controller.value.text;
             print(value);
@@ -25,7 +32,7 @@ class searchWidget extends StatelessWidget {
             Navigator.push(
             context,
             MaterialPageRoute(
-            builder: (context) => SearchScreen(searchElement: value),
+            builder: (context) => SearchScreen(),
             ),
             );
             if(searchPage){

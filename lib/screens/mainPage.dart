@@ -1,4 +1,5 @@
 import 'package:d_project/modals/itemModal.dart';
+import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:d_project/utils/cart_data.dart';
 import 'package:d_project/utils/userData.dart';
 import 'package:d_project/widgets/ItemCardCategoryPage.dart';
@@ -124,9 +125,7 @@ class _MainScreenState extends State<MainScreen> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState != ConnectionState.done) {
                               //print('project snapshot data is: ${projectSnap.data}');
-                              return SizedBox(
-                                width: 10.0,
-                                height: 120.0,
+                              return Center(
                                 child: CircularProgressIndicator(
                                   backgroundColor: Colors.cyan,
                                   strokeWidth: 5,

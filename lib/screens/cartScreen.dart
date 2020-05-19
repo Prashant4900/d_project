@@ -177,7 +177,7 @@ class _CartScreenState extends State<CartScreen> {
                                    ));
                                  }
                               },
-                              child: Center(child: Text(address == null ? "Enter Delivery Address" : "Proceed to Payment", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
+                              child: Center(child: Text(userData.selectedAddress == null ? "Enter Delivery Address" : "Proceed to Payment", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
                             ),
                       );
                     }
