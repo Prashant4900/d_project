@@ -51,22 +51,22 @@ class _CategoriesPageState extends State<CategoriesPage> {
         },
         items: [
           BottomNavigationBarItem(
-            activeIcon:Icon(Icons.home, color: Colors.blue,) ,
+            activeIcon:Icon(Icons.home, color: Colors.themeOrange,) ,
             icon: Icon(Icons.home, color: Colors.grey,),
             title: Text("HOME", style: TextStyle(color: Colors.grey),),
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.featured_play_list, color: Colors.blue,),
+            activeIcon: Icon(Icons.featured_play_list, color: Colors.themeOrange,),
             icon: Icon(Icons.featured_play_list, color: Colors.grey,),
             title: Text("ORDERS", style: TextStyle(color: Colors.grey),),
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.local_offer, color: Colors.blue,),
+            activeIcon: Icon(Icons.local_offer, color: Colors.themeOrange,),
             icon: Icon(Icons.local_offer, color: Colors.grey,),
             title: Text("OFFERS", style: TextStyle(color: Colors.grey),),
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.shopping_cart, color: Colors.blue,),
+            activeIcon: Icon(Icons.shopping_cart, color: Colors.themeOrange,),
             icon: Icon(Icons.shopping_cart, color: Colors.grey,),
             title: Text("CART", style: TextStyle(color: Colors.grey),),
           ),

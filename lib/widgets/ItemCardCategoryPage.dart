@@ -70,7 +70,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                           margin: EdgeInsets.only(top: 10.0,),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4.0),
-                            border: Border.all(color: Colors.green),
+                            border: Border.all(color: Colors.themeOrange),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
