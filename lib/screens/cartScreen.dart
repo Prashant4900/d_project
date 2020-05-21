@@ -104,7 +104,7 @@ class _CartScreenState extends State<CartScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Text("Change", style: TextStyle(color: Colors.blue),),
+                          Text("Change", style: TextStyle(color: Colors.themeOrange),),
                         ],
                       ),
                     ),
@@ -122,7 +122,7 @@ class _CartScreenState extends State<CartScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   FutureBuilder<double>(
-                      future: bloc.calculateTotalPrice(),
+                    future: bloc.calculateTotalPrice(),
                     builder: (context, snapshot) {
                         if(snapshot.connectionState != ConnectionState.done){
                           return Padding(
@@ -150,7 +150,7 @@ class _CartScreenState extends State<CartScreen> {
                         return Container(
                           width: screenWidth(context, dividedBy: 2),
                           child: RaisedButton(
-                            color: Colors.blueGrey,
+                            color: Colors.themeOrange,
                             onPressed: (){
                               print("Cart Empty");
                             },
@@ -161,7 +161,7 @@ class _CartScreenState extends State<CartScreen> {
                       return Container(
                         width: screenWidth(context, dividedBy: 2),
                         child: RaisedButton(
-                              color: Colors.blueGrey,
+                              color: Colors.themeOrange,
                               onPressed: () async{
                                   address = await userData.selectedAddress;
                                  if(address == null){
