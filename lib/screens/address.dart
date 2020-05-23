@@ -21,12 +21,18 @@ class _AddressListingState extends State<AddressListing> {
       ),
       body: Column(
         children: <Widget>[
-          Expanded(child:userData.addressList.length == 0 ? Center(child: Text("No saved Address"),) : ListView.builder(
-              physics: ClampingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: userData.addressList.length,
-              itemBuilder: (BuildContext ctxt, int index){
-                return Card(
+          Expanded(child: userData.addressList.length == 0 ? Center(
+            child: Text("No saved Address"),) : ListView.builder(
+            physics: ClampingScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: userData.addressList.length,
+            itemBuilder: (BuildContext ctxt, int index) {
+              return InkWell(
+                onTap: () {
+                  userData.selectedAddress = userData.addressList[index];
+                  Navigator.pop(context);
+                },
+                child: Card(
                   child: Container(
                     padding: EdgeInsets.all(10.0),
                     child: Row(
@@ -37,35 +43,46 @@ class _AddressListingState extends State<AddressListing> {
                           children: <Widget>[
                             Row(
                               children: <Widget>[
-                                Text(userData.addressList[index].houseNumber + ",", overflow: TextOverflow.ellipsis,),
-                                Text(userData.addressList[index].pinCode,overflow: TextOverflow.ellipsis,),
+                                Text(
+                                  userData.addressList[index].houseNumber + ",",
+                                  overflow: TextOverflow.ellipsis,),
+                                Text(userData.addressList[index].pinCode,
+                                  overflow: TextOverflow.ellipsis,),
                               ],
                             ),
-                            Text(userData.addressList[index].areaDetails,overflow: TextOverflow.ellipsis,),
-                            Text(userData.addressList[index].city,overflow: TextOverflow.ellipsis,)
+                            Text(userData.addressList[index].areaDetails,
+                              overflow: TextOverflow.ellipsis,),
+                            Text(userData.addressList[index].city,
+                              overflow: TextOverflow.ellipsis,)
                           ],
                         ),
-                        IconButton(icon : Icon(Icons.forward, color: userData.addressList[index] == userData.selectedAddress ? Colors.deepOrange : Colors.black,),onPressed: (){
-                          userData.selectedAddress = userData.addressList[index];
+                        IconButton(icon: Icon(Icons.forward,
+                          color: userData.addressList[index] ==
+                              userData.selectedAddress
+                              ? Colors.deepOrange
+                              : Colors.black,), onPressed: () {
+                          userData.selectedAddress =
+                          userData.addressList[index];
                           Navigator.pop(context);
                         }),
                       ],
                     ),
                   ),
-                );
-              },),),
+                ),
+              );
+            },),),
           Container(
             color: Colors.deepOrange,
             height: 50.0,
             width: screenWidth(context),
             child: InkWell(
-              onTap: () async{
+              onTap: () async {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => AddressEntry(),
                     ));
-                },
+              },
               child: Center(
                 child: Text(
                   "Add New Address",

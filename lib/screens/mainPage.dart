@@ -75,7 +75,9 @@ class _MainScreenState extends State<MainScreen> {
                       SizedBox(height: 10.0,),
                       Text("What would you like to buy Today?", style: TextStyle(fontWeight: FontWeight.w500),),
                       SizedBox(height: 20.0,),
-                      searchWidget(searchPage: false,),
+                      Hero(
+                          tag: "SearchBar",
+                          child: searchWidget(searchPage: false,)),
                       SizedBox(height: 10.0,),
                     ],
                   ),
@@ -100,7 +102,9 @@ class _MainScreenState extends State<MainScreen> {
                         crossAxisSpacing: 5.0,
                         mainAxisSpacing: 10.0,
                         children: categories.map((value){
-                          return categoriesWidget(name: value.name,color: value.color,icon: value.icon,category: value,);
+                          return Hero(
+                              tag: value.name,
+                              child: categoriesWidget(name: value.name,color: value.color,icon: value.icon,category: value,));
                         }).toList(),
                       ),
                     ],

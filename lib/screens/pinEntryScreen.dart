@@ -49,9 +49,12 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                 builder: (context) => Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    SvgPicture.asset(
-                      'assests/DoorakartIcon.svg',
-                      width: screenWidth(context, dividedBy: 4),
+                    Hero(
+                      tag: "DoorakartIcon",
+                      child: SvgPicture.asset(
+                        'assests/DoorakartIcon.svg',
+                        width: screenWidth(context, dividedBy: 4),
+                      ),
                     ),
                     Column(
                       children: <Widget>[
@@ -68,34 +71,33 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                           Container(
                             padding: EdgeInsets.all(20.0),
                             width: double.infinity,
-                            child: CircleAvatar(
-                              radius: 30.0,
-                              backgroundColor: btnColor,
-                              child: IconButton(
-                                color: Colors.white,
-                                onPressed: () async{
-                                  final progress = ProgressHUD.of(context);
-                                  progress.showWithText("Verifying OTP");
-                                  if(entered){
-                                    //condition for checking otp
-                                    var result = await LoginHelper.verifyOtp(userOTP.toString(), widget.phoneNumber);
-                                    if(result != null){
-                                      print("Auth sucess");
-                                      sharedPreferences = await SharedPreferences.getInstance();
-                                      await sharedPreferences.setString("token", result.toString());
-                                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => MainScreen()), (Route<dynamic> route) => false);
-                                    }
-                                    else{
-                                      Scaffold.of(context).showSnackBar(InvalidsnackBar);
-                                    }
+                            child: RawMaterialButton(
+                              padding: EdgeInsets.all(15.0),
+                              elevation: 2.0,
+                              fillColor: Colors.deepOrange,
+                              onPressed: () async{
+                                final progress = ProgressHUD.of(context);
+                                progress.showWithText("Verifying OTP");
+                                if(entered){
+                                  //condition for checking otp
+                                  var result = await LoginHelper.verifyOtp(userOTP.toString(), widget.phoneNumber);
+                                  if(result != null){
+                                    print("Auth sucess");
+                                    sharedPreferences = await SharedPreferences.getInstance();
+                                    await sharedPreferences.setString("token", result.toString());
+                                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => MainScreen()), (Route<dynamic> route) => false);
                                   }
                                   else{
-                                    Scaffold.of(context).showSnackBar(ProperlysnackBar);
+                                    Scaffold.of(context).showSnackBar(InvalidsnackBar);
                                   }
-                                  progress.dismiss();
-                                },
-                                icon: Icon(Icons.arrow_forward, color: Colors.white,semanticLabel: "Submit",),
-                              ),
+                                }
+                                else{
+                                  Scaffold.of(context).showSnackBar(ProperlysnackBar);
+                                }
+                                progress.dismiss();
+                              },
+                              shape: CircleBorder(),
+                              child: Icon(Icons.arrow_forward, color: Colors.white,semanticLabel: "Submit", size: 30.0,),
                             ),
                           ),
                         ],
@@ -108,7 +110,7 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                           padding: EdgeInsets.only(left: 20.0, right: 20.0),
                           width: double.infinity,
                           child: RaisedButton(
-                            color: Colors.deepOrangeAccent,
+                            color: Colors.deepOrange,
                             onPressed: () async{
                               final progress = ProgressHUD.of(context);
                               progress.showWithText("Sending OTP");
@@ -128,7 +130,7 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
 
                             },
 
-                            child: Text("Resend OTP"),
+                            child: Text("Resend OTP", style: TextStyle(color: Colors.white)),
                           ),
                         ),
                         Container(
@@ -141,7 +143,7 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                                 builder: (context) => PhoneSignInScreen(),
                               ));
                             },
-                            child: Text("Change Mobile Number"),
+                            child: Text("Change Mobile Number", style: TextStyle(color: Colors.white)),
                           ),
                         )
                       ],
@@ -188,7 +190,7 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
           color: Colors.white,
           border: Border.all(
             width: 2,
-            color: Colors.green,
+            color: Colors.deepOrange,
           )),
       followingFieldDecoration: pinPutDecoration,
       pinAnimationType: PinAnimationType.scale,

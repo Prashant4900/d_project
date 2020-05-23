@@ -46,12 +46,15 @@ class _mainItemListWidgetState extends State<mainItemListWidget> {
           children: <Widget>[
             Stack(
               children: <Widget>[
-                Container(
-                  width: double.infinity,
-                  height: 190.0,
-                  decoration: BoxDecoration(
-                    color: widget.category.color,
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30.0), bottomRight: Radius.circular(30.0),),
+                Hero(
+                  tag: widget.category.name,
+                  child: Container(
+                    width: double.infinity,
+                    height: 190.0,
+                    decoration: BoxDecoration(
+                      color: widget.category.color,
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30.0), bottomRight: Radius.circular(30.0),),
+                    ),
                   ),
                 ),
                 Padding(
@@ -61,12 +64,14 @@ class _mainItemListWidgetState extends State<mainItemListWidget> {
                       Column(
                         children: <Widget>[
                           appbarWidget(()=> widget._drawerKey.currentState.openDrawer()),
-                          searchWidget(searchPage: false,),
+                          Hero(
+                              tag: "SearchBar",
+                              child: searchWidget(searchPage: false,)),
                           SizedBox(height: 10.0,),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text("Category"),
+                              Text(""),
                               DropdownButton<String>(
                                 items : categories.map((category){
                                   return DropdownMenuItem<String>(

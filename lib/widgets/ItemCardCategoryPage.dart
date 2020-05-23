@@ -49,7 +49,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Text(item.name, style: TextStyle(
-                        fontSize: 20.0,
+                        fontSize: 18.0,
                         fontWeight: FontWeight.w300
                     ),),
                     Text(item.unit,overflow: TextOverflow.ellipsis, style: TextStyle(

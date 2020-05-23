@@ -44,7 +44,9 @@ class _ReverifyPhoneSignInScreenState extends State<ReverifyPhoneSignInScreen> {
                       children: <Widget>[
                         ListTile(
                           title: TextField(
-                            decoration: InputDecoration(labelText: "Enter Phone Number", icon: Icon(Icons.phone)),
+                            decoration: InputDecoration(
+                                prefix: Text("+91"),
+                                labelText: "Enter Phone Number", icon: Icon(Icons.phone)),
                             keyboardType: TextInputType.phone,
                             onChanged: (value) => phoneNumber = value,
                           ),

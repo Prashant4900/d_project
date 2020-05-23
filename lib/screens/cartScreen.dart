@@ -52,7 +52,7 @@ class _CartScreenState extends State<CartScreen> {
               builder: (context, snapshot) {
                 if(snapshot.connectionState != ConnectionState.done){
                   return Expanded(
-                      child: CircularProgressIndicator());
+                      child: Center(child: CircularProgressIndicator()));
                 }
                 return Expanded(
                   child: ListView.builder(
@@ -178,7 +178,9 @@ class _CartScreenState extends State<CartScreen> {
                                    ));
                                  }
                               },
-                              child: Center(child: Text(userData.selectedAddress == null ? "Enter Delivery Address" : "Proceed to Payment", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
+                              child: Hero(
+                                  tag : "proceedToPayment",
+                                  child: Center(child: Text(userData.selectedAddress == null ? "Enter Delivery Address" : "Proceed to Payment", style: TextStyle(fontSize: 15.0, color: Colors.white),),)),
                             ),
                       );
                     }

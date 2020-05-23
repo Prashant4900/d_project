@@ -209,10 +209,13 @@ class _PreviewOrderState extends State<PreviewOrder> {
                     }
                   }
                 },
-                child: Center(
-                  child: Text(
-                    "Proceed to Payment",
-                    style: TextStyle(fontSize: 15.0, color: Colors.white),
+                child: Hero(
+                  tag : "proceedToPayment",
+                  child: Center(
+                    child: Text(
+                      "Proceed to Payment",
+                      style: TextStyle(fontSize: 15.0, color: Colors.white),
+                    ),
                   ),
                 ),
               ),

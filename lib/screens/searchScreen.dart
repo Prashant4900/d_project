@@ -6,6 +6,7 @@ import 'package:d_project/widgets/ItemCardCategoryPage.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/widgets/SearchWidget.dart';
 import 'package:d_project/utils/scrollBehaviour.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:d_project/utils/listOfItem.dart';
@@ -72,12 +73,15 @@ class _SearchScreenState extends State<SearchScreen> {
                 itemFilter: (suggestion, input) => suggestion.name
                     .toLowerCase()
                     .startsWith(input.toLowerCase()),
-                itemSubmitted: (item) => setState(() => searchValue = item.name),
+                itemSubmitted: (item){
+                  setState(() => searchValue = item.name);
+                },
                 textChanged: (text) {
                   searchValue = text;
                 },
                 textSubmitted: (text){
-                  list = getSearchResult(text, context);},
+                  list = getSearchResult(text, context);
+                  },
                 clearOnSubmit: false,
                 suggestions: originalList,
               ),
@@ -110,7 +114,24 @@ class _SearchScreenState extends State<SearchScreen> {
         .where((l) => l.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
     if (short.length == 0) {
-      return Center(child: Text("No Products Found"));
+      if(searchValue == "search value"){
+        return Center(child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SvgPicture.asset("assests/searchSomething.svg", color:  Colors.deepOrange,height: screenWidth(context, dividedBy: 5),width: screenWidth(context, dividedBy: 5),),
+            Divider(),
+            Text("Search Something", style: TextStyle(color: Colors.deepOrange),),
+          ],
+        ));
+      }
+      return Center(child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SvgPicture.asset("assests/searchError.svg", color:  Colors.deepOrange,height: screenWidth(context, dividedBy: 5),width: screenWidth(context, dividedBy: 5),),
+          Divider(),
+          Text("No Products Found", style: TextStyle(color: Colors.deepOrange),),
+        ],
+      ));
     }
     return ListView.builder(
         physics: ClampingScrollPhysics(),

@@ -55,8 +55,9 @@ class _ChangeLocationState extends State<ChangeLocation> {
 //              ),
               Container(
                 padding: EdgeInsets.only(bottom : 10.0),
-                child: Text("Change Location".toUpperCase(), style: TextStyle(color: Colors.green, fontWeight: FontWeight.w600),),
+                child: Text("Change Location".toUpperCase(), style: TextStyle(color: Colors.deepOrange, fontWeight: FontWeight.w600),),
               ),
+              Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -67,7 +68,7 @@ class _ChangeLocationState extends State<ChangeLocation> {
                         ));
                       },
                     child: Container(
-                        color: Colors.green,
+                        color: Colors.deepOrange,
                         padding: EdgeInsets.all(5.0),
                         width: screenWidth(context, dividedBy: 2.3),
                         height: 40.0,
@@ -84,14 +85,15 @@ class _ChangeLocationState extends State<ChangeLocation> {
                         height: 40.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4.0),
-                          border: Border.all(color: Colors.green),
+                          border: Border.all(color: Colors.deepOrange),
                         ),
                         width: screenWidth(context, dividedBy: 2.3),
-                        child:Center(child: Text("Enter Address", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, color: Colors.green),)),
+                        child:Center(child: Text("Enter Address", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300, color: Colors.deepOrange),)),
                     ),
                   ),
                 ],
-              )
+              ),
+              Divider(),
             ],
           )
         ),

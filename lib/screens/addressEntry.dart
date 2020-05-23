@@ -13,6 +13,37 @@ class AddressEntry extends StatefulWidget {
 }
 
 class _AddressEntryState extends State<AddressEntry> {
+  List<String> indorePinCodes = ["452001"
+    ,"452002"
+    ,"452003"
+    ,"452004"
+    ,"452005"
+    ,"452006"
+    ,"452007"
+    ,"452008"
+    ,"452009"
+    ,"452010"
+    ,"452011"
+    ,"452012"
+    ,"452013"
+    ,"452014"
+    ,"452015"
+    ,"452016"
+    ,"452017"
+    ,"452018"
+    ,"452020"
+    ,"453111"
+    ,"453112"
+    ,"453331"
+    ,"453332"
+    ,"453555"
+    ,"453556"
+    ,"453771"];
+
+
+
+
+
   List<String> addressTypes = ["Home", "Office", "Other"];
   String selectedAddressType = "Home";
   final _formKey = GlobalKey<FormState>();

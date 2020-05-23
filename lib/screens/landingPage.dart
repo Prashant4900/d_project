@@ -52,9 +52,12 @@ class _LandingPageState extends State<LandingPage> {
                       'assests/DoorakartBanner.svg',
                       height: 60.0,
                     ),
-                    SvgPicture.asset(
-                      'assests/DoorakartIcon.svg',
-                      height: 150.0,
+                    Hero(
+                      tag: "DoorakartIcon",
+                      child: SvgPicture.asset(
+                        'assests/DoorakartIcon.svg',
+                        height: 150.0,
+                      ),
                     ),
                     SizedBox(
                       height: 20.0,

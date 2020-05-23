@@ -144,7 +144,9 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                                         ),
                                       );
                                   },
-                                  child: Center(child: Text("View Cart", style: TextStyle(fontSize: 15.0, color: Colors.white),overflow: TextOverflow.ellipsis,),),
+                                  child: Hero(
+                                      tag : "proceedToPayment",
+                                      child: Center(child: Text("View Cart", style: TextStyle(fontSize: 15.0, color: Colors.white),overflow: TextOverflow.ellipsis,),)),
                                 ),
                           );
                         }
@@ -167,7 +169,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
     var originalList = await bloc.itemList;
     List short = originalList.where((l) => l.MainSubCategory.toLowerCase().contains(sub)).toList();
     if(short.length == 0){
-      return Center(child: Text("No Products Found", style: TextStyle(fontSize: 20.0),));
+      return Expanded(child: Center(child: Text("No Products Found", style: TextStyle(fontSize: 20.0),)));
     }
     return Expanded (
       child: ListView.builder(

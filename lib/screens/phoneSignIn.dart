@@ -33,12 +33,16 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                 builder:(context) => Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    SvgPicture.asset('assests/DoorakartIcon.svg', width: screenWidth(context, dividedBy: 2),),
+                    Hero(
+                        tag: "DoorakartIcon",
+                        child: SvgPicture.asset('assests/DoorakartIcon.svg', width: screenWidth(context, dividedBy: 2),)),
                     Column(
                       children: <Widget>[
                         ListTile(
                           title: TextField(
-                            decoration: InputDecoration(labelText: "Enter Phone Number", icon: Icon(Icons.phone)),
+                            decoration: InputDecoration(
+                                prefix: Text("+91"),
+                                labelText: "Enter Phone Number", icon: Icon(Icons.phone)),
                             keyboardType: TextInputType.phone,
                             onChanged: (value) => phoneNumber = value,
                           ),

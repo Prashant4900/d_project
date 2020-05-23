@@ -12,6 +12,11 @@ enum mainCategory{
 
 class Item{
 
+
+  @override
+  String toString() => name;
+
+
   Item({this.category,
         this.imagePath,
         this.marketPrice,
@@ -84,6 +89,7 @@ class Item{
     }
     return col;
   }
+
 
   factory Item.fromJson(Map<String, dynamic> json) {
     return Item(
