@@ -1,3 +1,4 @@
+import 'package:d_project/utils/cart_data.dart';
 import 'package:d_project/utils/userData.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class PaymentDoneScreen extends StatefulWidget {
 }
 
 class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
-
+  CardData cardData = CardData();
   UserData userData = UserData();
   @override
   void initState() {
@@ -96,13 +97,16 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
           print(data["error"]);
           if(data["error"] == false || data["error"] == "false"){
             print("True returned");
+            cardData.calculateTotalPrice();
             return true;
           }
           else{
             print("false returned");
+            cardData.calculateTotalPrice();
             return false;
           }
       } on Exception catch (e) {
+        cardData.calculateTotalPrice();
             print(e.toString());
       }
     }

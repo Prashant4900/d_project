@@ -166,9 +166,10 @@ class _PreviewOrderState extends State<PreviewOrder> {
             ),
             Container(
               height: 50.0,
-              color: Colors.blue,
+              color: Colors.deepOrange,
               child: InkWell(
                 onTap: () async {
+                  await userData.checkLoginStatus();
                   bool phoneVerified = (userData.phoneNo != null);
                   print("Phone Verified" + phoneVerified.toString());
                   if (!phoneVerified) {

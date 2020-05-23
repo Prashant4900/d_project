@@ -123,13 +123,30 @@ class Order{
   String name;
   double amount;
   String orderTime;
+  var orderItemsData;
+  List<orderItems> orderItemsList;
+
 
   Order({
     this.name,
     this.amount,
     this.orderId,
-    this.orderTime
-});
+    this.orderTime,
+    this.orderItemsData
+}){
+    createOrderItems();
+  }
+
+
+  createOrderItems(){
+    if(orderItemsData != null){
+      var rest = orderItemsData as List;
+      if(rest.length > 0){
+        //selectedAddress = addressDat;
+        orderItemsList = rest.map<orderItems>((json) => orderItems.fromJson(json)).toList();
+      }
+    }
+  }
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
@@ -137,7 +154,27 @@ class Order{
       orderId: json["order_id"],
       amount: json["bill_amount"],
       orderTime: json["order_time"],
+      orderItemsData: json['items'],
     );
   }
 
+}
+
+class orderItems{
+  String upcCode;
+  int qty;
+
+
+  orderItems({
+    this.upcCode,
+    this.qty
+});
+
+
+  factory orderItems.fromJson(Map<String, dynamic> json) {
+    return orderItems(
+     upcCode: json['item_upc'],
+      qty: json['quantity'],
+    );
+  }
 }

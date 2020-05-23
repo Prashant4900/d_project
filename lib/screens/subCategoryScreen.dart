@@ -135,7 +135,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                           return Container(
                             width: screenWidth(context, dividedBy: 2),
                             child: RaisedButton(
-                                  color: Colors.themeOrange,
+                                  color: Colors.deepOrange,
                                   onPressed: () async{
                                       Navigator.push(
                                         context,

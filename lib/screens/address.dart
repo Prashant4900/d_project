@@ -45,7 +45,7 @@ class _AddressListingState extends State<AddressListing> {
                             Text(userData.addressList[index].city,overflow: TextOverflow.ellipsis,)
                           ],
                         ),
-                        IconButton(icon : Icon(Icons.forward, color: userData.addressList[index] == userData.selectedAddress ? Colors.themeOrange : Colors.black,),onPressed: (){
+                        IconButton(icon : Icon(Icons.forward, color: userData.addressList[index] == userData.selectedAddress ? Colors.deepOrange : Colors.black,),onPressed: (){
                           userData.selectedAddress = userData.addressList[index];
                           Navigator.pop(context);
                         }),
@@ -55,7 +55,7 @@ class _AddressListingState extends State<AddressListing> {
                 );
               },),),
           Container(
-            color: Colors.themeOrange,
+            color: Colors.deepOrange,
             height: 50.0,
             width: screenWidth(context),
             child: InkWell(

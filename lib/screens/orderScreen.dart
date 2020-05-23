@@ -1,8 +1,11 @@
+import 'package:d_project/screens/orderDetail.dart';
+import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:d_project/utils/userData.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/widgets/customDrawer.dart';
 import 'package:d_project/utils/scrollBehaviour.dart';
 import 'package:d_project/widgets/appbarWidget.dart';
+import 'package:date_time_format/date_time_format.dart';
 
 class OrderScreen extends StatefulWidget {
   OrderScreen();
@@ -56,14 +59,45 @@ class _OrderScreenState extends State<OrderScreen> {
                       child: Container(
                         padding: EdgeInsets.all(10.0),
                         child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text("Date  : " + userData.orderList[index].orderTime.split("T")[0], overflow: TextOverflow.ellipsis,),
-                                Text("Time : " + userData.orderList[index].orderTime.split("T")[1].split(".")[0 ], overflow: TextOverflow.ellipsis,),
-                                Text("OrderId : " + userData.orderList[index].orderId,overflow: TextOverflow.ellipsis,),
-                                Text("Amount : " + userData.orderList[index].amount.toString(),overflow: TextOverflow.ellipsis,)
-                              ],
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            InkWell(
+                              onTap : (){
+                                Navigator.push(context, MaterialPageRoute(
+                                  //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
+                                  builder: (context) => OrderDetails(order: userData.orderList[index]),
+                                ));
+                              },
+                              child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(DateTimeFormat.format(DateTime.parse(userData.orderList[index].orderTime).toLocal(), format: DateTimeFormats.americanDayOfWeekAbbr), overflow: TextOverflow.ellipsis),
+                                      Text("OrderId : " + userData.orderList[index].orderId,overflow: TextOverflow.ellipsis,),
+                                      Text("Amount : " + userData.orderList[index].amount.toString(),overflow: TextOverflow.ellipsis,)
+                                    ],
+                                  ),
                             ),
+                            Divider(),
+                            Row(
+                              children: <Widget>[
+                                InkWell(
+                                  child: Container(
+                                    width: screenWidth(context, dividedBy: 2.2),
+                                    height: 25.0,
+                                    child: Center(child: Text("Need Help?")),
+                                  ),
+                                ),
+                                InkWell(
+                                  child: Container(
+                                    width: screenWidth(context, dividedBy: 2.2),
+                                    height: 25.0,
+                                    child: Center(child: Text("Cancel Order")),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
 
                       ),
                     );
@@ -75,4 +109,5 @@ class _OrderScreenState extends State<OrderScreen> {
       ),
     );
   }
+
 }

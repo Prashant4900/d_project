@@ -20,14 +20,14 @@ class CustomDrawer extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: <Widget>[
               UserAccountsDrawerHeader(
-                accountName: Text(userData.phoneNo == null ? "" : userData.phoneNo),
-                accountEmail: Text(userData.name == null || userData.name == ""  ? "User" : userData.name, overflow: TextOverflow.ellipsis,),
+                accountName: Text(userData.phoneNo == null ? "" : userData.phoneNo , style: TextStyle(color: Colors.white),),
+                accountEmail: Text(userData.name == null || userData.name == ""  ? "User" : userData.name, style: TextStyle(color: Colors.white),overflow: TextOverflow.ellipsis,),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Color(0xF0F6F7FF),
-                  child: Text(userData.name == null || userData.name == "" ? "U" : userData.name.substring(0,1), style: TextStyle(fontSize: 40.0),),
+                  child: Text(userData.name == null || userData.name == "" ? "U" : userData.name.substring(0,1), style: TextStyle(fontSize: 40.0, color: Colors.black),),
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.blueGrey,
+                  color: Colors.deepOrange,
                 ),
               ),
               ListTile(

@@ -30,6 +30,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   Address address;
 
+
   @override
   Widget build(BuildContext context) {
     double amount;
@@ -104,7 +105,7 @@ class _CartScreenState extends State<CartScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Text("Change", style: TextStyle(color: Colors.themeOrange),),
+                          Text("Change", style: TextStyle(color: Colors.deepOrange),),
                         ],
                       ),
                     ),
@@ -150,7 +151,7 @@ class _CartScreenState extends State<CartScreen> {
                         return Container(
                           width: screenWidth(context, dividedBy: 2),
                           child: RaisedButton(
-                            color: Colors.themeOrange,
+                            color: Colors.deepOrange,
                             onPressed: (){
                               print("Cart Empty");
                             },
@@ -161,7 +162,7 @@ class _CartScreenState extends State<CartScreen> {
                       return Container(
                         width: screenWidth(context, dividedBy: 2),
                         child: RaisedButton(
-                              color: Colors.themeOrange,
+                              color: Colors.deepOrange,
                               onPressed: () async{
                                   address = await userData.selectedAddress;
                                  if(address == null){

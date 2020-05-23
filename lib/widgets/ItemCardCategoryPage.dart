@@ -24,6 +24,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
     var bloc = Provider.of<CardData>(context);
     Item item = widget.item;
     int count = bloc.cartItems[item.upcCode] == null ? 0 : bloc.cartItems[item.upcCode];
+    int count2  = count;
 
     return Card(
         elevation: 2.0,
@@ -70,26 +71,30 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                           margin: EdgeInsets.only(top: 10.0,),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4.0),
-                            border: Border.all(color: Colors.themeOrange),
+                            border: Border.all(color: Colors.deepOrange),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               count > 0 ? InkWell(
-                                onTap: () {
+                                onTap: () async{
                                   if(count != 0){
-                                    count--;
+                                    setState(() {
+                                      count2--;
+                                    });
                                   }
-                                  bloc.reduceToCart(item.upcCode);
+                                  await bloc.reduceToCart(item.upcCode);
                                 },
                                 child: Icon(Icons.remove, size: 30.0,),
                               ) : SizedBox(),
-                              Text(count == 0 ? "Add to Cart":count.toString(), style: TextStyle(fontSize: 12.0),),
+                              Text(count == 0 ? "Add to Cart": count2.toString(), style: TextStyle(fontSize: 12.0),),
                               InkWell(
-                                onTap: () {
-                                  count++;
-                                  bloc.addToCart(item.upcCode);
+                                onTap: () async{
+                                  setState(() {
+                                    count2++;
+                                  });
+                                  await bloc.addToCart(item.upcCode);
                                 },
                                 child: Icon(Icons.add , size: 30.0),
                               ),

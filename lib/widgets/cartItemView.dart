@@ -18,9 +18,13 @@ class CartItemView extends StatefulWidget {
 }
 
 class _CartItemViewState extends State<CartItemView> {
+
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CardData>(context);
+    Item item = widget.item;
+    int count = bloc.cartItems[item.upcCode] == null ? 0 : bloc.cartItems[item.upcCode];
+    int count2  = count;
 
     return Container(
       width: double.infinity,
@@ -64,19 +68,29 @@ class _CartItemViewState extends State<CartItemView> {
                             margin: EdgeInsets.only(top: 10.0,),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4.0),
-                              border: Border.all(color: Colors.green),
+                              border: Border.all(color: Colors.deepOrange),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 InkWell(
-                                  onTap: ()=>bloc.reduceToCart(widget.item.upcCode),
+                                  onTap: () async{
+                                    setState(() {
+                                      count2--;
+                                    });
+                                    await bloc.reduceToCart(widget.item.upcCode);
+                                  },
                                   child: Icon(Icons.remove, size: 25.0,),
                                 ),
-                                Text(bloc.cartItems[widget.item.upcCode] == null ? '0' : bloc.cartItems[widget.item.upcCode].toString(), style: TextStyle(fontSize: 15.0),),
+                                Text(bloc.cartItems[widget.item.upcCode] == null ? '0' : count2.toString(), style: TextStyle(fontSize: 15.0),),
                                 InkWell(
-                                  onTap:() => bloc.addToCart(widget.item.upcCode),
+                                  onTap:() async{
+                                    setState(() {
+                                      count2--;
+                                    });
+                                    await bloc.addToCart(widget.item.upcCode);
+                                  },
                                   child: Icon(Icons.add , size: 25.0),
                                 ),
 

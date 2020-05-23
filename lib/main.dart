@@ -24,7 +24,7 @@ void main() {
     ],
     child: MaterialApp(
       theme: ThemeData(
-        primaryColor: Colors.red,
+        primaryColor: Colors.deepOrange,
         appBarTheme: AppBarTheme(
           color: Colors.white,
           iconTheme: IconThemeData(color: Colors.black),
