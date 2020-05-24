@@ -84,7 +84,8 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                               btnText,
                               style: TextStyle(fontSize: 15.0, color: Colors.white),
                             ),
-                            color: Color(0xFF18D191),
+//                            color: Color(0xFF18D191),
+                            color: Colors.deepOrange,
                             elevation: 7.0,
                           ),
                         )

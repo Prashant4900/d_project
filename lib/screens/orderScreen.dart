@@ -55,51 +55,54 @@ class _OrderScreenState extends State<OrderScreen> {
                   shrinkWrap: true,
                   itemCount: userData.orderList.length,
                   itemBuilder: (BuildContext ctxt, int index){
-                    return Card(
-                      child: Container(
-                        padding: EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            InkWell(
-                              onTap : (){
-                                Navigator.push(context, MaterialPageRoute(
-                                  //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
-                                  builder: (context) => OrderDetails(order: userData.orderList[index]),
-                                ));
-                              },
-                              child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(DateTimeFormat.format(DateTime.parse(userData.orderList[index].orderTime).toLocal(), format: DateTimeFormats.americanDayOfWeekAbbr), overflow: TextOverflow.ellipsis),
-                                      Text("OrderId : " + userData.orderList[index].orderId,overflow: TextOverflow.ellipsis,),
-                                      Text("Amount : " + userData.orderList[index].amount.toString(),overflow: TextOverflow.ellipsis,)
-                                    ],
-                                  ),
-                            ),
-                            Divider(),
-                            Row(
-                              children: <Widget>[
-                                InkWell(
-                                  child: Container(
-                                    width: screenWidth(context, dividedBy: 2.2),
-                                    height: 25.0,
-                                    child: Center(child: Text("Need Help?")),
-                                  ),
-                                ),
-                                InkWell(
-                                  child: Container(
-                                    width: screenWidth(context, dividedBy: 2.2),
-                                    height: 25.0,
-                                    child: Center(child: Text("Cancel Order")),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(color: Colors.blueGrey),
                       ),
+                      padding: EdgeInsets.all(10.0),
+                      margin: EdgeInsets.all(5.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          InkWell(
+                            onTap : (){
+                              Navigator.push(context, MaterialPageRoute(
+                                //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
+                                builder: (context) => OrderDetails(order: userData.orderList[index]),
+                              ));
+                            },
+                            child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(DateTimeFormat.format(DateTime.parse(userData.orderList[index].orderTime).toLocal(), format: DateTimeFormats.americanDayOfWeekAbbr), overflow: TextOverflow.ellipsis),
+                                    Text("OrderId : " + userData.orderList[index].orderId,overflow: TextOverflow.ellipsis,),
+                                    Text("Amount : " + userData.orderList[index].amount.toString(),overflow: TextOverflow.ellipsis,)
+                                  ],
+                                ),
+                          ),
+                          Divider(),
+                          Row(
+                            children: <Widget>[
+                              InkWell(
+                                child: Container(
+                                  width: screenWidth(context, dividedBy: 2.2),
+                                  height: 25.0,
+                                  child: Center(child: Text("Need Help?")),
+                                ),
+                              ),
+                              InkWell(
+                                child: Container(
+                                  width: screenWidth(context, dividedBy: 2.2),
+                                  height: 25.0,
+                                  child: Center(child: Text("Cancel Order")),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+
                     );
                   },),
                 ],

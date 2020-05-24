@@ -57,105 +57,96 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
               future: getSearchResult(widget.sub.searchToken, context),
               builder: (context, snapshot){
                 if(snapshot.connectionState != ConnectionState.done){
-                  return Expanded (
-                    child: CircularProgressIndicator()
+                  return Expanded(
+                    child: Center(child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                        Text("Loading Data...")
+                      ],
+                    ))
                   );
                 }
                 return snapshot.data;
               },
             ),
             // ),
-            FutureBuilder<int>(
-              future: bloc.cartSize(),
-              builder: (context, snapshot) {
-              if(snapshot.connectionState != ConnectionState.done || snapshot.data == 0.0) {
-                return Container(width: 0,height: 0,);
-              }
-              else {
-                return Container(
-                  width: double.infinity,
-                  color: Color(0xF0F6F7FF),
-                  height: 50.0,
-                  child:Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      FutureBuilder<double>(
-                        future: bloc.calculateTotalPrice(),
-                        builder: (context, snapshot) {
-                            if(snapshot.connectionState != ConnectionState.done){
+            Row(
+              children: <Widget>[
+                Container(
+                      width: screenWidth(context, dividedBy: 2),
+                      height: 50.0,
+                      color: Color(0xF0F6F7FF),
+                      child:Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          FutureBuilder<double>(
+                            future: bloc.calculateTotalPrice(),
+                            builder: (context, snapshot) {
+                                if(snapshot.connectionState != ConnectionState.done){
+                                  return Padding(
+                                    padding: EdgeInsets.only(left : 10.0),
+                                    child : Text("Calculating ",style: TextStyle(color: Colors.black, fontSize: 10.0),overflow: TextOverflow.ellipsis,),
+                                  );
+                                }
                               return Padding(
                                 padding: EdgeInsets.only(left : 10.0),
-                                child : Text("Calculating ",style: TextStyle(color: Colors.black, fontSize: 20.0),),
-                              );
-                            }
-                          return Padding(
-                            padding: EdgeInsets.only(left : 10.0),
-                            child : Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text("Sumtotal ",style: TextStyle(color: Colors.black, fontSize: 10.0),),
-                                Text("₹" + snapshot.data.toString(),style: TextStyle(color: Colors.black, fontSize: 20.0),),
-                              ],
-                            ),
-                          );
-                        }
-                      ),
-                      FutureBuilder<int>(
-                        future: bloc.cartSize(),
-                        builder: (context, snapshot) {
-                            if(snapshot.connectionState != ConnectionState.done){
-                              return Padding(
-                                padding: EdgeInsets.only(left : 10.0),
-                                child : Text("Calculating ",style: TextStyle(color: Colors.black, fontSize: 20.0),overflow: TextOverflow.ellipsis,),
-                              );
-                            }
-                          return Padding(
-                            padding: EdgeInsets.only(left : 10.0),
-                            child : Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text("Items: ",style: TextStyle(color: Colors.black, fontSize: 10.0),),
-                                Text("" + snapshot.data.toString(),style: TextStyle(color: Colors.black, fontSize: 20.0),overflow: TextOverflow.ellipsis,),
-                              ],
-                            ),
-                          );
-                        }
-                      ),
-                      FutureBuilder<double>(
-                        future: bloc.calculateTotalPrice(),
-                        builder: (context, snapshot) {
-                          if(snapshot.connectionState != ConnectionState.done || snapshot.data == 0.0){
-                            return Container(
-                              width: 0,
-                              height: 0,
-                            );
-                          }
-                          return Container(
-                            width: screenWidth(context, dividedBy: 2),
-                            child: RaisedButton(
-                                  color: Colors.deepOrange,
-                                  onPressed: () async{
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => CartScreen(),
-                                        ),
-                                      );
-                                  },
-                                  child: Hero(
-                                      tag : "proceedToPayment",
-                                      child: Center(child: Text("View Cart", style: TextStyle(fontSize: 15.0, color: Colors.white),overflow: TextOverflow.ellipsis,),)),
+                                child : Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text("Sumtotal ",style: TextStyle(color: Colors.black, fontSize: 10.0),),
+                                    Text("₹" + snapshot.data.toString(),style: TextStyle(color: Colors.black, fontSize: 20.0),),
+                                  ],
                                 ),
-                          );
-                        }
+                              );
+                            }
+                          ),
+                          FutureBuilder<int>(
+                            future: bloc.cartSize(),
+                            builder: (context, snapshot) {
+                                if(snapshot.connectionState != ConnectionState.done){
+                                  return Padding(
+                                    padding: EdgeInsets.only(right : 20.0),
+                                    child : Text(" ",style: TextStyle(color: Colors.black, fontSize: 10.0),overflow: TextOverflow.ellipsis,),
+                                  );
+                                }
+                              return Padding(
+                                padding: EdgeInsets.only(right : 20.0),
+                                child : Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text("Items",style: TextStyle(color: Colors.black, fontSize: 10.0),),
+                                    Text("" + snapshot.data.toString(),style: TextStyle(color: Colors.black, fontSize: 20.0),overflow: TextOverflow.ellipsis,),
+                                  ],
+                                ),
+                              );
+                            }
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
+                Container(
+                  height : 50.0,
+                  width: screenWidth(context, dividedBy: 2),
+                  child: RaisedButton(
+                    color: Colors.deepOrange,
+                    onPressed: () async{
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CartScreen(),
+                        ),
+                      );
+                    },
+                    child: Hero(
+                        tag : "proceedToPayment",
+                        child: Center(child: Text("View Cart", style: TextStyle(fontSize: 15.0, color: Colors.white),overflow: TextOverflow.ellipsis,),)),
                   ),
-                );
-              }
-            },)
+                ),
+              ],
+            )
           ]
         )
       ),

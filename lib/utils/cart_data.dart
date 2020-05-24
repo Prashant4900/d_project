@@ -132,6 +132,7 @@ class CardData with ChangeNotifier{
       cartItems.remove(upcCode);
       notifyListeners();
       await updateCart(upcCode,0);
+      SyncMaps();
   }
 
 

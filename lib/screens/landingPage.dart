@@ -88,11 +88,28 @@ class _LandingPageState extends State<LandingPage> {
                           child: RaisedButton(
                             color: Colors.orange,
                             highlightElevation: 4.0,
-                            child: Text(
-                              "Login with Phone Number",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                            child: Row(
+                              children: <Widget>[
+
+                                Container(
+                                    width: 40.0,
+                                    height: 40.0,
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SvgPicture.asset("assests/phone.svg", color: Colors.orange,),
+                                    )),
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      "Login with Phone Number",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             onPressed: () {
                                 if(termsAndConditionCheck){
@@ -119,11 +136,27 @@ class _LandingPageState extends State<LandingPage> {
                           child: RaisedButton(
                             color: Colors.red,
                             highlightElevation: 4.0,
-                            child: Text(
-                              loginEmailText,
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                    height: 40,
+                                    width: 40,
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SvgPicture.asset("assests/google.svg", color: Colors.red,),
+                                    )),
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      loginEmailText,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             onPressed: () async {
                               if(termsAndConditionCheck){

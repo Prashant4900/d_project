@@ -52,7 +52,13 @@ class _CartScreenState extends State<CartScreen> {
               builder: (context, snapshot) {
                 if(snapshot.connectionState != ConnectionState.done){
                   return Expanded(
-                      child: Center(child: CircularProgressIndicator()));
+                      child: Center(child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          CircularProgressIndicator(),
+                          Text("Loading Cart Data...")
+                        ],
+                      )));
                 }
                 return Expanded(
                   child: ListView.builder(
