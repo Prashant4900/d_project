@@ -76,7 +76,7 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
   Future<bool> updateOrdertoServer() async{
     if(!widget.success){
       try {
-        var url = 'http://13.127.202.246/api/create_order';
+        var url = 'https://purchx.store/api/create_order';
           var response = await http.post(url, body: {
             "amount" : widget.amount,
             "order_id" : widget.orderId,

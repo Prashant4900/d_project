@@ -93,7 +93,7 @@ class Item{
 
   factory Item.fromJson(Map<String, dynamic> json) {
     return Item(
-        imagePath: "http://" + json["main_product"]["image_path"],
+        imagePath: json["main_product"]["image_path"],
         subItems :  json["sub_products"],
         itemId :json["item_id"],
         name: json["main_product"]["item_name"],

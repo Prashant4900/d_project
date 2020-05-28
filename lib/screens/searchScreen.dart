@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:d_project/utils/listOfItem.dart';
+import 'package:flutter/services.dart';
 
 class SearchScreen extends StatefulWidget {
 
@@ -17,9 +18,19 @@ class SearchScreen extends StatefulWidget {
   _SearchScreenState createState() => _SearchScreenState();
 }
 
+
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController searchController;
   String searchValue = "search value";
+
+
+  @override
+  void initState() {
+    SystemChannels.textInput.invokeMethod('TextInput.show');
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<ListOfItems>(context);

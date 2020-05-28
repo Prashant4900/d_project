@@ -88,7 +88,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                 },
                                 child: Icon(Icons.remove, size: 30.0,),
                               ) : SizedBox(),
-                              Text(count == 0 ? "Add to Cart": count2.toString(), style: TextStyle(fontSize: 12.0),),
+                              Text(bloc.cartItems[widget.item.upcCode] == null ? "Add to Cart": count2.toString(), style: TextStyle(fontSize: 12.0),),
                               InkWell(
                                 onTap: () async{
                                   setState(() {
@@ -98,7 +98,6 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                 },
                                 child: Icon(Icons.add , size: 30.0),
                               ),
-
                             ],
                           ),
                         ),

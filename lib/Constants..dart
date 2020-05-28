@@ -1,4 +1,4 @@
-const PAYMENT_URL = "http://13.127.202.246/api/generate_checksum";
+const PAYMENT_URL = "https://purchx.store/api/generate_checksum";
 
 const ORDER_DATA = {
   "custID": "USER_1122334455",

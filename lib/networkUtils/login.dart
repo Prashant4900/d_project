@@ -8,7 +8,7 @@ class loginHelper{
 
   //This method sends otp to the mobile number given as argument and returns true or false in case it's sent or not respectively
   Future<String> sendOTP(String number) async{
-    var url = 'http://13.127.202.246/api/send_otp';
+    var url = 'https://purchx.store/api/send_otp';
     var response = await http.post(url, body: {
       "phone_no" : number,
     });
@@ -23,7 +23,7 @@ class loginHelper{
   }
 
   Future<int> verifyOtp(String otp, String number) async{
-    var url = 'http://13.127.202.246/api/verify_otp';
+    var url = 'https://purchx.store/api/verify_otp';
     var response = await http.post(url, body: {
       "phone_no" : number,
       "otp" : otp,
@@ -43,7 +43,7 @@ class loginHelper{
   }
 
   Future<bool> reverifyPhone(String number, String userid, String otp) async{
-    var url = 'http://13.127.202.246/api/update_phone';
+    var url = 'https://purchx.store/api/update_phone';
     var response = await http.post(url, body: {
       "user_id" : userid,
       "phone_no" : number,

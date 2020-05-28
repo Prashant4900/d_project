@@ -67,7 +67,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Future<bool> updateOrdertoServer() async{
-      var url = 'http://13.127.202.246/api/create_order';
+      var url = 'https://purchx.store/api/create_order';
       var response = await http.post(url, body: {
         "amount" : widget.amount,
         "order_id" : widget.orderId,
@@ -175,7 +175,7 @@ class _PaymentSuccessfulScreenState extends State<PaymentSuccessfulScreen> {
         "<input  type='hidden' name='INDUSTRY_TYPE_ID' value='Retail' />" +
         "<input  type='hidden' name='WEBSITE' value='WEBSTAGING' />" +
         "<input  type='hidden' name='CHANNEL_ID' value='WEB' />" +
-        "<input  type='hidden' name='CALLBACK_URL' value='http://13.127.202.246/api/handle_app_request' />" +
+        "<input  type='hidden' name='CALLBACK_URL' value='https://purchx.store/api/handle_app_request' />" +
         "<input  type='hidden' name='CHECKSUMHASH' value=${widget.hashprime} />" +
         "</form> </body> </html>";
   }

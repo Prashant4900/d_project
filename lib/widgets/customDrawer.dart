@@ -59,16 +59,6 @@ class CustomDrawer extends StatelessWidget {
                 },
               ),
               ListTile(
-                title: Text('Wallet'),
-                leading: Icon(Icons.monetization_on),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
                 title: Text('Inbox'),
                 leading: Icon(Icons.message),
                 onTap: () {

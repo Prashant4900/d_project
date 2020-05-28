@@ -226,7 +226,7 @@ class _AddressEntryState extends State<AddressEntry> {
                       // Validate returns true if the form is valid, or false
                       // otherwise.
                       if (_formKey.currentState.validate()){
-                        var url = 'http://13.127.202.246/api/add_address';
+                        var url = 'https://purchx.store/api/add_address';
                         var response = await http.post(url, body: {
                           "house_no" : address.houseNumber.toString(),
                           "apartment" : address.apartmentName == null ? "" : address.apartmentName.toString(),

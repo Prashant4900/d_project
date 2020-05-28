@@ -35,7 +35,7 @@ class UserData  with ChangeNotifier{
     orderList = [];
     addressList = [];
     if(userid != null){
-      var url = 'http://13.127.202.246/api/get_user';
+      var url = 'https://purchx.store/api/get_user';
       var response = await http.post(url, body: {
         "user_id" : userid,
       });

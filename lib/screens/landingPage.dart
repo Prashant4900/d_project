@@ -165,7 +165,7 @@ class _LandingPageState extends State<LandingPage> {
                                 status.then((val) => val == true ? _googleSignIn.signOut() : 2+ 2);
                                 GoogleSignInAccount user = await _googleSignIn.signIn();
                                 if (user != null) {
-                                  var url = 'http://13.127.202.246/api/create_user';
+                                  var url = 'https://purchx.store/api/create_user';
                                   var response = await http.post(url, body: {
                                     "user_id": user.id,
                                     "user_name": user.displayName
@@ -215,7 +215,7 @@ class _LandingPageState extends State<LandingPage> {
 
   _launchURL() async {
     print("OnTap Clicked");
-    const url = 'http://13.127.202.246/terms';
+    const url = 'https://purchx.store/terms';
     await launch(url);
 //    if (await canLaunch(url)) {
 //      await launch(url);

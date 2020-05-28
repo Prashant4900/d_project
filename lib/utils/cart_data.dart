@@ -35,7 +35,7 @@ class CardData with ChangeNotifier{
       print(userid);
       if(userid != null){
         try {
-          var url = 'http://13.127.202.246/api/get_cart';
+          var url = 'https://purchx.store/api/get_cart';
           var response = await http.post(url, body: {
             "user_id" : userid,
           });
@@ -130,9 +130,8 @@ class CardData with ChangeNotifier{
 
   void clear(String upcCode) async{
       cartItems.remove(upcCode);
-      notifyListeners();
       await updateCart(upcCode,0);
-      SyncMaps();
+      notifyListeners();
   }
 
 
@@ -185,7 +184,7 @@ class CardData with ChangeNotifier{
 
 
   Future<void> updateCart(String upcCode, int qty) async{
-    var url = 'http://13.127.202.246/api/update_cart';
+    var url = 'https://purchx.store/api/update_cart';
     try{
       var response = await http.post(url, body: {
         "user_id" : userid,

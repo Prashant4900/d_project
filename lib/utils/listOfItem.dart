@@ -23,7 +23,7 @@ class ListOfItems with ChangeNotifier{
 
   Future<List<Item>> getItems() async{
     List<Item> itemList1;
-    var url = 'http://13.127.202.246/api/get_products';
+    var url = 'https://purchx.store/api/get_products';
     var response = await http.post(url, body: {
       "phone_no" : "7999867216",
     });
