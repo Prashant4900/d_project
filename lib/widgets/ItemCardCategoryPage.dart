@@ -7,11 +7,34 @@ import 'package:cached_network_image/cached_network_image.dart';
 // import 'package:progress_dialog/progress_dialog.dart';
 import 'package:loading/loading.dart';
 import 'package:loading/indicator/ball_spin_fade_loader_indicator.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'dart:async';
 
 class itemCardCategoryPage extends StatefulWidget {
   itemCardCategoryPage({this.item});
 
   final Item item;
+
+    static Future<void> showLoadingDialog(
+      BuildContext context, GlobalKey key) async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return new WillPopScope(
+              onWillPop: () async => false,
+              child: SimpleDialog(
+                  key: key,
+                  backgroundColor: Colors.white,
+                  children: <Widget>[
+                    Center(
+                      child: Column(children: [
+                        CircularProgressIndicator(),
+                      ]),
+                    )
+                  ]));
+        });
+  }
 
 
   @override
@@ -21,6 +44,7 @@ class itemCardCategoryPage extends StatefulWidget {
 class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
 
   var _value;
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +53,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
     int count = bloc.cartItems[item.upcCode] == null ? 0 : bloc.cartItems[item.upcCode];
     int count2  = count;
     bool loading = false;
+    bool _loading = loading;
 
     return Card(
         elevation: 2.0,
@@ -71,13 +96,13 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                 child: Text("₹"+item.ourPrice.toString(), style: TextStyle(fontSize: 17.0),)),
                         Container(
 
-                          width: 100.0,
+                          width: 120.0,
                           margin: EdgeInsets.only(top: 10.0,),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4.0),
                             border: Border.all(color: Colors.deepOrange),
                           ),
-                          child: Row(
+                          child: Builder(builder:(contextt) => Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             // children: <Widget>[
@@ -106,12 +131,18 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                             children: <Widget>[
                               count > 0 ? InkWell(
                                 onTap: () async{
-                                  if(count != 0){
-                                    setState(() {
-                                      count2--;
-                                    });
-                                  }
-                                  await bloc.reduceToCart(item.upcCode);
+                                  final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+                                  _loading = true;
+                                  pr.style(
+                                    message: 'Updating Quantity',
+                                    borderRadius: 10.0,
+                                    backgroundColor: Colors.white,
+                                  );
+                                  await pr.show();
+                                  Future<void> future = bloc.reduceToCartFut(item.upcCode);
+                                  future.then((value) => {
+                                    pr.hide(),
+                                  });
                                 },
                                 child: Icon(Icons.remove, size: 30.0,),
                               ) : SizedBox(),
@@ -121,22 +152,40 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                               Text(bloc.cartItems[widget.item.upcCode] == null ? "Add to Cart": count2.toString(), style: TextStyle(fontSize: 15.0),),
                               InkWell(
                                 onTap: () async{
-                                  loading = true;
-                                  Future<void> future = bloc.addToCartFut(item.upcCode);
-                                  future.then((value) => {
-                                    setState(() {
-                                      count2++;
-                                      loading = false;
-                                      print("loading");
-                                      print(loading);
-                                    })
+                                  final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+                                  _loading = true;
+                                  pr.style(
+                                    message: 'Updating Quantity',
+                                    borderRadius: 10.0,
+                                    backgroundColor: Colors.white,
+                                    );
+                                  
+                                  if(!loading) {
+                                    Future<void> future = bloc.addToCartFut(item.upcCode);
+                                    await pr.show();
+                                    // setState(() {
+                                    //   loading = true;
+                                    // });
+                                    future.then((value) => {
+                                      // _loading = false,
+                                      pr.hide(),
+                                      setState(() {
+                                        // loading = false;
+                                        count2++;
+                                      }),
+                                    });
+                                    // Timer(Duration(milliseconds: 300), () {
+                                    //   // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
+                                    // pr.hide();
+                                    // });
                                   }
-                                  );
-                                  // await pr.hide();
+                                  // itemCardCategoryPage.showLoadingDialog(contextt, _keyLoader); //open Loader
+
                                 },
                                 child: Icon(Icons.add , size: 30.0),
                               ),
                             ],
+                          )
                           ),
                         ),
                       ],

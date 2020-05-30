@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:d_project/utils/cart_data.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'dart:async';
 
 
 class CartItemView extends StatefulWidget {
@@ -74,23 +76,49 @@ class _CartItemViewState extends State<CartItemView> {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                InkWell(
-                                  onTap: () async{
-                                    setState(() {
-                                      count2--;
-                                    });
-                                    await bloc.reduceToCart(widget.item.upcCode);
-                                  },
-                                  child: Icon(Icons.remove, size: 25.0,),
-                                ),
+                              InkWell(
+                                onTap: () async{
+                                  final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+                                  pr.style(
+                                    message: 'Updating Quantity',
+                                    borderRadius: 10.0,
+                                    backgroundColor: Colors.white,
+                                  );
+                                  Future<void> future = bloc.reduceToCartFut(item.upcCode);
+                                  await pr.show();
+                                  future.then((value) => {
+                                    pr.hide(),
+                                    // if(count2!=0) {
+                                    //   setState(() {
+                                    //     // count2--;
+                                    //   }),}
+                                  });
+                                  // Timer(Duration(milliseconds: 300), () {
+                                  //   pr.hide();
+                                  // });
+                                },
+                                child: Icon(Icons.remove, size: 30.0,),
+                              ),
                                 Text(bloc.cartItems[widget.item.upcCode] == null ? '0' : count2.toString(), style: TextStyle(fontSize: 15.0),),
                                 InkWell(
                                   onTap:() async{
-                                    setState(() {
-                                      count2--;
+                                    final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+                                    pr.style(
+                                      message: 'Updating Quantity',
+                                      borderRadius: 10.0,
+                                      backgroundColor: Colors.white,
+                                    );
+                                    Future<void> future = bloc.addToCartFut(item.upcCode);
+                                    await pr.show();                                    
+                                    future.then((value) => {
+                                      pr.hide(),
+                                      if(count2!=0) {
+                                        setState(() {
+                                          count2++;
+                                        }),
+                                      },
                                     });
-                                    await bloc.addToCart(widget.item.upcCode);
-                                  },
+                                    },
                                   child: Icon(Icons.add , size: 25.0),
                                 ),
 

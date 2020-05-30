@@ -39,6 +39,7 @@ dependencies:
   date_time_format: ^0.1.1+1
   autocomplete_textfield: ^1.7.3
   loading: ^1.0.2
+  progress_dialog: ^1.2.3
 
 
 dev_dependencies:
