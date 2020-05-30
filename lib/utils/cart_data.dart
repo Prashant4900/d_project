@@ -116,6 +116,11 @@ class CardData with ChangeNotifier{
     return item;
   }
 
+  Future<void> addToCartFut(String upcCode) async {
+    print("future called");
+    addToCart(upcCode);
+  }
+
   void addToCart(String upcCode) async{
     if (cartItems.containsKey(upcCode)) {
       cartItems[upcCode] += 1;

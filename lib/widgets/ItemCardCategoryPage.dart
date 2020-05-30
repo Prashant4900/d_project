@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:d_project/utils/cart_data.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:progress_dialog/progress_dialog.dart';
+import 'package:loading/loading.dart';
+import 'package:loading/indicator/ball_spin_fade_loader_indicator.dart';
 
 class itemCardCategoryPage extends StatefulWidget {
   itemCardCategoryPage({this.item});
@@ -25,6 +28,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
     Item item = widget.item;
     int count = bloc.cartItems[item.upcCode] == null ? 0 : bloc.cartItems[item.upcCode];
     int count2  = count;
+    bool loading = false;
 
     return Card(
         elevation: 2.0,
@@ -76,6 +80,29 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            // children: <Widget>[
+                            //   count > 0 ? InkWell(
+                            //     onTap: () async{
+                            //       if(count != 0){
+                            //         setState(() {
+                            //           count2--;
+                            //         });
+                            //       }
+                            //       await bloc.reduceToCart(item.upcCode);
+                            //     },
+                            //     child: Icon(Icons.remove, size: 30.0,),
+                            //   ) : SizedBox(),
+                            //   Text(bloc.cartItems[widget.item.upcCode] == null ? "Add to Cart": count2.toString(), style: TextStyle(fontSize: 12.0),),
+                            //   InkWell(
+                            //     onTap: () async{
+                            //       setState(() {
+                            //         count2++;
+                            //       });
+                            //       await bloc.addToCart(item.upcCode);
+                            //     },
+                            //     child: Icon(Icons.add , size: 30.0),
+                            //   ),
+                            // ],
                             children: <Widget>[
                               count > 0 ? InkWell(
                                 onTap: () async{
@@ -88,13 +115,24 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                 },
                                 child: Icon(Icons.remove, size: 30.0,),
                               ) : SizedBox(),
-                              Text(bloc.cartItems[widget.item.upcCode] == null ? "Add to Cart": count2.toString(), style: TextStyle(fontSize: 12.0),),
+                              loading? 
+                              Loading(indicator: BallSpinFadeLoaderIndicator(), size: 20.0,color: Colors.blue)
+                              :
+                              Text(bloc.cartItems[widget.item.upcCode] == null ? "Add to Cart": count2.toString(), style: TextStyle(fontSize: 15.0),),
                               InkWell(
                                 onTap: () async{
-                                  setState(() {
-                                    count2++;
-                                  });
-                                  await bloc.addToCart(item.upcCode);
+                                  loading = true;
+                                  Future<void> future = bloc.addToCartFut(item.upcCode);
+                                  future.then((value) => {
+                                    setState(() {
+                                      count2++;
+                                      loading = false;
+                                      print("loading");
+                                      print(loading);
+                                    })
+                                  }
+                                  );
+                                  // await pr.hide();
                                 },
                                 child: Icon(Icons.add , size: 30.0),
                               ),
