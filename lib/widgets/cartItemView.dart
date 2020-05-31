@@ -21,6 +21,28 @@ class CartItemView extends StatefulWidget {
 
 class _CartItemViewState extends State<CartItemView> {
 
+  bool toggle = true;
+  bool loading = false;
+  void _toggle() {
+    print("toggle called");
+    setState(() {
+      toggle = !toggle;
+      loading = !loading;
+    });
+  }
+
+  _getToggleChild(bool itemPresent,int count) {
+    if (toggle) {
+      return Text( itemPresent ? "Add to Cart": count.toString(), style: TextStyle(fontSize: 12.0),);
+    } else {
+      return SizedBox(
+              child: CircularProgressIndicator(),
+              height: 20.0,
+              width: 20.0,
+            );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CardData>(context);
@@ -78,47 +100,31 @@ class _CartItemViewState extends State<CartItemView> {
                               children: <Widget>[
                               InkWell(
                                 onTap: () async{
-                                  final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
-                                  pr.style(
-                                    message: 'Updating Quantity',
-                                    borderRadius: 10.0,
-                                    backgroundColor: Colors.white,
-                                  );
-                                  Future<void> future = bloc.reduceToCartFut(item.upcCode);
-                                  await pr.show();
-                                  future.then((value) => {
-                                    pr.hide(),
-                                    // if(count2!=0) {
-                                    //   setState(() {
-                                    //     // count2--;
-                                    //   }),}
-                                  });
-                                  // Timer(Duration(milliseconds: 300), () {
-                                  //   pr.hide();
-                                  // });
+                                  if(!loading) {
+                                     _toggle();
+                                    Future<void> future = bloc.reduceToCartFut(item.upcCode);
+                                    future.then((value) => {
+                                      Timer(Duration(milliseconds: 400), () {
+                                        _toggle();
+                                      })
+                                    });
+                                  }
                                 },
                                 child: Icon(Icons.remove, size: 30.0,),
                               ),
-                                Text(bloc.cartItems[widget.item.upcCode] == null ? '0' : count2.toString(), style: TextStyle(fontSize: 15.0),),
+                               _getToggleChild(bloc.cartItems[widget.item.upcCode] == null,count2),
                                 InkWell(
                                   onTap:() async{
-                                    final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
-                                    pr.style(
-                                      message: 'Updating Quantity',
-                                      borderRadius: 10.0,
-                                      backgroundColor: Colors.white,
-                                    );
+                                  if(!loading) {
+                                     _toggle();
                                     Future<void> future = bloc.addToCartFut(item.upcCode);
-                                    await pr.show();                                    
                                     future.then((value) => {
-                                      pr.hide(),
-                                      if(count2!=0) {
-                                        setState(() {
-                                          count2++;
-                                        }),
-                                      },
+                                      Timer(Duration(milliseconds: 400), () {
+                                        _toggle();
+                                      })
                                     });
-                                    },
+                                  }
+                                  },
                                   child: Icon(Icons.add , size: 25.0),
                                 ),
 

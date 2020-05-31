@@ -46,14 +46,34 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
   var _value;
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
+  bool toggle = true;
+  bool loading = false;
+  void _toggle() {
+    print("toggle called");
+    setState(() {
+      toggle = !toggle;
+      loading = !loading;
+    });
+  }
+
+  _getToggleChild(bool itemPresent,int count) {
+    if (toggle) {
+      return Text( itemPresent ? "Add to Cart": count.toString(), style: TextStyle(fontSize: 12.0),);
+    } else {
+      return SizedBox(
+              child: CircularProgressIndicator(),
+              height: 20.0,
+              width: 20.0,
+            );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var bloc = Provider.of<CardData>(context);
     Item item = widget.item;
     int count = bloc.cartItems[item.upcCode] == null ? 0 : bloc.cartItems[item.upcCode];
     int count2  = count;
-    bool loading = false;
-    bool _loading = loading;
 
     return Card(
         elevation: 2.0,
@@ -131,48 +151,53 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                             children: <Widget>[
                               count > 0 ? InkWell(
                                 onTap: () async{
-                                  final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
-                                  _loading = true;
-                                  pr.style(
-                                    message: 'Updating Quantity',
-                                    borderRadius: 10.0,
-                                    backgroundColor: Colors.white,
-                                  );
-                                  await pr.show();
-                                  Future<void> future = bloc.reduceToCartFut(item.upcCode);
-                                  future.then((value) => {
-                                    pr.hide(),
-                                  });
+                                  // final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+                                  // pr.style(
+                                  //   message: 'Updating Quantity',
+                                  //   borderRadius: 10.0,
+                                  //   backgroundColor: Colors.white,
+                                  // );
+                                  // await pr.show();
+                                  if(!loading) {
+                                     _toggle();
+                                    Future<void> future = bloc.reduceToCartFut(item.upcCode);
+                                    future.then((value) => {
+                                      Timer(Duration(milliseconds: 400), () {
+                                        // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
+                                        _toggle();
+                                      })
+                                    });
+                                  }
                                 },
                                 child: Icon(Icons.remove, size: 30.0,),
                               ) : SizedBox(),
-                              loading? 
-                              Loading(indicator: BallSpinFadeLoaderIndicator(), size: 20.0,color: Colors.blue)
-                              :
-                              Text(bloc.cartItems[widget.item.upcCode] == null ? "Add to Cart": count2.toString(), style: TextStyle(fontSize: 15.0),),
+                              // 
+                              _getToggleChild(bloc.cartItems[widget.item.upcCode] == null,count2),
                               InkWell(
                                 onTap: () async{
-                                  final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
-                                  _loading = true;
-                                  pr.style(
-                                    message: 'Updating Quantity',
-                                    borderRadius: 10.0,
-                                    backgroundColor: Colors.white,
-                                    );
+                                  // final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+                                  // pr.style(
+                                  //   message: 'Updating Quantity',
+                                  //   borderRadius: 10.0,
+                                  //   backgroundColor: Colors.white,
+                                  //   );
+                                    
                                   
                                   if(!loading) {
+                                    _toggle();
                                     Future<void> future = bloc.addToCartFut(item.upcCode);
-                                    await pr.show();
+
+                                    // await pr.show();
                                     // setState(() {
                                     //   loading = true;
                                     // });
                                     future.then((value) => {
                                       // _loading = false,
-                                      pr.hide(),
-                                      setState(() {
-                                        // loading = false;
-                                        count2++;
-                                      }),
+                                      // pr.hide(),
+                                      Timer(Duration(milliseconds: 400), () {
+                                        // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
+                                        _toggle();
+                                      })
                                     });
                                     // Timer(Duration(milliseconds: 300), () {
                                     //   // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
