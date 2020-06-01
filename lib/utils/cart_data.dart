@@ -116,6 +116,17 @@ class CardData with ChangeNotifier{
     return item;
   }
 
+  Future<void> addToCartFut(String upcCode) async {
+    print("future called");
+    addToCart(upcCode);
+  }
+
+  Future<void> reduceToCartFut(String upcCode) async {
+    print("future called");
+    reduceToCart(upcCode);
+  }
+
+
   void addToCart(String upcCode) async{
     if (cartItems.containsKey(upcCode)) {
       cartItems[upcCode] += 1;
@@ -129,9 +140,12 @@ class CardData with ChangeNotifier{
 
 
   void clear(String upcCode) async{
-      cartItems.remove(upcCode);
-      await updateCart(upcCode,0);
-      notifyListeners();
+      // await updateCart(upcCode,0);
+      Future<void> future = updateCart(upcCode, 0);
+      future.then((value) => {
+        cartItems.remove(upcCode),
+        notifyListeners()
+      });
   }
 
 
@@ -139,16 +153,43 @@ class CardData with ChangeNotifier{
   void reduceToCart(String upcCode) async{
     if (cartItems.containsKey(upcCode)) {
       if(cartItems[upcCode] > 1){
-        cartItems[upcCode] -= 1;
-        await updateCart(upcCode,cartItems[upcCode]);
+        // cartItems[upcCode] -= 1;
+        // await updateCart(upcCode,cartItems[upcCode]);
+        print("check1 : ");
+        print(cartItems);
+        Future<void> future = updateCart(upcCode, cartItems[upcCode]-1);
+        future.then((value) => {
+          cartItems[upcCode] -= 1,
+          // notifyListeners()
+          print("check2 : "+cartItems.toString()),
+          print(cartItems),
+          notifyListeners()
+        });
       }
       else if(cartItems[upcCode] == 1){
-        clear(upcCode);
+        print("check1 : ");
+        print(cartItems);
+        // clear(upcCode);
+        Future<void> future = updateCart(upcCode, 0);
+        future.then((value) => {
+          cartItems.remove(upcCode),
+          // notifyListeners()
+          print("check2 : "+cartItems.toString()),
+          print(cartItems),
+          notifyListeners()
+        });
       }
     } else {
-      clear(upcCode);
+      // clear(upcCode);
+      Future<void> future = updateCart(upcCode, 0);
+      future.then((value) => {
+        cartItems.remove(upcCode),
+        notifyListeners()
+      });
     }
-    notifyListeners();
+    print("check");
+    // print(cartItems);
+    
   }
 
   Future<double> calculateTotalPrice()  async{
@@ -184,6 +225,7 @@ class CardData with ChangeNotifier{
 
 
   Future<void> updateCart(String upcCode, int qty) async{
+    print("update cart called");
     var url = 'https://purchx.store/api/update_cart';
     try{
       var response = await http.post(url, body: {
@@ -198,7 +240,7 @@ class CardData with ChangeNotifier{
       print("Unable to Update Cart");
     }
     print("Cart Updated");
-}
+  }
 }
 
 

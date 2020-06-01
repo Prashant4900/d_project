@@ -4,11 +4,37 @@ import 'package:provider/provider.dart';
 import 'package:d_project/utils/cart_data.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:progress_dialog/progress_dialog.dart';
+import 'package:loading/loading.dart';
+import 'package:loading/indicator/ball_spin_fade_loader_indicator.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'dart:async';
 
 class itemCardCategoryPage extends StatefulWidget {
   itemCardCategoryPage({this.item});
 
   final Item item;
+
+    static Future<void> showLoadingDialog(
+      BuildContext context, GlobalKey key) async {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return new WillPopScope(
+              onWillPop: () async => false,
+              child: SimpleDialog(
+                  key: key,
+                  backgroundColor: Colors.white,
+                  children: <Widget>[
+                    Center(
+                      child: Column(children: [
+                        CircularProgressIndicator(),
+                      ]),
+                    )
+                  ]));
+        });
+  }
 
 
   @override
@@ -18,6 +44,29 @@ class itemCardCategoryPage extends StatefulWidget {
 class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
 
   var _value;
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
+  bool toggle = true;
+  bool loading = false;
+  void _toggle() {
+    print("toggle called");
+    setState(() {
+      toggle = !toggle;
+      loading = !loading;
+    });
+  }
+
+  _getToggleChild(bool itemPresent,int count) {
+    if (toggle) {
+      return Text( itemPresent ? "Add to Cart": count.toString(), style: TextStyle(fontSize: 12.0),);
+    } else {
+      return SizedBox(
+              child: CircularProgressIndicator(),
+              height: 20.0,
+              width: 20.0,
+            );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,38 +116,101 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                 child: Text("₹"+item.ourPrice.toString(), style: TextStyle(fontSize: 17.0),)),
                         Container(
 
-                          width: 100.0,
+                          width: 120.0,
                           margin: EdgeInsets.only(top: 10.0,),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4.0),
                             border: Border.all(color: Colors.deepOrange),
                           ),
-                          child: Row(
+                          child: Builder(builder:(contextt) => Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            // children: <Widget>[
+                            //   count > 0 ? InkWell(
+                            //     onTap: () async{
+                            //       if(count != 0){
+                            //         setState(() {
+                            //           count2--;
+                            //         });
+                            //       }
+                            //       await bloc.reduceToCart(item.upcCode);
+                            //     },
+                            //     child: Icon(Icons.remove, size: 30.0,),
+                            //   ) : SizedBox(),
+                            //   Text(bloc.cartItems[widget.item.upcCode] == null ? "Add to Cart": count2.toString(), style: TextStyle(fontSize: 12.0),),
+                            //   InkWell(
+                            //     onTap: () async{
+                            //       setState(() {
+                            //         count2++;
+                            //       });
+                            //       await bloc.addToCart(item.upcCode);
+                            //     },
+                            //     child: Icon(Icons.add , size: 30.0),
+                            //   ),
+                            // ],
                             children: <Widget>[
                               count > 0 ? InkWell(
                                 onTap: () async{
-                                  if(count != 0){
-                                    setState(() {
-                                      count2--;
+                                  // final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+                                  // pr.style(
+                                  //   message: 'Updating Quantity',
+                                  //   borderRadius: 10.0,
+                                  //   backgroundColor: Colors.white,
+                                  // );
+                                  // await pr.show();
+                                  if(!loading) {
+                                     _toggle();
+                                    Future<void> future = bloc.reduceToCartFut(item.upcCode);
+                                    future.then((value) => {
+                                      Timer(Duration(milliseconds: 400), () {
+                                        // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
+                                        _toggle();
+                                      })
                                     });
                                   }
-                                  await bloc.reduceToCart(item.upcCode);
                                 },
                                 child: Icon(Icons.remove, size: 30.0,),
                               ) : SizedBox(),
-                              Text(bloc.cartItems[widget.item.upcCode] == null ? "Add to Cart": count2.toString(), style: TextStyle(fontSize: 12.0),),
+                              // 
+                              _getToggleChild(bloc.cartItems[widget.item.upcCode] == null,count2),
                               InkWell(
                                 onTap: () async{
-                                  setState(() {
-                                    count2++;
-                                  });
-                                  await bloc.addToCart(item.upcCode);
+                                  // final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+                                  // pr.style(
+                                  //   message: 'Updating Quantity',
+                                  //   borderRadius: 10.0,
+                                  //   backgroundColor: Colors.white,
+                                  //   );
+                                    
+                                  
+                                  if(!loading) {
+                                    _toggle();
+                                    Future<void> future = bloc.addToCartFut(item.upcCode);
+
+                                    // await pr.show();
+                                    // setState(() {
+                                    //   loading = true;
+                                    // });
+                                    future.then((value) => {
+                                      // _loading = false,
+                                      // pr.hide(),
+                                      Timer(Duration(milliseconds: 400), () {
+                                        // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
+                                        _toggle();
+                                      })
+                                    });
+                                    // Timer(Duration(milliseconds: 300), () {
+                                    //   // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
+                                    // pr.hide();
+                                    // });
+                                  }
+                                  // itemCardCategoryPage.showLoadingDialog(contextt, _keyLoader); //open Loader
+
                                 },
                                 child: Icon(Icons.add , size: 30.0),
                               ),
                             ],
+                          )
                           ),
                         ),
                       ],

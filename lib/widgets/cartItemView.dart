@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:d_project/utils/cart_data.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'dart:async';
 
 
 class CartItemView extends StatefulWidget {
@@ -18,6 +20,28 @@ class CartItemView extends StatefulWidget {
 }
 
 class _CartItemViewState extends State<CartItemView> {
+
+  bool toggle = true;
+  bool loading = false;
+  void _toggle() {
+    print("toggle called");
+    setState(() {
+      toggle = !toggle;
+      loading = !loading;
+    });
+  }
+
+  _getToggleChild(bool itemPresent,int count) {
+    if (toggle) {
+      return Text( itemPresent ? "Add to Cart": count.toString(), style: TextStyle(fontSize: 12.0),);
+    } else {
+      return SizedBox(
+              child: CircularProgressIndicator(),
+              height: 20.0,
+              width: 20.0,
+            );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,22 +98,32 @@ class _CartItemViewState extends State<CartItemView> {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                InkWell(
-                                  onTap: () async{
-                                    setState(() {
-                                      count2--;
+                              InkWell(
+                                onTap: () async{
+                                  if(!loading) {
+                                     _toggle();
+                                    Future<void> future = bloc.reduceToCartFut(item.upcCode);
+                                    future.then((value) => {
+                                      Timer(Duration(milliseconds: 400), () {
+                                        _toggle();
+                                      })
                                     });
-                                    await bloc.reduceToCart(widget.item.upcCode);
-                                  },
-                                  child: Icon(Icons.remove, size: 25.0,),
-                                ),
-                                Text(bloc.cartItems[widget.item.upcCode] == null ? '0' : count2.toString(), style: TextStyle(fontSize: 15.0),),
+                                  }
+                                },
+                                child: Icon(Icons.remove, size: 30.0,),
+                              ),
+                               _getToggleChild(bloc.cartItems[widget.item.upcCode] == null,count2),
                                 InkWell(
                                   onTap:() async{
-                                    setState(() {
-                                      count2--;
+                                  if(!loading) {
+                                     _toggle();
+                                    Future<void> future = bloc.addToCartFut(item.upcCode);
+                                    future.then((value) => {
+                                      Timer(Duration(milliseconds: 400), () {
+                                        _toggle();
+                                      })
                                     });
-                                    await bloc.addToCart(widget.item.upcCode);
+                                  }
                                   },
                                   child: Icon(Icons.add , size: 25.0),
                                 ),
