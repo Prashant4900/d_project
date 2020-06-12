@@ -129,12 +129,27 @@ class CardData with ChangeNotifier{
 
   void addToCart(String upcCode) async{
     if (cartItems.containsKey(upcCode)) {
-      cartItems[upcCode] += 1;
-    } else {
-      cartItems[upcCode] = 1;
+      Future<void> future = updateCart(upcCode, cartItems[upcCode]-1);
+      future.then((value) => {
+        cartItems[upcCode] += 1,
+        // notifyListeners()
+        print("check2 : "+cartItems.toString()),
+        print(cartItems),
+        notifyListeners()
+      });
+    } 
+    else {
+      Future<void> future = updateCart(upcCode, 1);
+      future.then((value) => {
+        cartItems[upcCode] = 1,
+        // notifyListeners()
+        print("check2 : "+cartItems.toString()),
+        print(cartItems),
+        notifyListeners()
+      });
     }
-    await updateCart(upcCode,cartItems[upcCode]);
-    notifyListeners();
+    // await updateCart(upcCode,cartItems[upcCode]);
+    // notifyListeners();
   }
 
 
