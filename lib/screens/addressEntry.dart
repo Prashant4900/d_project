@@ -150,7 +150,7 @@ class _AddressEntryState extends State<AddressEntry> {
                   child: TextFormField(
                     decoration: InputDecoration(
                       labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
-                      labelText: "*Area Details",
+                      labelText: "Area Details",
                       hoverColor: Colors.green,
                     ),
                     onChanged: (value){
@@ -172,7 +172,7 @@ class _AddressEntryState extends State<AddressEntry> {
                       child: TextFormField(
                         decoration: InputDecoration(
                           labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
-                          labelText: "*City",
+                          labelText: "City",
                           hoverColor: Colors.green,
                         ),
                         onChanged: (value){
@@ -190,6 +190,7 @@ class _AddressEntryState extends State<AddressEntry> {
                       width: screenWidth(context, dividedBy: 2),
                       padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
                       child: TextFormField(
+                        keyboardType: TextInputType.numberWithOptions(),
                         decoration: InputDecoration(
                           labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
                           labelText: "Pincode",
@@ -219,6 +220,45 @@ class _AddressEntryState extends State<AddressEntry> {
                   ],
                 ),
                 Padding(
+                  padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
+                      labelText: "Address Name",
+                      hoverColor: Colors.green,
+                    ),
+                    onChanged: (value){
+                      address.addressName = value;
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please assign a name to Address';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.numberWithOptions(),
+                    decoration: InputDecoration(
+                      labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
+                      labelText: "Phone Number",
+                      hoverColor: Colors.green,
+                    ),
+                    onChanged: (value){
+                      address.mobileNumber = value;
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please assign a mobile number to address';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
                   padding: const EdgeInsets.only(top : 40.0),
                   child: RaisedButton(
                     color: Colors.green,
@@ -235,7 +275,9 @@ class _AddressEntryState extends State<AddressEntry> {
                           "city" : address.city.toString(),
                           "zip_code" : address.pinCode,
                           "address_type" : selectedAddressType,
-                          "user_id" : userData.userid
+                          "user_id" : userData.userid,
+                          "address_name" : address.addressName,
+                          "mob_number" : address.mobileNumber,
                         });
                         address.addressType = selectedAddressType;
                         userData.addressList.add(address);

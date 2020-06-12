@@ -1,6 +1,8 @@
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_project/modals/categoryModal.dart';
 import 'package:d_project/modals/itemModal.dart';
+import 'package:d_project/screens/CategoriesPage.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:d_project/widgets/ItemCardCategoryPage.dart';
 import 'package:flutter/material.dart';
@@ -20,16 +22,22 @@ class SearchScreen extends StatefulWidget {
 
 
 class _SearchScreenState extends State<SearchScreen> {
+  FocusNode focusNode = FocusNode();
   TextEditingController searchController;
   String searchValue = "search value";
 
+  Category viewAll = Category(color: Colors.orange,icon : 'assests/icon/item.svg',name : "View all",searchToken: "", subCategories: null);
 
   @override
   void initState() {
-    SystemChannels.textInput.invokeMethod('TextInput.show');
     super.initState();
   }
 
+  @override
+  void didChangeDependencies() {
+    FocusScope.of(context).requestFocus(focusNode);
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +60,7 @@ class _SearchScreenState extends State<SearchScreen> {
               padding: EdgeInsets.only(left: 10.0),
               width: screenWidth(context, dividedBy: 1.2),
               child: AutoCompleteTextField<Item>(
+                focusNode: focusNode,
                 controller: searchController,
                 decoration: new InputDecoration(
                   enabledBorder: OutlineInputBorder(
@@ -130,8 +139,22 @@ class _SearchScreenState extends State<SearchScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SvgPicture.asset("assests/searchSomething.svg", color:  Colors.deepOrange,height: screenWidth(context, dividedBy: 5),width: screenWidth(context, dividedBy: 5),),
-            Divider(),
+            Divider(color: Colors.white,),
             Text("Search Something", style: TextStyle(color: Colors.deepOrange),),
+            Divider(height: 10.0,color: Colors.white),
+            RaisedButton(
+              color: Colors.deepOrange,
+              onPressed: (){
+              Navigator.push(
+              context,
+              MaterialPageRoute(
+              builder: (context) => CategoriesPage(category: viewAll),
+              ),
+              );
+            },
+              child: Container(
+                  child: Text("View All Items", style: TextStyle(color: Colors.white),)),
+            )
           ],
         ));
       }
@@ -139,8 +162,22 @@ class _SearchScreenState extends State<SearchScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           SvgPicture.asset("assests/searchError.svg", color:  Colors.deepOrange,height: screenWidth(context, dividedBy: 5),width: screenWidth(context, dividedBy: 5),),
-          Divider(),
+          Divider(color: Colors.white,),
           Text("No Products Found", style: TextStyle(color: Colors.deepOrange),),
+          Divider(height: 10.0,color: Colors.white),
+          RaisedButton(
+            color: Colors.deepOrange,
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CategoriesPage(category: viewAll),
+                ),
+              );
+            },
+            child: Container(
+                child: Text("View All Items", style: TextStyle(color: Colors.white),)),
+          )
         ],
       ));
     }

@@ -90,6 +90,8 @@ class Address{
   String city;
   String pinCode;
   String addressType;
+  String addressName;
+  String mobileNumber;
 
   Address({
     this.id,
@@ -101,7 +103,9 @@ class Address{
     this.areaDetails,
     this.city,
     this.pinCode,
-    this.addressType
+    this.addressType,
+    this.addressName,
+    this.mobileNumber
 });
 
   factory Address.fromJson(Map<String, dynamic> json) {
