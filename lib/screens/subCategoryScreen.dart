@@ -173,9 +173,9 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
           itemCount: short.length,
           itemBuilder: (BuildContext ctxt, int index){
             return itemCardCategoryPage(item: short[index],callback: (int cartSize) {
-              bottom.bottomCartView.of(context).testFun(cartSize);
+              // bottom.bottomCartView.of(context).testFun(cartSize);
               setState(() {
-                this.widget.sizeCallback(cartSize);
+                // this.widget.sizeCallback(cartSize);
                 size = cartSize;
               });
             } ,);
