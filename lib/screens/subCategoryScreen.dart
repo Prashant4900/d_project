@@ -3,8 +3,12 @@ import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:d_project/utils/cart_data.dart';
 import 'package:d_project/utils/userData.dart';
 import 'package:d_project/widgets/ItemCardCategoryPage.dart';
+import 'package:d_project/widgets/bottomCartView.dart' as bottom;
+import 'package:d_project/widgets/bottomCartView.dart';
+import 'package:d_project/widgets/item2.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/widgets/SearchWidget.dart';
+import 'package:d_project/utils/scrollBehaviour.dart';
 import 'package:d_project/utils/scrollBehaviour.dart';
 import 'package:provider/provider.dart';
 import 'package:d_project/utils/listOfItem.dart';
@@ -14,7 +18,9 @@ import 'cartScreen.dart';
 
 class SubCategoryScreen extends StatefulWidget {
   SubCategoryScreen({this.sub});
+  Function(int) sizeCallback;
   @required subCategory sub;
+  int count = 0;
 
 
   @override
@@ -23,6 +29,16 @@ class SubCategoryScreen extends StatefulWidget {
 }
 
 class _SubCategoryScreenState extends State<SubCategoryScreen> {
+
+  int size = 0;
+  double total = 0;
+
+
+  void callback(int c) {
+    setState(() {
+      this.size = c;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,82 +87,70 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
               },
             ),
             // ),
-            Row(
-              children: <Widget>[
-                Container(
-                      width: screenWidth(context, dividedBy: 2),
-                      height: 50.0,
-                      color: Color(0xF0F6F7FF),
-                      child:Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          FutureBuilder<double>(
-                            future: bloc.calculateTotalPrice(),
-                            builder: (context, snapshot) {
-                                if(snapshot.connectionState != ConnectionState.done){
-                                  return Padding(
-                                    padding: EdgeInsets.only(left : 10.0),
-                                    child : Text("Calculating ",style: TextStyle(color: Colors.black, fontSize: 10.0),overflow: TextOverflow.ellipsis,),
-                                  );
-                                }
-                              return Padding(
-                                padding: EdgeInsets.only(left : 10.0),
-                                child : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text("Sumtotal ",style: TextStyle(color: Colors.black, fontSize: 10.0),),
-                                    Text("₹" + snapshot.data.toString(),style: TextStyle(color: Colors.black, fontSize: 20.0),),
-                                  ],
-                                ),
-                              );
-                            }
-                          ),
-                          FutureBuilder<int>(
-                            future: bloc.cartSize(),
-                            builder: (context, snapshot) {
-                                if(snapshot.connectionState != ConnectionState.done){
-                                  return Padding(
-                                    padding: EdgeInsets.only(right : 20.0),
-                                    child : Text(" ",style: TextStyle(color: Colors.black, fontSize: 10.0),overflow: TextOverflow.ellipsis,),
-                                  );
-                                }
-                              return Padding(
-                                padding: EdgeInsets.only(right : 20.0),
-                                child : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text("Items",style: TextStyle(color: Colors.black, fontSize: 10.0),),
-                                    Text("" + snapshot.data.toString(),style: TextStyle(color: Colors.black, fontSize: 20.0),overflow: TextOverflow.ellipsis,),
-                                  ],
-                                ),
-                              );
-                            }
-                          ),
-                        ],
-                      ),
-                    ),
-                Container(
-                  height : 50.0,
-                  width: screenWidth(context, dividedBy: 2),
-                  child: RaisedButton(
-                    color: Colors.deepOrange,
-                    onPressed: () async{
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CartScreen(),
-                        ),
-                      );
-                    },
-                    child: Hero(
-                        tag : "proceedToPayment",
-                        child: Center(child: Text("View Cart", style: TextStyle(fontSize: 15.0, color: Colors.white),overflow: TextOverflow.ellipsis,),)),
-                  ),
-                ),
-              ],
-            )
+            // Container(
+            //   height: 50.0,
+            //   child: Row(
+            //     children: <Widget>[
+            //       Container(
+            //             width: screenWidth(context, dividedBy: 2),
+            //             height: 50.0,
+            //             color: Color(0xF0F6F7FF),
+            //             child:Row(
+            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //               children: <Widget>[
+            //                 Container(
+            //                   child:
+            //                     Padding(
+            //                       padding: EdgeInsets.only(left : 10.0),
+            //                       child : Column(
+            //                         mainAxisAlignment: MainAxisAlignment.center,
+            //                         crossAxisAlignment: CrossAxisAlignment.start,
+            //                         children: <Widget>[
+            //                           Text("Sumtotal ",style: TextStyle(color: Colors.black, fontSize: 10.0),),
+            //                           // Text("₹" + snapshot.data.toString(),style: TextStyle(color: Colors.black, fontSize: 20.0),),
+            //                         ],
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 Container( 
+            //                   child :
+            //                   Padding(
+            //                       padding: EdgeInsets.only(right : 20.0),
+            //                       child : Column(
+            //                         mainAxisAlignment: MainAxisAlignment.center,
+            //                         crossAxisAlignment: CrossAxisAlignment.start,
+            //                         children: <Widget>[
+            //                           Text("Items",style: TextStyle(color: Colors.black, fontSize: 10.0),),
+            //                           Text("" +  _c.toString(),style: TextStyle(color: Colors.black, fontSize: 20.0),overflow: TextOverflow.ellipsis,),
+            //                         ],
+            //                       ),
+            //                 ),
+            //                 )
+            //               ],
+            //             ),
+            //           ),
+            //       Container(
+            //         height : 50.0,
+            //         width: screenWidth(context, dividedBy: 2),
+            //         child: RaisedButton(
+            //           color: Colors.deepOrange,
+            //           onPressed: () async{
+            //             Navigator.push(
+            //               context,
+            //               MaterialPageRoute(
+            //                 builder: (context) => CartScreen(),
+            //               ),
+            //             );
+            //           },
+            //           child: Hero(
+            //               tag : "proceedToPayment",
+            //               child: Center(child: Text("View Cart", style: TextStyle(fontSize: 15.0, color: Colors.white),overflow: TextOverflow.ellipsis,),)),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // )
+            bottomCartView(size: size,total: total)
           ]
         )
       ),
@@ -168,7 +172,29 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
           // shrinkWrap: true,
           itemCount: short.length,
           itemBuilder: (BuildContext ctxt, int index){
-            return itemCardCategoryPage(item: short[index],);
+            return itemCardCategoryPage(item: short[index],callback: (int cartSize) {
+              bottom.bottomCartView.of(context).testFun(cartSize);
+              setState(() {
+                this.widget.sizeCallback(cartSize);
+                size = cartSize;
+              });
+            } ,);
+            // // callback: (int c) {
+            // //   print("count test : $c");
+            // //   setState(() {
+            // //     _c = c;
+            // //   });
+            // // }  ,
+            // );
+            // return item2(item: short[index],
+            // callback: (int c) {
+            //   print("count test : $c");
+            //   setState(() {
+            //     _c = c;
+            //   });
+            // }  ,
+            // );
+
           }),
     ); 
   }

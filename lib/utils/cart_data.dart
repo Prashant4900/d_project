@@ -12,8 +12,10 @@ class CardData with ChangeNotifier{
 
 
   static final CardData _cartData = CardData._internal();
+  Function(int) sizeCallback;
 
-  factory CardData() {
+  factory CardData({Function(int) sizeCallback}) {
+    _cartData.sizeCallback = sizeCallback;
     return _cartData;
   }
 
@@ -91,6 +93,24 @@ class CardData with ChangeNotifier{
     return mainCartItems;
   }
 
+  Map<Item, int> SyncMaps2(){
+    Map<Item, int> mainCartItems = {};
+    cartItems.forEach((k, v) {
+      if(v != 0){
+        Future<Item> item = getItemWithUpc(k);
+        item.then((val){
+          print(val.toString());
+          if(val != null){
+            if(v != 0){
+              mainCartItems[val] = v;
+            }
+          }
+        });
+      }
+    });
+    return mainCartItems;
+  }
+
   Future<Item> getItemWithUpc(String upc) async{
     Item item;
     var val = await listOfItems.itemList;
@@ -129,24 +149,23 @@ class CardData with ChangeNotifier{
 
   void addToCart(String upcCode) async{
     if (cartItems.containsKey(upcCode)) {
-      Future<void> future = updateCart(upcCode, cartItems[upcCode]-1);
-      future.then((value) => {
-        cartItems[upcCode] += 1,
+      await updateCart(upcCode, cartItems[upcCode]-1);
+      // future.then(() => {
+        cartItems[upcCode] += 1;
         // notifyListeners()
-        print("check2 : "+cartItems.toString()),
-        print(cartItems),
-        notifyListeners()
-      });
+        print("check2 : "+cartItems.toString());
+        print(cartItems);
+      // });
     } 
     else {
-      Future<void> future = updateCart(upcCode, 1);
-      future.then((value) => {
-        cartItems[upcCode] = 1,
+      await updateCart(upcCode, 1);
+      // future.then((value) => {
+        cartItems[upcCode] = 1;
         // notifyListeners()
-        print("check2 : "+cartItems.toString()),
-        print(cartItems),
-        notifyListeners()
-      });
+        print("check2 : "+cartItems.toString());
+        print(cartItems);
+        // notifyListeners()
+      // });
     }
     // await updateCart(upcCode,cartItems[upcCode]);
     // notifyListeners();
@@ -172,27 +191,31 @@ class CardData with ChangeNotifier{
         // await updateCart(upcCode,cartItems[upcCode]);
         print("check1 : ");
         print(cartItems);
-        Future<void> future = updateCart(upcCode, cartItems[upcCode]-1);
-        future.then((value) => {
-          cartItems[upcCode] -= 1,
-          // notifyListeners()
-          print("check2 : "+cartItems.toString()),
-          print(cartItems),
-          notifyListeners()
-        });
+        await updateCart(upcCode, cartItems[upcCode]-1);
+        cartItems[upcCode] -= 1;
+        
+
+        // future.then((value) => {
+        //   cartItems[upcCode] -= 1,
+        //   // notifyListeners()
+        //   print("check2 : "+cartItems.toString()),
+        //   print(cartItems),
+        //   notifyListeners()
+        // });
       }
       else if(cartItems[upcCode] == 1){
         print("check1 : ");
         print(cartItems);
         // clear(upcCode);
-        Future<void> future = updateCart(upcCode, 0);
-        future.then((value) => {
-          cartItems.remove(upcCode),
-          // notifyListeners()
-          print("check2 : "+cartItems.toString()),
-          print(cartItems),
-          notifyListeners()
-        });
+        await updateCart(upcCode, 0);
+        cartItems.remove(upcCode);
+        // future.then((value) => {
+        //   cartItems.remove(upcCode),
+        //   // notifyListeners()
+        //   print("check2 : "+cartItems.toString()),
+        //   print(cartItems),
+        //   notifyListeners()
+        // });
       }
     } else {
       // clear(upcCode);
@@ -226,6 +249,10 @@ class CardData with ChangeNotifier{
     return itemListProduct.length;
   }
 
+  int cartSizeSync(){
+    return cartItems.length;
+  }
+
   double calculateSaving(){
     return 0;
    // double offerPrice = calculateTotalPrice();
@@ -239,7 +266,7 @@ class CardData with ChangeNotifier{
   }
 
 
-  Future<void> updateCart(String upcCode, int qty) async{
+  Future updateCart(String upcCode, int qty) async{
     print("update cart called");
     var url = 'https://purchx.store/api/update_cart';
     try{

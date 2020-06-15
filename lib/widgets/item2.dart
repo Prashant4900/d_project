@@ -10,11 +10,12 @@ import 'package:loading/indicator/ball_spin_fade_loader_indicator.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'dart:async';
 
-class itemCardCategoryPage extends StatefulWidget {
+class item2 extends StatefulWidget {
+
+
+  item2({this.item,this.callback});
 
   Function(int) callback;
-  itemCardCategoryPage({this.item,this.callback});
-  
   final Item item;
 
     static Future<void> showLoadingDialog(
@@ -40,10 +41,10 @@ class itemCardCategoryPage extends StatefulWidget {
 
 
   @override
-  _itemCardCategoryPageState createState() => _itemCardCategoryPageState();
+  _item2State createState() => _item2State();
 }
 
-class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
+class _item2State extends State<item2> {
 
   var _value;
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
@@ -52,10 +53,8 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
   bool loading = false;
   void _toggle() {
     print("toggle called");
-    setState(() {
       toggle = !toggle;
       loading = !loading;
-    });
   }
 
   _getToggleChild(bool itemPresent,int count) {
@@ -76,6 +75,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
     Item item = widget.item;
     int count = bloc.cartItems[item.upcCode] == null ? 0 : bloc.cartItems[item.upcCode];
     int count2  = count;
+    int c = 0;
 
     return Card(
         elevation: 2.0,
@@ -159,10 +159,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                     future.then((value) => {
                                       Timer(Duration(milliseconds: 400), () {
                                         // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
-                                        this.widget.callback(bloc.cartSizeSync());
                                         _toggle();
-                                        
-
                                       })
                                     });
                                   }
@@ -177,8 +174,8 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                     _toggle();
                                     Future<void> future = bloc.addToCartFut(item.upcCode);
                                     future.then((value) => {
-                                      print("aayaaa"),
                                       Timer(Duration(milliseconds: 400), () {
+                                        this.widget.callback(++c);
                                         _toggle();
                                       })
                                     });
