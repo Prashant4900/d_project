@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:d_project/modals/itemModal.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:d_project/modals/itemModal.dart';
 import 'package:d_project/utils/listOfItem.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -129,7 +128,7 @@ class CardData with ChangeNotifier{
 
   void addToCart(String upcCode) async{
     if (cartItems.containsKey(upcCode)) {
-      Future<void> future = updateCart(upcCode, cartItems[upcCode]-1);
+      Future<void> future = updateCart(upcCode, cartItems[upcCode]+1);
       future.then((value) => {
         cartItems[upcCode] += 1,
         // notifyListeners()

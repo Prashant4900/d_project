@@ -187,24 +187,13 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                     _toggle();
                                     Future<void> future = bloc.addToCartFut(item.upcCode);
 
-                                    // await pr.show();
-                                    // setState(() {
-                                    //   loading = true;
-                                    // });
                                     future.then((value) => {
-                                      // _loading = false,
-                                      // pr.hide(),
                                       Timer(Duration(milliseconds: 400), () {
-                                        // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
                                         _toggle();
                                       })
                                     });
-                                    // Timer(Duration(milliseconds: 300), () {
-                                    //   // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
-                                    // pr.hide();
-                                    // });
                                   }
-                                  // itemCardCategoryPage.showLoadingDialog(contextt, _keyLoader); //open Loader
+
 
                                 },
                                 child: Icon(Icons.add , size: 30.0),

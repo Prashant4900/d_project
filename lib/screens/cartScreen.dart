@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:d_project/modals/categoryModal.dart';
 import 'package:d_project/screens/address.dart';
 import 'package:d_project/screens/previewOrderScreen.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
@@ -14,11 +15,12 @@ import 'package:d_project/widgets/cartItemView.dart';
 import 'package:d_project/screens/payment.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import 'CategoriesPage.dart';
 import 'addressEntry.dart';
 
 class CartScreen extends StatefulWidget {
   CartScreen();
-  CartScreen.withBack(){
+  CartScreen.withBack() {
     backButton = false;
   }
   bool backButton = true;
@@ -29,7 +31,12 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   Address address;
-
+  Category viewAll = Category(
+      color: Colors.orange,
+      icon: 'assests/icon/item.svg',
+      name: "View all",
+      searchToken: "",
+      subCategories: null);
 
   @override
   Widget build(BuildContext context) {
@@ -39,42 +46,77 @@ class _CartScreenState extends State<CartScreen> {
     var userData = Provider.of<UserData>(context);
     var cart = bloc.cartItems;
     return Scaffold(
-      appBar :widget.backButton ? AppBar(
-        automaticallyImplyLeading: widget.backButton,
-       // title: Text("Your Cart("+bloc.cartSize().toString()+")"),
-        centerTitle: true,
-      ) : null,
+      appBar: widget.backButton
+          ? AppBar(
+              automaticallyImplyLeading: widget.backButton,
+              // title: Text("Your Cart("+bloc.cartSize().toString()+")"),
+              centerTitle: true,
+            )
+          : null,
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            FutureBuilder<Map<Item , int>>(
-              future: bloc.SyncMaps(),
-              builder: (context, snapshot) {
-                if(snapshot.connectionState != ConnectionState.done){
+            FutureBuilder<Map<Item, int>>(
+                future: bloc.SyncMaps(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState != ConnectionState.done) {
+                    return Expanded(
+                        child: Center(
+                            child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                        Text("Loading Cart Data...")
+                      ],
+                    )));
+                  }
                   return Expanded(
-                      child: Center(child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          CircularProgressIndicator(),
-                          Text("Loading Cart Data...")
-                        ],
-                      )));
-                }
-                return Expanded(
-                  child: ListView.builder(
-                      physics: ClampingScrollPhysics(),
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context , index){
-                        Item currentItem = snapshot.data.keys.toList()[index];
-                        int count = cart[currentItem.upcCode];
-                        return CartItemView(item: currentItem, count: count);
-                      }),
-                );
-              }
-            ),
+                      child: (bloc.cartItems.length > 0)
+                          ? ListView.builder(
+                              physics: ClampingScrollPhysics(),
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, index) {
+                                Item currentItem =
+                                    snapshot.data.keys.toList()[index];
+                                int count = cart[currentItem.upcCode];
+                                return CartItemView(
+                                    item: currentItem, count: count);
+                              })
+                          : Center(
+                              child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Divider(
+                                  color: Colors.white,
+                                ),
+                                Text(
+                                  "No Items in Cart",
+                                  style: TextStyle(fontSize: 20.0),
+                                ),
+                                Divider(height: 10.0, color: Colors.white),
+                                RaisedButton(
+                                  color: Colors.deepOrange,
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            CategoriesPage(category: viewAll),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                      child: Text(
+                                    "View All Items",
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                                )
+                              ],
+                            )));
+                }),
             Container(
               decoration: BoxDecoration(
-                  color: Color(0xF0F6F7FF),
+                color: Color(0xF0F6F7FF),
 //                border: Border(
 //                  top: BorderSide(
 //                    color: Colors.blue,
@@ -92,16 +134,51 @@ class _CartScreenState extends State<CartScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        userData.selectedAddress != null ? Text("Deliver to : " + userData.selectedAddress.houseNumber + "," + userData.selectedAddress.areaDetails, overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15.0),):Center(child: Text("Please provide a delivery address", style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16.0),),),
-                        userData.selectedAddress != null ? Text( userData.selectedAddress.city + "," + userData.selectedAddress.pinCode, overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300, fontSize: 13.0),):Text("", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0),),
+                        userData.selectedAddress != null
+                            ? Text(
+                                "Deliver to : " +
+                                    userData.selectedAddress.houseNumber +
+                                    "," +
+                                    userData.selectedAddress.areaDetails,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15.0),
+                              )
+                            : Center(
+                                child: Text(
+                                  "Please provide a delivery address",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 16.0),
+                                ),
+                              ),
+                        userData.selectedAddress != null
+                            ? Text(
+                                userData.selectedAddress.city +
+                                    "," +
+                                    userData.selectedAddress.pinCode,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 13.0),
+                              )
+                            : Text(
+                                "",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16.0),
+                              ),
                         //  Text(address == null ? "" :address.city + " , " + address.pinCode),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(right : 10.0, top : 4.0),
+                    padding: EdgeInsets.only(right: 10.0, top: 4.0),
                     child: InkWell(
-                      onTap :() async{
+                      onTap: () async {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -111,86 +188,118 @@ class _CartScreenState extends State<CartScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Text("Change", style: TextStyle(color: Colors.deepOrange),),
+                          Text(
+                            "Change",
+                            style: TextStyle(color: Colors.deepOrange),
+                          ),
                         ],
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),
             Container(
-
               width: double.infinity,
               color: Color(0xF0F6F7FF),
               height: 50.0,
-              child:Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   FutureBuilder<double>(
-                    future: bloc.calculateTotalPrice(),
-                    builder: (context, snapshot) {
-                        if(snapshot.connectionState != ConnectionState.done){
+                      future: bloc.calculateTotalPrice(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState != ConnectionState.done) {
                           return Padding(
-                            padding: EdgeInsets.only(left : 10.0),
-                            child : Text("Calculating ",style: TextStyle(color: Colors.black, fontSize: 20.0),),
+                            padding: EdgeInsets.only(left: 10.0),
+                            child: Text(
+                              "Calculating ",
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 20.0),
+                            ),
                           );
                         }
-                      return Padding(
-                        padding: EdgeInsets.only(left : 10.0),
-                        child : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text("Sumtotal ",style: TextStyle(color: Colors.black, fontSize: 10.0),),
-                            Text("₹" + snapshot.data.toString(),style: TextStyle(color: Colors.black, fontSize: 20.0),),
-                          ],
-                        ),
-                      );
-                    }
-                  ),
+                        return Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "Sumtotal ",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 10.0),
+                              ),
+                              Text(
+                                "₹" + snapshot.data.toString(),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20.0),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
                   FutureBuilder<double>(
-                    future: bloc.calculateTotalPrice(),
-                    builder: (context, snapshot) {
-                      if(snapshot.connectionState != ConnectionState.done || snapshot.data == 0.0){
+                      future: bloc.calculateTotalPrice(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState != ConnectionState.done ||
+                            snapshot.data == 0.0) {
+                          return Container(
+                            width: screenWidth(context, dividedBy: 2),
+                            child: RaisedButton(
+                              color: Colors.deepOrange,
+                              onPressed: () {
+                                print("Cart Empty");
+                              },
+                              child: Center(
+                                child: Text(
+                                  "Cart Empty",
+                                  style: TextStyle(
+                                      fontSize: 15.0, color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
                         return Container(
                           width: screenWidth(context, dividedBy: 2),
                           child: RaisedButton(
                             color: Colors.deepOrange,
-                            onPressed: (){
-                              print("Cart Empty");
+                            onPressed: () async {
+                              address = await userData.selectedAddress;
+                              if (address == null) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
+                                      builder: (context) => AddressListing(),
+                                    ));
+                              } else {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
+                                      builder: (context) => PreviewOrder(
+                                          userid: userData.userid.toString(),
+                                          amount: snapshot.data.toString(),
+                                          orderid: createOrderId()),
+                                    ));
+                              }
                             },
-                            child: Center(child: Text("Cart Empty", style: TextStyle(fontSize: 15.0, color: Colors.white),),),
+                            child: Hero(
+                                tag: "proceedToPayment",
+                                child: Center(
+                                  child: Text(
+                                    userData.selectedAddress == null
+                                        ? "Enter Delivery Address"
+                                        : "Proceed to Payment",
+                                    style: TextStyle(
+                                        fontSize: 15.0, color: Colors.white),
+                                  ),
+                                )),
                           ),
                         );
-                      }
-                      return Container(
-                        width: screenWidth(context, dividedBy: 2),
-                        child: RaisedButton(
-                              color: Colors.deepOrange,
-                              onPressed: () async{
-                                  address = await userData.selectedAddress;
-                                 if(address == null){
-                                   Navigator.push(context, MaterialPageRoute(
-                                     //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
-                                     builder: (context) => AddressListing(),
-                                   ));
-                                 }
-                                 else{
-                                   Navigator.push(context, MaterialPageRoute(
-                                     //builder: (context) => PaymentSuccessfulScreen(userId: userData.userid.toString(),amount: amount.toString(),orderId: createOrderId(),),
-                                     builder: (context) => PreviewOrder(userid: userData.userid.toString(),amount: snapshot.data.toString(),orderid: createOrderId()),
-                                   ));
-                                 }
-                              },
-                              child: Hero(
-                                  tag : "proceedToPayment",
-                                  child: Center(child: Text(userData.selectedAddress == null ? "Enter Delivery Address" : "Proceed to Payment", style: TextStyle(fontSize: 15.0, color: Colors.white),),)),
-                            ),
-                      );
-                    }
-                  ),
+                      }),
                 ],
               ),
             )
@@ -200,7 +309,7 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  String createOrderId(){
+  String createOrderId() {
     String orderId = '';
     orderId += randomAlpha(4).toUpperCase();
     orderId += "20";
