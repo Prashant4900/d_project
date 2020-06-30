@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:d_project/screens/paymentDoneScreen.dart';
 
+
+bool cashOnDelievry = false;
 class PreviewOrder extends StatefulWidget {
   PreviewOrder({this.amount, this.userid, this.orderid});
   String amount;
@@ -22,7 +24,6 @@ class PreviewOrder extends StatefulWidget {
 class _PreviewOrderState extends State<PreviewOrder> {
   UserData userData = UserData();
 
-  bool cashOnDelievry = false;
   bool phoneVerified;
 
   @override
@@ -136,30 +137,7 @@ class _PreviewOrderState extends State<PreviewOrder> {
                                   fontSize: 16.0, fontWeight: FontWeight.w300),
                             )),
                         Divider(),
-                        Column(
-                          children: <Widget>[
-                            RadioListTile(
-                              groupValue: cashOnDelievry,
-                              title: Text('Pay Online (Recommended)'),
-                              value: false,
-                              onChanged: (val) {
-                                setState(() {
-                                  cashOnDelievry = val;
-                                });
-                              },
-                            ),
-                            RadioListTile(
-                              groupValue: cashOnDelievry,
-                              title: Text('Cash On Delivery'),
-                              value: true,
-                              onChanged: (val) {
-                                setState(() {
-                                  cashOnDelievry = val;
-                                });
-                              },
-                            ),
-                          ],
-                        )
+                        radioButtons(),
                       ],
                     );
                   }),
@@ -222,6 +200,45 @@ class _PreviewOrderState extends State<PreviewOrder> {
             ),
           ]),
         ),
+      ),
+    );
+  }
+}
+
+
+
+class radioButtons extends StatefulWidget {
+  @override
+  _radioButtonsState createState() => _radioButtonsState();
+}
+
+class _radioButtonsState extends State<radioButtons> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          RadioListTile(
+            groupValue: cashOnDelievry,
+            title: Text('Pay Online (Recommended)'),
+            value: false,
+            onChanged: (val) {
+              setState(() {
+                cashOnDelievry = val;
+              });
+            },
+          ),
+          RadioListTile(
+            groupValue: cashOnDelievry,
+            title: Text('Cash On Delivery'),
+            value: true,
+            onChanged: (val) {
+              setState(() {
+                cashOnDelievry = val;
+              });
+            },
+          ),
+        ],
       ),
     );
   }
