@@ -40,7 +40,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
         fixedColor: Colors.red,
         currentIndex: _selectedpage,
         onTap: (int index) {
-          {
+          if(index == 0){
+            Navigator.pop(context);
+          }
+          else{
             setState(() {
               _selectedpage = index;
             });

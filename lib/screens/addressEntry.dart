@@ -71,7 +71,7 @@ class _AddressEntryState extends State<AddressEntry> {
                         decoration: InputDecoration(
                           labelStyle: TextStyle(
                               fontSize: 15.0, fontWeight: FontWeight.w300),
-                          labelText: "House no",
+                          labelText: "* House no",
                           hoverColor: Colors.green,
                         ),
                         onChanged: (value) {
@@ -99,12 +99,6 @@ class _AddressEntryState extends State<AddressEntry> {
                         onChanged: (value) {
                           address.apartmentName = value;
                         },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter Apartment Name';
-                          }
-                          return null;
-                        },
                       ),
                     ),
                   ],
@@ -121,12 +115,6 @@ class _AddressEntryState extends State<AddressEntry> {
                     onChanged: (value) {
                       address.streetDetails = value;
                     },
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please Provide Your Street Details';
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 Padding(
@@ -141,12 +129,6 @@ class _AddressEntryState extends State<AddressEntry> {
                     onChanged: (value) {
                       address.landMark = value;
                     },
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please Provide Some Landmark';
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 Padding(
@@ -155,7 +137,7 @@ class _AddressEntryState extends State<AddressEntry> {
                     decoration: InputDecoration(
                       labelStyle: TextStyle(
                           fontSize: 15.0, fontWeight: FontWeight.w300),
-                      labelText: "Area Details",
+                      labelText: "* Area Details",
                       hoverColor: Colors.green,
                     ),
                     onChanged: (value) {
@@ -179,7 +161,7 @@ class _AddressEntryState extends State<AddressEntry> {
                         decoration: InputDecoration(
                           labelStyle: TextStyle(
                               fontSize: 15.0, fontWeight: FontWeight.w300),
-                          labelText: "City",
+                          labelText: "* City",
                           hoverColor: Colors.green,
                         ),
                         onChanged: (value) {
@@ -202,7 +184,7 @@ class _AddressEntryState extends State<AddressEntry> {
                         decoration: InputDecoration(
                           labelStyle: TextStyle(
                               fontSize: 15.0, fontWeight: FontWeight.w300),
-                          labelText: "Pincode",
+                          labelText: "* Pincode",
                           hoverColor: Colors.green,
                         ),
                         onChanged: (value) {
@@ -234,7 +216,7 @@ class _AddressEntryState extends State<AddressEntry> {
                     decoration: InputDecoration(
                       labelStyle: TextStyle(
                           fontSize: 15.0, fontWeight: FontWeight.w300),
-                      labelText: "Address Name",
+                      labelText: "* Address Name",
                       hoverColor: Colors.green,
                     ),
                     onChanged: (value) {
@@ -255,7 +237,7 @@ class _AddressEntryState extends State<AddressEntry> {
                     decoration: InputDecoration(
                       labelStyle: TextStyle(
                           fontSize: 15.0, fontWeight: FontWeight.w300),
-                      labelText: "Phone Number",
+                      labelText: "* Phone Number",
                       hoverColor: Colors.green,
                     ),
                     onChanged: (value) {
