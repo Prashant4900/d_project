@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:d_project/utils/userData.dart';
 import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/widgets/customDrawer.dart';
@@ -9,6 +12,8 @@ class ContactUs extends StatefulWidget {
 }
 
 class _ContactUsState extends State<ContactUs> {
+  String callText = "Call us";
+  UserData userData = UserData();
 
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   @override
@@ -24,18 +29,19 @@ class _ContactUsState extends State<ContactUs> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                AppBar(title: Text('Contact DooraKart Team'),
+                AppBar(
+                  title: Text('Contact DooraKart Team'),
                   actions: <Widget>[
                     IconButton(
                       icon: Icon(Icons.clear),
-                      onPressed: ()=> Navigator.pop(context),
+                      onPressed: () => Navigator.pop(context),
                     )
                   ],
-                 ),
+                ),
                 ShowChild(
-
-                  indicator : Container(
-                    padding: EdgeInsets.only(left: 10.0, right: 10.0 , top: 20.0),
+                  indicator: Container(
+                    padding:
+                        EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0),
                     width: double.infinity,
                     height: 80.0,
                     child: Card(
@@ -44,9 +50,16 @@ class _ContactUsState extends State<ContactUs> {
                         children: <Widget>[
                           Padding(
                               padding: EdgeInsets.all(5.0),
-                              child: Icon(Icons.mail, color: Colors.deepOrange, size: 35.0,)),
+                              child: Icon(
+                                Icons.mail,
+                                color: Colors.deepOrange,
+                                size: 35.0,
+                              )),
                           VerticalDivider(),
-                          Text("Write to us", style: TextStyle(fontSize: 20.0),)
+                          Text(
+                            "Write to us",
+                            style: TextStyle(fontSize: 20.0),
+                          )
                         ],
                       ),
                     ),
@@ -59,9 +72,16 @@ class _ContactUsState extends State<ContactUs> {
                             children: <Widget>[
                               Padding(
                                   padding: EdgeInsets.all(5.0),
-                                  child: Icon(Icons.mail, color: Colors.deepOrange, size: 35.0,)),
+                                  child: Icon(
+                                    Icons.mail,
+                                    color: Colors.deepOrange,
+                                    size: 35.0,
+                                  )),
                               VerticalDivider(),
-                              Text("Write to us", style: TextStyle(fontSize: 20.0),)
+                              Text(
+                                "Write to us",
+                                style: TextStyle(fontSize: 20.0),
+                              )
                             ],
                           ),
                           TextField(
@@ -70,9 +90,8 @@ class _ContactUsState extends State<ContactUs> {
                             decoration: InputDecoration(
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: Colors.blue,
-                                  )
-                              ),
+                                color: Colors.blue,
+                              )),
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.blue,
@@ -81,32 +100,76 @@ class _ContactUsState extends State<ContactUs> {
                             ),
                           ),
                           RaisedButton(
-                            onPressed: (){
+                            onPressed: () {
                               print("Mail sent");
                             },
                             color: Colors.deepOrange,
                             child: Container(
-                              height: 40.0,
+                                height: 40.0,
                                 width: double.infinity,
-                                child: Center(child: Text("Send", style: TextStyle(color: Colors.white),))),
+                                child: Center(
+                                    child: Text(
+                                  "Send",
+                                  style: TextStyle(color: Colors.white),
+                                ))),
                           )
                         ],
                       )),
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 10.0, right: 10.0 , top: 10.0),
-                  width: double.infinity,
-                  height: 80.0,
-                  child: Card(
-                    elevation: 1.0,
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: Icon(Icons.phone, color: Colors.green, size: 35.0,)),
-                        VerticalDivider(),
-                        Text("Call us", style: TextStyle(fontSize: 20.0),)
-                      ],
+                InkWell(
+                  onTap: () {
+                    if(userData.secondsRemainingToCall > 0){
+                      Timer timer =  new Timer.periodic(new Duration(seconds: 1), (time) {
+                        if(userData.secondsRemainingToCall > 0){
+                          setState(() {
+                            callText = "Calling in " + userData.secondsRemainingToCall.toString() + " seconds";
+                          });
+                          userData.secondsRemainingToCall--;
+                          if(userData.secondsRemainingToCall == 0){
+                            setState(() {
+                              callText = "Call us now";
+                            });
+                            time.cancel();
+                          }
+                        }
+                        else{
+                          setState(() {
+                            callText = "Call us now";
+                          });
+                          time.cancel();
+                        }
+                      });
+                    }
+                    else{
+                      setState(() {
+                        callText = "Call us now";
+                      });
+                      print("Calling the number");
+                    }
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                    width: double.infinity,
+                    height: 80.0,
+                    child: Card(
+                      elevation: 1.0,
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Icon(
+                                Icons.phone,
+                                color: Colors.green,
+                                size: 35.0,
+                              )),
+                          VerticalDivider(),
+                          Text(
+                            callText,
+                            style: TextStyle(fontSize: 20.0),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 )
@@ -118,28 +181,25 @@ class _ContactUsState extends State<ContactUs> {
     );
   }
 
-
   Widget _buildAboutDialog(BuildContext context) {
     return new AlertDialog(
-        title: const Text('About Pop up'),
-        content: new Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text("Hello"),
-          ],
+      title: const Text('About Pop up'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("Hello"),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Okay, got it!'),
         ),
-        actions: <Widget>[
-    new FlatButton(
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-    textColor: Theme.of(context).primaryColor,
-    child: const Text('Okay, got it!'),
-    ),
-    ],
+      ],
     );
   }
 }
-
-

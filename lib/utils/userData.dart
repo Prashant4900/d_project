@@ -21,6 +21,7 @@ class UserData  with ChangeNotifier{
   String phoneNo;
   var addressData;
   var orderData;
+  int secondsRemainingToCall = 30;
 
 
   List<Order> orderList = List<Order>();
