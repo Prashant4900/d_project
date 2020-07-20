@@ -30,7 +30,7 @@ class _ContactUsState extends State<ContactUs> {
             child: Column(
               children: <Widget>[
                 AppBar(
-                  title: Text('Contact DooraKart Team'),
+                  title: Text('Contact PurchX Team'),
                   actions: <Widget>[
                     IconButton(
                       icon: Icon(Icons.clear),

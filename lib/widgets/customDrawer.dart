@@ -58,26 +58,26 @@ class CustomDrawer extends StatelessWidget {
                     );
                 },
               ),
-              ListTile(
-                title: Text('Inbox'),
-                leading: Icon(Icons.message),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text('Refer app'),
-                leading: Icon(Icons.share),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
+//              ListTile(
+//                title: Text('Inbox'),
+//                leading: Icon(Icons.message),
+//                onTap: () {
+//                  // Update the state of the app
+//                  // ...
+//                  // Then close the drawer
+//                  Navigator.pop(context);
+//                },
+//              ),
+//              ListTile(
+//                title: Text('Refer app'),
+//                leading: Icon(Icons.share),
+//                onTap: () {
+//                  // Update the state of the app
+//                  // ...
+//                  // Then close the drawer
+//                  Navigator.pop(context);
+//                },
+//              ),
               ListTile(
                 title: Text('Contact us'),
                 leading: Icon(Icons.call),

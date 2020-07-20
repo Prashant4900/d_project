@@ -48,16 +48,10 @@ class _LandingPageState extends State<LandingPage> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    SvgPicture.asset(
-                      'assests/DoorakartBanner.svg',
-                      height: 60.0,
-                    ),
+                    
                     Hero(
                       tag: "DoorakartIcon",
-                      child: SvgPicture.asset(
-                        'assests/DoorakartIcon.svg',
-                        height: 150.0,
-                      ),
+                      child: Image.asset("assests/center.png")
                     ),
                     SizedBox(
                       height: 20.0,

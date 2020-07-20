@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/widgets/customDrawer.dart';
 import 'package:d_project/utils/scrollBehaviour.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class HelpScreen extends StatefulWidget {
   @override
@@ -8,6 +12,9 @@ class HelpScreen extends StatefulWidget {
 }
 
 class _HelpScreenState extends State<HelpScreen> {
+
+  final Completer<WebViewController> _controller =
+  Completer<WebViewController>();
 
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   @override
@@ -23,15 +30,24 @@ class _HelpScreenState extends State<HelpScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                AppBar(title: Text('Help'),
+                AppBar(
+                  title: Text('Help'),
                   actions: <Widget>[
                     IconButton(
                       icon: Icon(Icons.clear),
-                      onPressed: ()=> Navigator.pop(context),
+                      onPressed: () => Navigator.pop(context),
                     )
                   ],
                 ),
-               Center(child: Text("Here We Will Provide Users help"))
+                Container(
+                  height: screenHeight(context, dividedBy: 0.2),
+                  child: WebView(
+                    initialUrl: 'https://purchx.store/faq/',
+                    onWebViewCreated: (WebViewController webViewController) {
+                      _controller.complete(webViewController);
+                    },
+                  ),
+                ),
               ],
             ),
           ),

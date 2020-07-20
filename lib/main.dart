@@ -6,6 +6,8 @@ import 'screens/landingPage.dart';
 import 'package:d_project/utils/cart_data.dart';
 import 'screens/mainPage.dart';
 import 'utils/listOfItem.dart';
+import 'screens/splashScreen.dart';
+
 
 void main() {
 
@@ -33,14 +35,7 @@ void main() {
           )
         )
       ),
-      home: AnimatedSplash(
-        imagePath: 'assests/DoorakartIconImage.png',
-        home: MainScreen(),
-        customFunction: duringSplash,
-        duration: 1500,
-        type: AnimatedSplashType.BackgroundProcess,
-        outputAndHome: op,
-      ),
+      home: SplashScreeb(),
     ),
   ));
 
