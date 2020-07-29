@@ -46,11 +46,11 @@ List<Category> categories = [
     subCategory(name: "Jams & Spreads", searchToken: "jams",color: Colors.green, icon: 'assests/icon/foodAndBeverages/jams.svg'),
     subCategory(name: "Namkeen", searchToken: "namkeen",color: Colors.white, icon: 'assests/icon/foodAndBeverages/namkeen.svg'),
     subCategory(name: "Noodles",searchToken: "noodles", color: Colors.blue, icon: 'assests/icon/foodAndBeverages/noodles.svg'),
-    subCategory(name: "Sauce & Pickles",searchToken: "sauce", color: Colors.orange, icon: 'assests/icon/foodAndBeverages/sauce.svg'),
+    subCategory(name: "Sauce & Pickles",searchToken: "sauce", color: Colors.pink, icon: 'assests/icon/foodAndBeverages/sauce.svg'),
     subCategory(name: "Biscuit & Cookies",searchToken: "biscuit", color: Colors.brown, icon: 'assests/icon/foodAndBeverages/biscuit.svg'),
-    subCategory(name: "Frozen fruits & papad",searchToken: "frozen", color: Colors.orange, icon: 'assests/icon/foodAndBeverages/frozenFruit.svg'),
+    subCategory(name: "Frozen fruits & papad",searchToken: "frozen", color: Colors.deepOrangeAccent, icon: 'assests/icon/foodAndBeverages/frozenFruit.svg'),
     subCategory(name: "Ice-creams",searchToken: "ice-cream", color: Colors.brown, icon: 'assests/icon/foodAndBeverages/iceCream.svg'),
-
+    subCategory(name: "Sweets & Cakes",searchToken: "sweets", color: Colors.red, icon: 'assests/icon/foodAndBeverages/cake-pop.svg'),
   ]),
   Category(color: Colors.orange,icon : 'assests/icon/item.svg',name : "View all",searchToken: "", subCategories: null),
 ];

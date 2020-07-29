@@ -10,16 +10,17 @@ class PushNotificationsManager {
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   bool _initialized = false;
+  String FIREBASE_TOKEN;
 
   Future<void> init() async {
     if (!_initialized) {
       // For iOS request permission first.
       _firebaseMessaging.requestNotificationPermissions();
       _firebaseMessaging.configure();
-
       // For testing purposes print the Firebase Messaging token
-      String token = await _firebaseMessaging.getToken();
-      print("FirebaseMessaging token: $token");
+      await _firebaseMessaging.getToken().then((val){
+        FIREBASE_TOKEN = val;
+      });
 
       _initialized = true;
     }

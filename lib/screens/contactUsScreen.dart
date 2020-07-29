@@ -5,6 +5,10 @@ import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/widgets/customDrawer.dart';
 import 'package:d_project/utils/scrollBehaviour.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+
+String message = "";
 
 class ContactUs extends StatefulWidget {
   @override
@@ -85,6 +89,9 @@ class _ContactUsState extends State<ContactUs> {
                             ],
                           ),
                           TextField(
+                            onChanged: (str){
+                              message = str;
+                            },
                             minLines: 10,
                             maxLines: 40,
                             decoration: InputDecoration(
@@ -101,7 +108,7 @@ class _ContactUsState extends State<ContactUs> {
                           ),
                           RaisedButton(
                             onPressed: () {
-                              print("Mail sent");
+                              sendMail(message);
                             },
                             color: Colors.deepOrange,
                             child: Container(
@@ -202,4 +209,17 @@ class _ContactUsState extends State<ContactUs> {
       ],
     );
   }
+}
+
+
+sendMail(String msg) async {
+  final Uri _emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: 'dorakartinfo@gmail..com',
+      queryParameters: {
+        'subject': 'Query Regarding PurchX Mobile App',
+        'body' : msg
+      }
+  );
+  await launch(_emailLaunchUri.toString());
 }

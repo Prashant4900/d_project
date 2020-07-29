@@ -88,10 +88,40 @@ class _PreviewOrderState extends State<PreviewOrder> {
                         Divider(),
                         Padding(
                             padding: EdgeInsets.all(5.0),
-                            child: Text(
-                              "Total : " + "₹" + widget.amount,
-                              style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.w300),
+                            child: Container(
+                              padding : EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4.0),
+                                border: Border.all(color: Colors.black),
+                              ),
+                              child: Column(
+                                crossAxisAlignment :  CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    "Total : " + "₹" + widget.amount,
+                                    style: TextStyle(
+                                        fontSize: 14.0, fontWeight: FontWeight.w300),
+                                  ),
+                                  Divider(),
+                                  Text(
+                                    "Delivery Charges : " + "Free",
+                                    style: TextStyle(
+                                        fontSize: 14.0, fontWeight: FontWeight.w300),
+                                  ),
+                                  Divider(),
+                                  Text(
+                                    "Services and Taxes : " + "₹" + ServicesAndTaxes(double.parse(widget.amount)).toString(),
+                                    style: TextStyle(
+                                        fontSize: 14.0, fontWeight: FontWeight.w300),
+                                  ),
+                                  Divider(),
+                                  Text(
+                                    "Amount Payable : " + "₹" + (double.parse(widget.amount) + ServicesAndTaxes(double.parse(widget.amount))).toString(),
+                                    style: TextStyle(
+                                        fontSize: 14.0, fontWeight: FontWeight.w300),
+                                  ),
+                                ],
+                              ),
                             )),
                         Divider(),
                         Padding(
@@ -165,7 +195,7 @@ class _PreviewOrderState extends State<PreviewOrder> {
                             MaterialPageRoute(
                               builder: (context) => PaymentScreen(
                                 userId: userData.userid.toString(),
-                                amount: widget.amount,
+                                amount: (double.parse(widget.amount) + ServicesAndTaxes(double.parse(widget.amount))).toString(),
                                 orderId: widget.orderid,
                               ),
                             ));
@@ -179,7 +209,7 @@ class _PreviewOrderState extends State<PreviewOrder> {
                             builder: (context) => PaymentDoneScreen(
                               success: false,
                               orderId: widget.orderid,
-                              amount: widget.amount,
+                              amount: (double.parse(widget.amount) + ServicesAndTaxes(double.parse(widget.amount))).toString(),
                               customerId: userData.userid.toString(),
                               type: "COD",
                             ),
@@ -242,4 +272,18 @@ class _radioButtonsState extends State<radioButtons> {
       ),
     );
   }
+}
+
+
+int ServicesAndTaxes(double amount){
+  if(amount <= 150){
+    return 25;
+  }
+  else if(amount <= 300){
+    return 21;
+  }
+  else if(amount <= 500){
+    return 17;
+  }
+  return 13;
 }

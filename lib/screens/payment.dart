@@ -167,13 +167,13 @@ class _PaymentSuccessfulScreenState extends State<PaymentSuccessfulScreen> {
 
 
   String _loadHTML() {
-    return "<html> <body onload='document.f.submit();'><h1>Redirecting to Payment Gateway</h1> <form id='f' name='f' method='post' action='https://securegw-stage.paytm.in/theia/processTransaction'>"
-        "<input type='hidden' name='MID' value='hRKZHE36260544645209'/>" +
+    return "<html> <body onload='document.f.submit();'><h1>Redirecting to Payment Gateway</h1> <form id='f' name='f' method='post' action='https://securegw.paytm.in/order/process'>"
+        "<input type='hidden' name='MID' value='RjlRJN99594375683102'/>" +
         "<input  type='hidden' name='ORDER_ID' value='${widget.orderId}' />" +
         "<input  type='hidden' name='TXN_AMOUNT' value='${widget.amount}' />" +
         "<input  type='hidden' name='CUST_ID' value='${widget.userId}' />" +
         "<input  type='hidden' name='INDUSTRY_TYPE_ID' value='Retail' />" +
-        "<input  type='hidden' name='WEBSITE' value='WEBSTAGING' />" +
+        "<input  type='hidden' name='WEBSITE' value='DEFAULT' />" +
         "<input  type='hidden' name='CHANNEL_ID' value='WEB' />" +
         "<input  type='hidden' name='CALLBACK_URL' value='https://purchx.store/api/handle_app_request' />" +
         "<input  type='hidden' name='CHECKSUMHASH' value=${widget.hashprime} />" +
@@ -204,6 +204,7 @@ class _PaymentSuccessfulScreenState extends State<PaymentSuccessfulScreen> {
                         .toString());
               },
               onPageFinished: (page) {
+                print(page.toString());
                 if (page.contains("/handle_app_request")){
                   print(_webController.toString());
                   getData();

@@ -1,9 +1,12 @@
 import 'dart:ui';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import '../push_notifications.dart';
 
 class UserData  with ChangeNotifier{
   static final UserData _userdata = UserData._internal();
@@ -29,6 +32,18 @@ class UserData  with ChangeNotifier{
   Address selectedAddress;
 
   checkLoginStatus() async {
+    PushNotificationsManager pushNotificationsManager = await PushNotificationsManager();
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+    String FIREBASE_TOKEN = "";
+    print("WE CAME HERE");
+    await _firebaseMessaging.getToken().then((val){
+      FIREBASE_TOKEN = val;
+      print("FIREBASE TOKEN " + val.toString());
+    });
+
+
+
+
     userid = null;
     SharedPreferences sharedPreferences;
     sharedPreferences = await SharedPreferences.getInstance();
@@ -39,6 +54,7 @@ class UserData  with ChangeNotifier{
       var url = 'https://purchx.store/api/get_user';
       var response = await http.post(url, body: {
         "user_id" : userid,
+        "fcm_token" : FIREBASE_TOKEN,
       });
       var data = json.decode(response.body);
       print(data);

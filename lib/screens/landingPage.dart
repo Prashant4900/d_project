@@ -49,9 +49,11 @@ class _LandingPageState extends State<LandingPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     
-                    Hero(
-                      tag: "DoorakartIcon",
-                      child: Image.asset("assests/center.png")
+                    Expanded(
+                      child: Hero(
+                        tag: "DoorakartIcon",
+                        child: Image.asset("assests/center.png")
+                      ),
                     ),
                     SizedBox(
                       height: 20.0,
@@ -195,6 +197,7 @@ class _LandingPageState extends State<LandingPage> {
                             elevation: 10.0,
                           ),
                         ),
+                        SizedBox(height: 40.0,)
                       ],
                     )
                   ],

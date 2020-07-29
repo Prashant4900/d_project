@@ -1,8 +1,10 @@
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:d_project/modals/itemModal.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:d_project/utils/cart_data.dart';
 import 'package:d_project/utils/userData.dart';
 import 'package:d_project/widgets/ItemCardCategoryPage.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:d_project/widgets/categoriesWidget.dart';
@@ -15,6 +17,9 @@ import 'package:d_project/utils/scrollBehaviour.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:d_project/screens/landingPage.dart';
 import 'package:provider/provider.dart';
+import 'package:d_project/push_notifications.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MainScreen extends StatefulWidget {
 
@@ -24,6 +29,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+
+  List<String> carousalImageURLlist = [];
 
   ListOfItems list = new ListOfItems();
   List<int> crack = [0, 1 ,2 , 3, 4, 5, 6, 7];
@@ -35,7 +42,10 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     checkLoginStatus();
     userData.checkLoginStatus();
+    get_slider_images();
   }
+
+
 
 
   SharedPreferences sharedPreferences;
@@ -88,8 +98,35 @@ class _MainScreenState extends State<MainScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      SizedBox(height: 2.0,),
+                      Center(
+                        child: SizedBox(
+                            height: screenWidth(context, dividedBy:1.09 * 3),
+                            width: screenWidth(context, dividedBy: 1.09),
+                            child: FutureBuilder<List<String>>(
+                              future: get_slider_images(),
+                              builder: (context, snapshot) {
+                                if(snapshot.connectionState != ConnectionState.done){
+                                  return Container(
+                                      height: 100,
+                                      width: 100,
+                                      child: Center(child: CircularProgressIndicator()));
+                                }
+                                return Carousel(
+                                  dotSize: 4.0,
+                                  dotSpacing: 15.0,
+                                  dotColor: Colors.deepOrange,
+                                  indicatorBgPadding: 5.0,
+                                  dotBgColor: Colors.deepOrange.withOpacity(0.0),
+                                  borderRadius: true,
+                                  images: convertor(snapshot.data),
+                                );
+                              }
+                            )
+                        ),
+                      ),
                       Padding(
-                        padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
+                        padding: EdgeInsets.only(top: 10.0,left: 10.0, bottom: 10.0),
                         child: Text("Categories", style: TextStyle(
                             fontSize: 15.0,
                             fontWeight: FontWeight.w500
@@ -160,8 +197,27 @@ class _MainScreenState extends State<MainScreen> {
 
       ),
     );
+
   }
 
+
+  Future<List<String>> get_slider_images() async {
+    var url = 'https://purchx.store/api/get_slider_image';
+    var response = await http.post(url);
+    var data = json.decode(response.body);
+    var rest = data['image_path_list'] as List;
+    List<String> dataNew = List<String>.from(rest);
+    return dataNew;
+  }
+
+  List<NetworkImage> convertor(List<String> urls){
+    List<NetworkImage> values= [];
+    for(int i = 0 ; i < urls.length; i++){
+      NetworkImage net = NetworkImage(urls[i]);
+      values.add(net);
+    }
+    return values;
+  }
 
 }
 
