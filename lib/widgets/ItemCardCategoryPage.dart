@@ -139,40 +139,10 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    // children: <Widget>[
-                                    //   count > 0 ? InkWell(
-                                    //     onTap: () async{
-                                    //       if(count != 0){
-                                    //         setState(() {
-                                    //           count2--;
-                                    //         });
-                                    //       }
-                                    //       await bloc.reduceToCart(item.upcCode);
-                                    //     },
-                                    //     child: Icon(Icons.remove, size: 30.0,),
-                                    //   ) : SizedBox(),
-                                    //   Text(bloc.cartItems[widget.item.upcCode] == null ? "Add to Cart": count2.toString(), style: TextStyle(fontSize: 12.0),),
-                                    //   InkWell(
-                                    //     onTap: () async{
-                                    //       setState(() {
-                                    //         count2++;
-                                    //       });
-                                    //       await bloc.addToCart(item.upcCode);
-                                    //     },
-                                    //     child: Icon(Icons.add , size: 30.0),
-                                    //   ),
-                                    // ],
                                     children: <Widget>[
                                       count > 0
                                           ? InkWell(
                                               onTap: () async {
-                                                // final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
-                                                // pr.style(
-                                                //   message: 'Updating Quantity',
-                                                //   borderRadius: 10.0,
-                                                //   backgroundColor: Colors.white,
-                                                // );
-                                                // await pr.show();
                                                 if (!loading) {
                                                   _toggle();
                                                   Future<void> future = bloc
@@ -182,7 +152,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                                         Timer(
                                                             Duration(
                                                                 milliseconds:
-                                                                    400), () {
+                                                                    1000), () {
                                                           // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
                                                           _toggle();
                                                         })
@@ -218,7 +188,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                             future.then((value) => {
                                                   Timer(
                                                       Duration(
-                                                          milliseconds: 400),
+                                                          milliseconds: 1000),
                                                       () {
                                                     _toggle();
                                                   })

@@ -112,7 +112,7 @@ class CardData with ChangeNotifier {
 
   Future<void> addToCartFutSubCat(String upcCode) async {
     print("future called");
-    addToCartSubCat(upcCode);
+    await addToCartSubCat(upcCode);
   }
 
   Future<void> addToCartFut(String upcCode) async {
@@ -122,7 +122,7 @@ class CardData with ChangeNotifier {
 
   Future<void> reduceToCartFutSubCat(String upcCode) async {
     print("future called");
-    reduceToCartSubCat(upcCode);
+    await reduceToCartSubCat(upcCode);
   }
 
   Future<void> reduceToCartFut(String upcCode) async {
@@ -154,10 +154,10 @@ class CardData with ChangeNotifier {
     // notifyListeners();
   }
 
-  void addToCartSubCat(String upcCode) async {
+  Future<void> addToCartSubCat(String upcCode) async {
     if (cartItems.containsKey(upcCode)) {
       Future<void> future = updateCart(upcCode, cartItems[upcCode] + 1);
-      future.then((value) => {
+      await future.then((value) => {
             cartItems[upcCode] += 1,
             // notifyListeners()
             print("check2 : " + cartItems.toString()),
@@ -165,7 +165,7 @@ class CardData with ChangeNotifier {
           });
     } else {
       Future<void> future = updateCart(upcCode, 1);
-      future.then((value) => {
+      await future.then((value) => {
             cartItems[upcCode] = 1,
             // notifyListeners()
             print("check2 : " + cartItems.toString()),
@@ -182,7 +182,7 @@ class CardData with ChangeNotifier {
     future.then((value) => {cartItems.remove(upcCode), notifyListeners()});
   }
 
-  void reduceToCartSubCat(String upcCode) async {
+  Future<void> reduceToCartSubCat(String upcCode) async {
     if (cartItems.containsKey(upcCode)) {
       if (cartItems[upcCode] > 1) {
         // cartItems[upcCode] -= 1;
@@ -190,7 +190,7 @@ class CardData with ChangeNotifier {
         print("check1 : ");
         print(cartItems);
         Future<void> future = updateCart(upcCode, cartItems[upcCode] - 1);
-        future.then((value) => {
+        await future.then((value) => {
               cartItems[upcCode] -= 1,
               // notifyListeners()
               print("check2 : " + cartItems.toString()),
@@ -201,7 +201,7 @@ class CardData with ChangeNotifier {
         print(cartItems);
         // clear(upcCode);
         Future<void> future = updateCart(upcCode, 0);
-        future.then((value) => {
+        await future.then((value) => {
               cartItems.remove(upcCode),
               // notifyListeners()
               print("check2 : " + cartItems.toString()),
@@ -211,7 +211,7 @@ class CardData with ChangeNotifier {
     } else {
       // clear(upcCode);
       Future<void> future = updateCart(upcCode, 0);
-      future.then((value) => {cartItems.remove(upcCode), notifyListeners()});
+      await future.then((value) => {cartItems.remove(upcCode)});
     }
     print("check");
     // print(cartItems);
