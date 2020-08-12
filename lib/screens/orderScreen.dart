@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:d_project/modals/categoryModal.dart';
 import 'package:d_project/screens/orderDetail.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
 import 'package:d_project/utils/userData.dart';
@@ -6,6 +9,10 @@ import 'package:d_project/widgets/customDrawer.dart';
 import 'package:d_project/utils/scrollBehaviour.dart';
 import 'package:d_project/widgets/appbarWidget.dart';
 import 'package:date_time_format/date_time_format.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'CategoriesPage.dart';
+
 
 class OrderScreen extends StatefulWidget {
   OrderScreen();
@@ -22,6 +29,10 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   UserData userData = UserData();
+  String cancelOrderText = "Cancel Order";
+  int secondsRemainingToCall = 10;
+
+  Category viewAll = Category(color: Colors.orange,icon : 'assests/icon/item.svg',name : "View all",searchToken: "", subCategories: null);
 
   @override
   void initState() {
@@ -50,7 +61,29 @@ class _OrderScreenState extends State<OrderScreen> {
                     onPressed: ()=>Navigator.pop(context),
                   ),
                 ],),
-                userData.orderList.length == 0 ? Center(child: Text("No Orders"),) : ListView.builder(
+                userData.orderList.length == 0 ? Container(
+                    width: screenWidth(context),
+                    height: screenHeight(context) -200,
+                    child: Center(child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("No Orders"),
+                        SizedBox(height: 10,),
+                        RaisedButton(
+                          color: Colors.deepOrange,
+                          onPressed: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CategoriesPage(category: viewAll),
+                              ),
+                            );
+                          },
+                          child: Container(
+                              child: Text("View All Items", style: TextStyle(color: Colors.white),)),
+                        )
+                      ],
+                    ),)) : ListView.builder(
                   physics: ClampingScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: userData.orderList.length,
@@ -92,10 +125,42 @@ class _OrderScreenState extends State<OrderScreen> {
                                 ),
                               ),
                               InkWell(
+                                onTap : (){
+                                  {
+                                    if(secondsRemainingToCall > 0){
+                                      Timer timer =  new Timer.periodic(new Duration(seconds: 1), (time) {
+                                        if(secondsRemainingToCall > 0){
+                                          setState(() {
+                                            cancelOrderText = "Calling in " + secondsRemainingToCall.toString() + " seconds";
+                                          });
+                                          secondsRemainingToCall--;
+                                          if(secondsRemainingToCall == 0){
+                                            setState(() {
+                                              cancelOrderText = "Call us now";
+                                            });
+                                            time.cancel();
+                                          }
+                                        }
+                                        else{
+                                          setState(() {
+                                            cancelOrderText = "Call us now";
+                                          });
+                                          time.cancel();
+                                        }
+                                      });
+                                    }
+                                    else{
+                                      setState(() {
+                                        cancelOrderText = "Call us now";
+                                      });
+                                      sendPhone();
+                                    }
+                                  }
+                                },
                                 child: Container(
                                   width: screenWidth(context, dividedBy: 2.2),
                                   height: 25.0,
-                                  child: Center(child: Text("Cancel Order")),
+                                  child: Center(child: Text(cancelOrderText)),
                                 ),
                               )
                             ],
@@ -111,6 +176,12 @@ class _OrderScreenState extends State<OrderScreen> {
         ),
       ),
     );
+  }
+
+
+
+  sendPhone() async {
+    await launch('tel:9617659479');
   }
 
 }

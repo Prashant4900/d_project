@@ -151,7 +151,7 @@ class _ContactUsState extends State<ContactUs> {
                       setState(() {
                         callText = "Call us now";
                       });
-                      print("Calling the number");
+                      sendPhone();
                     }
                   },
                   child: Container(
@@ -222,4 +222,8 @@ sendMail(String msg) async {
       }
   );
   await launch(_emailLaunchUri.toString());
+}
+
+sendPhone() async {
+  await launch('tel:9617659479');
 }

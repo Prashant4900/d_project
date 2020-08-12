@@ -14,7 +14,8 @@ class PaymentDoneScreen extends StatefulWidget {
     this.orderId,
     this.success,
     this.address,
-    this.type
+    this.type,
+    this.cod
 });
 
   Address address;
@@ -23,6 +24,7 @@ class PaymentDoneScreen extends StatefulWidget {
   String customerId;
   String amount;
   String type;
+  bool cod =false;
 
   @override
   _PaymentDoneScreenState createState() => _PaymentDoneScreenState();
@@ -35,7 +37,6 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
   void initState() {
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +61,9 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  widget.success == true || snapshot.data == true ? Text("Your Order is Successful", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300), ): Text("Your Order failed, Contact Support",overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),),
-                  widget.success ==true || snapshot.data == true ? Icon(Icons.check_circle, color: Colors.green,size: 60.0,) : Icon(Icons.block, color: Colors.red, size: 60.0,),
-                  widget.success ==true || snapshot.data == true ? Text("Your orderId is " + widget.orderId, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),) : SizedBox(),
+                  widget.success == true || snapshot.data == true || widget.cod == true? Text("Your Order is Successful", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300), ): Text("Your Order failed, Contact Support",overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),),
+                  widget.success ==true || snapshot.data == true || widget.cod == true? Icon(Icons.check_circle, color: Colors.green,size: 60.0,) : Icon(Icons.block, color: Colors.red, size: 60.0,),
+                  widget.success ==true || snapshot.data == true || widget.cod == true? Text("Your orderId is " + widget.orderId, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),) : SizedBox(),
                 ],
               ),
             );
@@ -74,6 +75,7 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
 
 
   Future<bool> updateOrdertoServer() async{
+    print("Before if condition");
     if(!widget.success){
       try {
         var url = 'https://purchx.store/api/create_order';
@@ -93,7 +95,7 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
             "payment_mode": widget.type
           });
           var data = json.decode(response.body.toString());
-          print(data);
+          print("ORder Data" + data);
           print(data["error"]);
           if(data["error"] == false || data["error"] == "false"){
             print("True returned");
@@ -106,6 +108,7 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
             return false;
           }
       } on Exception catch (e) {
+        print("execet");
         cardData.calculateTotalPrice();
             print(e.toString());
       }

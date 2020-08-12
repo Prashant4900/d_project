@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:date_time_format/date_time_format.dart';
 
 import '../push_notifications.dart';
 
@@ -85,9 +86,15 @@ class UserData  with ChangeNotifier{
       if(rest.length > 0){
         orderList = rest.map<Order>((json) => Order.fromJson(json)).toList();
       }
-      print(phoneNo);
-      print(userid);
-      print(addressData);
+      orderList.sort((Order a, Order b){
+        if(DateTime.parse(a.orderTime).isAfter(DateTime.parse(b.orderTime))){
+          return -1;
+        }
+        else{
+          return 1;
+        }
+      }
+      );
     }
   }
 }
@@ -162,6 +169,7 @@ class Order{
   createOrderItems(){
     if(orderItemsData != null){
       var rest = orderItemsData as List;
+
       if(rest.length > 0){
         //selectedAddress = addressDat;
         orderItemsList = rest.map<orderItems>((json) => orderItems.fromJson(json)).toList();

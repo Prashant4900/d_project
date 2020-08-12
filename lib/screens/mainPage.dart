@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:d_project/modals/itemModal.dart';
 import 'package:d_project/utils/Screen_size_reducer.dart';
@@ -210,10 +211,16 @@ class _MainScreenState extends State<MainScreen> {
     return dataNew;
   }
 
-  List<NetworkImage> convertor(List<String> urls){
-    List<NetworkImage> values= [];
+  List<CachedNetworkImage> convertor(List<String> urls){
+    List<CachedNetworkImage> values= [];
     for(int i = 0 ; i < urls.length; i++){
-      NetworkImage net = NetworkImage(urls[i]);
+      CachedNetworkImage net = CachedNetworkImage(
+        imageUrl: urls[i],
+        placeholder: (context, url) => Container(
+            height: 100,
+            width: 100,
+            child: CircularProgressIndicator()),
+      );
       values.add(net);
     }
     return values;

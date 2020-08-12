@@ -52,6 +52,10 @@ List<Category> categories = [
     subCategory(name: "Ice-creams",searchToken: "ice-cream", color: Colors.brown, icon: 'assests/icon/foodAndBeverages/iceCream.svg'),
     subCategory(name: "Sweets & Cakes",searchToken: "sweets", color: Colors.red, icon: 'assests/icon/foodAndBeverages/cake-pop.svg'),
   ]),
+  Category(color: Colors.red,icon : 'assests/icon/foodAndBeverages/cake-pop.svg',searchToken: "sweets",name : "Sweets and Cakes",subCategories: [
+    subCategory(name: "Ice-creams",searchToken: "ice-cream", color: Colors.brown, icon: 'assests/icon/foodAndBeverages/iceCream.svg'),
+  subCategory(name: "Sweets & Cakes",searchToken: "sweets", color: Colors.red, icon: 'assests/icon/foodAndBeverages/cake-pop.svg'),
+]),
   Category(color: Colors.orange,icon : 'assests/icon/item.svg',name : "View all",searchToken: "", subCategories: null),
 ];
 

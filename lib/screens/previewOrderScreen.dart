@@ -212,6 +212,7 @@ class _PreviewOrderState extends State<PreviewOrder> {
                               amount: (double.parse(widget.amount) + ServicesAndTaxes(double.parse(widget.amount))).toString(),
                               customerId: userData.userid.toString(),
                               type: "COD",
+                              cod: true,
                             ),
                           ),);
                     }

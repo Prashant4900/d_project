@@ -35,7 +35,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void didChangeDependencies() {
-    FocusScope.of(context).requestFocus(focusNode);
+    if(searchValue == "search value"){
+      FocusScope.of(context).requestFocus(focusNode);
+    }
     super.didChangeDependencies();
   }
 
@@ -101,8 +103,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 },
                 textSubmitted: (text){
                   list = getSearchResult(text, context);
+                  SystemChannels.textInput.invokeMethod('TextInput.hide');
                   },
-                clearOnSubmit: false,
+                clearOnSubmit: true,
                 suggestions: originalList,
               ),
             ),
