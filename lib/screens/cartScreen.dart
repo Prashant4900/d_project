@@ -226,7 +226,7 @@ class _CartScreenState extends State<CartScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                "Sumtotal ",
+                                "Sum total ",
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 10.0),
                               ),

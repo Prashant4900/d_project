@@ -5,14 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import "package:d_project/utils/Screen_size_reducer.dart";
 
-class SplashScreeb extends StatefulWidget {
+class SplashScreen extends StatefulWidget {
   @override
-  _SplashScreebState createState() => _SplashScreebState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
 
 
-class _SplashScreebState extends State<SplashScreeb> {
+class _SplashScreenState extends State<SplashScreen> {
 
 
   final splashDelay = 2;

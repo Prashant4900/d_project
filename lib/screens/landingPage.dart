@@ -74,7 +74,7 @@ class _LandingPageState extends State<LandingPage> {
                             Text("Accept"),
                             InkWell(
                               onTap: _launchURL,
-                              child: Text(" Terms and Conditons", style: TextStyle(color: Colors.blue),),
+                              child: Text(" Terms and Condition", style: TextStyle(color: Colors.blue),),
                             )
                           ],
                         ),

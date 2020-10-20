@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum mainCategory{
+enum mainCategory {
   fruits,
   vegetables,
   dairy,
@@ -9,37 +9,37 @@ enum mainCategory{
   food,
 }
 
-
-class Item{
-
-
+class Item {
   @override
   String toString() => name;
 
-
-  Item({this.category,
-        this.imagePath,
-        this.marketPrice,
-        this.name,
-        this.ourPrice,
-        this.upcCode,
-        this.brandName,
-        this.itemId,
-        this.subItems,
-        this.MainCategory,
-        this.unit,
-        this.MainSubCategory,
-  }){
+  Item({
+    this.category,
+    this.imagePath,
+    this.marketPrice,
+    this.name,
+    this.ourPrice,
+    this.upcCode,
+    this.brandName,
+    this.itemId,
+    this.subItems,
+    this.MainCategory,
+    this.unit,
+    this.MainSubCategory,
+    this.discount,
+  }) {
     makeSubCategories();
   }
 
   String imagePath;
-  @required String upcCode;
-  @required String name;
+  @required
+  String upcCode;
+  @required
+  String name;
   String brandName;
   int itemId;
   double marketPrice;
-  double  ourPrice;
+  double ourPrice;
   mainCategory category;
   var subItems;
   String MainCategory;
@@ -48,61 +48,63 @@ class Item{
   List<subItem> subItemsList = [];
   bool subCategories = false;
 
+  int discount;
 
-  void makeSubCategories(){
-    if(subItems != null){
+  void makeSubCategories() {
+    if (subItems != null) {
       var rest = subItems as List;
-      if(rest.length > 0){
+      if (rest.length > 0) {
         subCategories = true;
-        subItemsList = rest.map<subItem>((json) => subItem.fromJson(json)).toList();
-        subItem original = subItem(upcCode: upcCode, ouuPrice: ourPrice, unit: unit);
+        subItemsList =
+            rest.map<subItem>((json) => subItem.fromJson(json)).toList();
+        subItem original =
+            subItem(upcCode: upcCode, ouuPrice: ourPrice, unit: unit);
         subItemsList.add(original);
       }
-    }
-    else{
+    } else {
       subCategories = false;
     }
   }
 
   // ignore: missing_return
-  Color getColor(){
+  Color getColor() {
     Color col;
-    switch(this.category){
-      case mainCategory.fruits :
+    switch (this.category) {
+      case mainCategory.fruits:
         col = Colors.red;
         break;
-      case mainCategory.dairy :
-        col =  Colors.green;
+      case mainCategory.dairy:
+        col = Colors.green;
         break;
-      case mainCategory.vegetables :
+      case mainCategory.vegetables:
         col = Colors.white;
         break;
-      case mainCategory.household :
-        col =  Colors.blue;
+      case mainCategory.household:
+        col = Colors.blue;
         break;
-      case mainCategory.hygiene :
-        col =  Colors.brown;
+      case mainCategory.hygiene:
+        col = Colors.brown;
         break;
-      case mainCategory.food :
+      case mainCategory.food:
         col = Colors.orange;
         break;
     }
     return col;
   }
 
-
   factory Item.fromJson(Map<String, dynamic> json) {
     return Item(
-        imagePath: json["main_product"]["image_path"],
-        subItems :  json["sub_products"],
-        itemId :json["item_id"],
-        name: json["main_product"]["item_name"],
-        ourPrice: json["main_product"]["price_per_unit"],
-        brandName: json["main_product"]["brand_name"],
-        upcCode: json["main_product"]["item_upc"],
-        MainCategory : json["main_product"]["category"],
-        unit : json["main_product"]["unit"],
-        MainSubCategory: json["main_product"]["sub_category"]
+      imagePath: json["main_product"]["image_path"],
+      subItems: json["sub_products"],
+      itemId: json["item_id"],
+      name: json["main_product"]["item_name"],
+      ourPrice: json["main_product"]["price_per_unit"],
+      brandName: json["main_product"]["brand_name"],
+      upcCode: json["main_product"]["item_upc"],
+      MainCategory: json["main_product"]["category"],
+      unit: json["main_product"]["unit"],
+      MainSubCategory: json["main_product"]["sub_category"],
+      discount: json["main_product"]["discount"],
     );
   }
 }
@@ -116,34 +118,21 @@ class Item{
 //"price_per_unit": 79.0
 //},
 
-
-
-
-class subItem{
-
-
+class subItem {
   String name;
   String brandName;
   double ouuPrice;
   String upcCode;
   String unit;
 
-
-  subItem({
-    this.name,
-    this.brandName,
-    this.ouuPrice,
-    this.upcCode,
-    this.unit
-});
-
+  subItem({this.name, this.brandName, this.ouuPrice, this.upcCode, this.unit});
 
   factory subItem.fromJson(Map<String, dynamic> json) {
     return subItem(
         name: json["item_name"],
-        ouuPrice : json["price_per_unit"],
+        ouuPrice: json["price_per_unit"],
         brandName: json["brand_name"],
         upcCode: json["item_upc"],
-        unit : json["unit"]);
+        unit: json["unit"]);
   }
 }

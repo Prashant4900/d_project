@@ -14,14 +14,17 @@ import 'VerifiyPinEntryScreen.dart';
 
 class ReverifyPhoneSignInScreen extends StatefulWidget {
   @override
-  _ReverifyPhoneSignInScreenState createState() => _ReverifyPhoneSignInScreenState();
+  _ReverifyPhoneSignInScreenState createState() =>
+      _ReverifyPhoneSignInScreenState();
 }
 
 class _ReverifyPhoneSignInScreenState extends State<ReverifyPhoneSignInScreen> {
-  final NumbersnackBar = SnackBar(content: Text('Please Enter a Valid Mobile Number'));
+  final NumbersnackBar =
+      SnackBar(content: Text('Please Enter a Valid Mobile Number'));
   loginHelper LoginHelper = loginHelper();
   String btnText = "Request OTP";
   String phoneNumber = "";
+  String userName = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,13 +35,21 @@ class _ReverifyPhoneSignInScreenState extends State<ReverifyPhoneSignInScreen> {
             height: screenHeight(context),
             child: ProgressHUD(
               child: Builder(
-                builder:(context) => Column(
+                builder: (context) => Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    SvgPicture.asset('assests/DoorakartIcon.svg', width: screenWidth(context, dividedBy: 2),),
+                    SvgPicture.asset(
+                      'assests/DoorakartIcon.svg',
+                      width: screenWidth(context, dividedBy: 2),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Text("Please Verify Your Phone Number Before Placing Order", maxLines: 2, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w300),),
+                      child: Text(
+                        "Please Verify Your Phone Number Before Placing Order",
+                        maxLines: 2,
+                        style: TextStyle(
+                            fontSize: 20.0, fontWeight: FontWeight.w300),
+                      ),
                     ),
                     Column(
                       children: <Widget>[
@@ -46,47 +57,56 @@ class _ReverifyPhoneSignInScreenState extends State<ReverifyPhoneSignInScreen> {
                           title: TextField(
                             decoration: InputDecoration(
                                 prefix: Text("+91"),
-                                labelText: "Enter Phone Number", icon: Icon(Icons.phone)),
+                                labelText: "Enter Phone Number",
+                                icon: Icon(Icons.phone)),
                             keyboardType: TextInputType.phone,
                             onChanged: (value) => phoneNumber = value,
                           ),
                         ),
                         Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+                          padding: const EdgeInsets.only(
+                              left: 20.0, right: 20.0, top: 10.0),
                           child: RaisedButton(
-                            onPressed: () async{
+                            onPressed: () async {
                               Pattern pattern = r'^(?:[+0]9)?[0-9]{10}$';
                               RegExp regex = new RegExp(pattern);
-                              if (regex.hasMatch(phoneNumber)){
+                              if (regex.hasMatch(phoneNumber)) {
                                 final progress = ProgressHUD.of(context);
                                 progress.showWithText("Sending OTP");
                                 String result;
-                                try{
-                                  result = await LoginHelper.sendOTP(phoneNumber);
-                                }
-                                catch(e){
+                                try {
+                                  result =
+                                      await LoginHelper.sendOTP(phoneNumber);
+                                } catch (e) {
                                   print(e);
-                                }
-                                finally{
+                                } finally {
                                   progress.dismiss();
-                                  if(result != null){
-                                    var jsonFile = json.decode(result.toString());
+                                  if (result != null) {
+                                    var jsonFile =
+                                        json.decode(result.toString());
                                     var code = jsonFile["otp"];
                                     print("Code" + code.toString());
-                                    Navigator.pushReplacement(context, MaterialPageRoute(
-                                      builder: (context) => VerifyPinEntryScreen(phoneNumber: phoneNumber),
-                                    ));
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              VerifyPinEntryScreen(
+                                            phoneNumber: phoneNumber,
+                                            userName: userName,
+                                          ),
+                                        ));
                                   }
                                 }
-                              }
-                              else{
-                                Scaffold.of(context).showSnackBar(NumbersnackBar);
+                              } else {
+                                Scaffold.of(context)
+                                    .showSnackBar(NumbersnackBar);
                               }
                             },
                             child: Text(
                               btnText,
-                              style: TextStyle(fontSize: 15.0, color: Colors.white),
+                              style: TextStyle(
+                                  fontSize: 15.0, color: Colors.white),
                             ),
                             color: Color(0xFF18D191),
                             elevation: 7.0,
@@ -104,5 +124,3 @@ class _ReverifyPhoneSignInScreenState extends State<ReverifyPhoneSignInScreen> {
     );
   }
 }
-
-

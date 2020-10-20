@@ -35,7 +35,7 @@ void main() {
           )
         )
       ),
-      home: SplashScreeb(),
+      home: SplashScreen(),
     ),
   ));
 

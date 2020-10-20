@@ -69,7 +69,7 @@ class _PreviewOrderState extends State<PreviewOrder> {
                         Padding(
                             padding: EdgeInsets.only(top: 5.0, left: 10.0),
                             child: Text(
-                              "Order Detais",
+                              "Order Details",
                               style: TextStyle(
                                   fontSize: 16.0, fontWeight: FontWeight.w300),
                             )),
@@ -130,7 +130,7 @@ class _PreviewOrderState extends State<PreviewOrder> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  "Address Detais",
+                                  "Address Details",
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.w300),

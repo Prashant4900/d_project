@@ -11,8 +11,11 @@ import 'package:d_project/networkUtils/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class VerifyPinEntryScreen extends StatefulWidget {
-  VerifyPinEntryScreen({this.phoneNumber});
-  @required String phoneNumber;
+  VerifyPinEntryScreen({this.phoneNumber, this.userName});
+  @required
+  String phoneNumber;
+  @required
+  String userName;
   @override
   _VerifyPinEntryScreenState createState() => _VerifyPinEntryScreenState();
 }
@@ -23,12 +26,12 @@ class _VerifyPinEntryScreenState extends State<VerifyPinEntryScreen> {
   final InvalidsnackBar = SnackBar(content: Text('OTP Invalid'));
   final ProperlysnackBar = SnackBar(content: Text('Invalid OTP Format'));
 
-
   final TextEditingController _pinPutController = TextEditingController();
 
   final FocusNode _pinPutFocusNode = FocusNode();
 
-  String errorMessage = "Please type the verification code sent to your Mobile Number";
+  String errorMessage =
+      "Please type the verification code sent to your Mobile Number";
   Color boxBorder = Colors.white;
   Color errorText = Colors.black;
   Color btnColor = Colors.blueAccent;
@@ -57,16 +60,26 @@ class _VerifyPinEntryScreenState extends State<VerifyPinEntryScreen> {
                     ),
                     Column(
                       children: <Widget>[
-                        Text("Verification Code", style : TextStyle(fontSize: 30.0, fontWeight: FontWeight.w300)),
-                        Text(errorMessage, style: TextStyle(color: errorText),),
+                        Text("Verification Code",
+                            style: TextStyle(
+                                fontSize: 30.0, fontWeight: FontWeight.w300)),
+                        Text(
+                          errorMessage,
+                          style: TextStyle(color: errorText),
+                        ),
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left:  screenWidth(context, dividedBy: 5), right: screenWidth(context, dividedBy: 5), top: 10.0),
+                      padding: EdgeInsets.only(
+                          left: screenWidth(context, dividedBy: 5),
+                          right: screenWidth(context, dividedBy: 5),
+                          top: 10.0),
                       child: Column(
                         children: <Widget>[
                           onlySelectedBorderPinPut(),
-                          SizedBox(height: 20.0,),
+                          SizedBox(
+                            height: 20.0,
+                          ),
                           Container(
                             padding: EdgeInsets.all(20.0),
                             width: double.infinity,
@@ -75,35 +88,45 @@ class _VerifyPinEntryScreenState extends State<VerifyPinEntryScreen> {
                               backgroundColor: btnColor,
                               child: IconButton(
                                 color: Colors.white,
-                                onPressed: () async{
+                                onPressed: () async {
                                   final progress = ProgressHUD.of(context);
                                   progress.showWithText("Verifying OTP");
-                                  if(entered){
+                                  if (entered) {
                                     //condition for checking otp
-                                    var result = await LoginHelper.reverifyPhone(widget.phoneNumber, userData.userid,userOTP.toString());
+                                    var result =
+                                        await LoginHelper.reverifyPhone(
+                                            widget.phoneNumber,
+                                            userData.userid,
+                                            userOTP.toString());
 
-                                    if(result != false){
+                                    if (result != false) {
                                       progress.dismiss();
-                                        Navigator.pop(context, true);
-                                       }
-                                    else{
+                                      Navigator.pop(context, true);
+                                    } else {
                                       progress.dismiss();
-                                      Scaffold.of(context).showSnackBar(InvalidsnackBar);
+                                      Scaffold.of(context)
+                                          .showSnackBar(InvalidsnackBar);
                                     }
-                                  }
-                                  else{
-                                    Scaffold.of(context).showSnackBar(ProperlysnackBar);
+                                  } else {
+                                    Scaffold.of(context)
+                                        .showSnackBar(ProperlysnackBar);
                                   }
                                   progress.dismiss();
                                 },
-                                icon: Icon(Icons.arrow_forward, color: Colors.white,semanticLabel: "Submit",),
+                                icon: Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.white,
+                                  semanticLabel: "Submit",
+                                ),
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 40.0,),
+                    SizedBox(
+                      height: 40.0,
+                    ),
                     Column(
                       children: <Widget>[
                         Container(
@@ -111,25 +134,23 @@ class _VerifyPinEntryScreenState extends State<VerifyPinEntryScreen> {
                           width: double.infinity,
                           child: RaisedButton(
                             color: Colors.deepOrangeAccent,
-                            onPressed: () async{
+                            onPressed: () async {
                               final progress = ProgressHUD.of(context);
                               progress.showWithText("Sending OTP");
                               String result;
-                              try{
-                                result = await LoginHelper.sendOTP(widget.phoneNumber);
-                              }
-                              catch(e){
+                              try {
+                                result = await LoginHelper.sendOTP(
+                                    widget.phoneNumber);
+                              } catch (e) {
                                 print(e);
-                              }
-                              finally{
+                              } finally {
                                 progress.dismiss();
-                                if(result != null){
-                                  Scaffold.of(context).showSnackBar(ResendsnackBar);
+                                if (result != null) {
+                                  Scaffold.of(context)
+                                      .showSnackBar(ResendsnackBar);
                                 }
                               }
-
                             },
-
                             child: Text("Resend OTP"),
                           ),
                         ),
@@ -139,9 +160,12 @@ class _VerifyPinEntryScreenState extends State<VerifyPinEntryScreen> {
                           child: RaisedButton(
                             color: Colors.deepOrange,
                             onPressed: () {
-                              Navigator.pushReplacement(context, MaterialPageRoute(
-                                builder: (context) => ReverifyPhoneSignInScreen(),
-                              ));
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ReverifyPhoneSignInScreen(),
+                                  ));
                             },
                             child: Text("Change Mobile Number"),
                           ),
@@ -158,10 +182,6 @@ class _VerifyPinEntryScreenState extends State<VerifyPinEntryScreen> {
     );
   }
 
-
-
-
-
   Widget onlySelectedBorderPinPut() {
     BoxDecoration pinPutDecoration = BoxDecoration(
         color: Color.fromRGBO(235, 236, 237, 1),
@@ -169,8 +189,7 @@ class _VerifyPinEntryScreenState extends State<VerifyPinEntryScreen> {
         border: Border.all(
           width: 1,
           color: boxBorder,
-        )
-    );
+        ));
 
     return PinPut(
       fieldsCount: 4,

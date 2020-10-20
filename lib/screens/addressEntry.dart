@@ -7,6 +7,8 @@ import 'package:d_project/utils/userData.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:dropdownfield/dropdownfield.dart';
+
 class AddressEntry extends StatefulWidget {
   @override
   _AddressEntryState createState() => _AddressEntryState();
@@ -52,7 +54,7 @@ class _AddressEntryState extends State<AddressEntry> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Enter Adddress"),
+        title: Text("Enter Address"),
       ),
       body: ScrollConfiguration(
         behavior: MyBehavior(),
@@ -93,7 +95,7 @@ class _AddressEntryState extends State<AddressEntry> {
                         decoration: InputDecoration(
                           labelStyle: TextStyle(
                               fontSize: 15.0, fontWeight: FontWeight.w300),
-                          labelText: "Aparatment name",
+                          labelText: "Apartment name",
                           hoverColor: Colors.green,
                         ),
                         onChanged: (value) {
@@ -193,8 +195,8 @@ class _AddressEntryState extends State<AddressEntry> {
                         validator: (value) {
                           Pattern pattern = r'^[1-9][0-9]{5}$';
                           RegExp regex = new RegExp(pattern);
-                          if (!regex.hasMatch(value)) {
-                            return 'Please enter pincode';
+                          if (!regex.hasMatch(value) || !indorePinCodes.contains(value)) {
+                            return 'Indore Pincode Only';
                           }
                           return null;
                         },

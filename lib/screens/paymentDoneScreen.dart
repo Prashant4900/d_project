@@ -75,7 +75,6 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
 
 
   Future<bool> updateOrdertoServer() async{
-    print("Before if condition");
     if(!widget.success){
       try {
         var url = 'https://purchx.store/api/create_order';
@@ -95,25 +94,19 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
             "payment_mode": widget.type
           });
           var data = json.decode(response.body.toString());
-          print("ORder Data" + data);
-          print(data["error"]);
           if(data["error"] == false || data["error"] == "false"){
-            print("True returned");
             cardData.calculateTotalPrice();
             return true;
           }
           else{
-            print("false returned");
             cardData.calculateTotalPrice();
             return false;
           }
       } on Exception catch (e) {
-        print("execet");
         cardData.calculateTotalPrice();
             print(e.toString());
       }
     }
-    print("Why this kolaveri di");
     return true;
     }
 }

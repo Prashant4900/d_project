@@ -15,18 +15,21 @@ import 'package:d_project/utils/listOfItem.dart';
 import 'package:flutter/services.dart';
 
 class SearchScreen extends StatefulWidget {
-
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
-
 
 class _SearchScreenState extends State<SearchScreen> {
   FocusNode focusNode = FocusNode();
   TextEditingController searchController;
   String searchValue = "search value";
 
-  Category viewAll = Category(color: Colors.orange,icon : 'assests/icon/item.svg',name : "View all",searchToken: "", subCategories: null);
+  Category viewAll = Category(
+      color: Colors.orange,
+      icon: 'assests/icon/item.svg',
+      name: "View all",
+      searchToken: "",
+      subCategories: null);
 
   @override
   void initState() {
@@ -35,7 +38,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void didChangeDependencies() {
-    if(searchValue == "search value"){
+    if (searchValue == "search value") {
       FocusScope.of(context).requestFocus(focusNode);
     }
     super.didChangeDependencies();
@@ -82,9 +85,13 @@ class _SearchScreenState extends State<SearchScreen> {
                         width: screenWidth(context, dividedBy: 9),
                         height: screenWidth(context, dividedBy: 9),
                         child: CachedNetworkImage(
-                          imageUrl: suggestion.imagePath == null ? "http://via.placeholder.com/350x150"  : suggestion.imagePath,
-                          placeholder: (context, url) => CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => Icon(Icons.terrain),
+                          imageUrl: suggestion.imagePath == null
+                              ? "http://via.placeholder.com/350x150"
+                              : suggestion.imagePath,
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.terrain),
                         ),
                       ),
                     ),
@@ -95,16 +102,16 @@ class _SearchScreenState extends State<SearchScreen> {
                 itemFilter: (suggestion, input) => suggestion.name
                     .toLowerCase()
                     .startsWith(input.toLowerCase()),
-                itemSubmitted: (item){
+                itemSubmitted: (item) {
                   setState(() => searchValue = item.name);
                 },
                 textChanged: (text) {
                   searchValue = text;
                 },
-                textSubmitted: (text){
+                textSubmitted: (text) {
                   list = getSearchResult(text, context);
                   SystemChannels.textInput.invokeMethod('TextInput.hide');
-                  },
+                },
                 clearOnSubmit: true,
                 suggestions: originalList,
               ),
@@ -119,9 +126,7 @@ class _SearchScreenState extends State<SearchScreen> {
           child: FutureBuilder<Widget>(
             future: list,
             builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                return Center(child: CircularProgressIndicator());
-              }
+              if (snapshot.connectionState != ConnectionState.done) {}
               return snapshot.data;
             },
           ),
@@ -137,40 +142,65 @@ class _SearchScreenState extends State<SearchScreen> {
         .where((l) => l.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
     if (short.length == 0) {
-      if(searchValue == "search value"){
-        return Center(child: Column(
+      if (searchValue == "search value") {
+        return Center(
+            child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SvgPicture.asset("assests/searchSomething.svg", color:  Colors.deepOrange,height: screenWidth(context, dividedBy: 5),width: screenWidth(context, dividedBy: 5),),
-            Divider(color: Colors.white,),
-            Text("Search Something", style: TextStyle(color: Colors.deepOrange),),
-            Divider(height: 10.0,color: Colors.white),
+            SvgPicture.asset(
+              "assests/searchSomething.svg",
+              color: Colors.deepOrange,
+              height: screenWidth(context, dividedBy: 5),
+              width: screenWidth(context, dividedBy: 5),
+            ),
+            Divider(
+              color: Colors.white,
+            ),
+            Text(
+              "Search Something",
+              style: TextStyle(color: Colors.deepOrange),
+            ),
+            Divider(height: 10.0, color: Colors.white),
             RaisedButton(
               color: Colors.deepOrange,
-              onPressed: (){
-              Navigator.push(
-              context,
-              MaterialPageRoute(
-              builder: (context) => CategoriesPage(category: viewAll),
-              ),
-              );
-            },
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CategoriesPage(category: viewAll),
+                  ),
+                );
+              },
               child: Container(
-                  child: Text("View All Items", style: TextStyle(color: Colors.white),)),
+                  child: Text(
+                "View All Items",
+                style: TextStyle(color: Colors.white),
+              )),
             )
           ],
         ));
       }
-      return Center(child: Column(
+      return Center(
+          child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SvgPicture.asset("assests/searchError.svg", color:  Colors.deepOrange,height: screenWidth(context, dividedBy: 5),width: screenWidth(context, dividedBy: 5),),
-          Divider(color: Colors.white,),
-          Text("No Products Found", style: TextStyle(color: Colors.deepOrange),),
-          Divider(height: 10.0,color: Colors.white),
+          SvgPicture.asset(
+            "assests/searchError.svg",
+            color: Colors.deepOrange,
+            height: screenWidth(context, dividedBy: 5),
+            width: screenWidth(context, dividedBy: 5),
+          ),
+          Divider(
+            color: Colors.white,
+          ),
+          Text(
+            "No Products Found",
+            style: TextStyle(color: Colors.deepOrange),
+          ),
+          Divider(height: 10.0, color: Colors.white),
           RaisedButton(
             color: Colors.deepOrange,
-            onPressed: (){
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -179,7 +209,10 @@ class _SearchScreenState extends State<SearchScreen> {
               );
             },
             child: Container(
-                child: Text("View All Items", style: TextStyle(color: Colors.white),)),
+                child: Text(
+              "View All Items",
+              style: TextStyle(color: Colors.white),
+            )),
           )
         ],
       ));
@@ -194,5 +227,4 @@ class _SearchScreenState extends State<SearchScreen> {
           );
         });
   }
-
 }

@@ -10,8 +10,11 @@ import 'package:d_project/networkUtils/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PinEntryScreen extends StatefulWidget {
-  PinEntryScreen({this.phoneNumber});
-  @required String phoneNumber;
+  PinEntryScreen({this.phoneNumber, this.userName});
+  @required
+  String phoneNumber;
+  @required
+  String userName;
   @override
   _PinEntryScreenState createState() => _PinEntryScreenState();
 }
@@ -21,12 +24,12 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
   final InvalidsnackBar = SnackBar(content: Text('OTP Invalid'));
   final ProperlysnackBar = SnackBar(content: Text('Invalid OTP Format'));
 
-
   final TextEditingController _pinPutController = TextEditingController();
 
   final FocusNode _pinPutFocusNode = FocusNode();
 
-  String errorMessage = "Please type the verification code sent to your Mobile Number";
+  String errorMessage =
+      "Please type the verification code sent to your Mobile Number";
   Color boxBorder = Colors.white;
   Color errorText = Colors.black;
   Color btnColor = Colors.blueAccent;
@@ -58,16 +61,26 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                     ),
                     Column(
                       children: <Widget>[
-                        Text("Verification Code", style : TextStyle(fontSize: 30.0, fontWeight: FontWeight.w300)),
-                        Text(errorMessage, style: TextStyle(color: errorText),),
+                        Text("Verification Code",
+                            style: TextStyle(
+                                fontSize: 30.0, fontWeight: FontWeight.w300)),
+                        Text(
+                          errorMessage,
+                          style: TextStyle(color: errorText),
+                        ),
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left:  screenWidth(context, dividedBy: 5), right: screenWidth(context, dividedBy: 5), top: 10.0),
+                      padding: EdgeInsets.only(
+                          left: screenWidth(context, dividedBy: 5),
+                          right: screenWidth(context, dividedBy: 5),
+                          top: 10.0),
                       child: Column(
                         children: <Widget>[
                           onlySelectedBorderPinPut(),
-                          SizedBox(height: 20.0,),
+                          SizedBox(
+                            height: 20.0,
+                          ),
                           Container(
                             padding: EdgeInsets.all(20.0),
                             width: double.infinity,
@@ -75,35 +88,50 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                               padding: EdgeInsets.all(15.0),
                               elevation: 2.0,
                               fillColor: Colors.deepOrange,
-                              onPressed: () async{
+                              onPressed: () async {
                                 final progress = ProgressHUD.of(context);
                                 progress.showWithText("Verifying OTP");
-                                if(entered){
+                                if (entered) {
                                   //condition for checking otp
-                                  var result = await LoginHelper.verifyOtp(userOTP.toString(), widget.phoneNumber);
-                                  if(result != null){
-                                    print("Auth sucess");
-                                    sharedPreferences = await SharedPreferences.getInstance();
-                                    await sharedPreferences.setString("token", result.toString());
-                                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => MainScreen()), (Route<dynamic> route) => false);
+                                  var result = await LoginHelper.verifyOtp(
+                                      userOTP.toString(),
+                                      widget.phoneNumber,
+                                      widget.userName);
+                                  if (result != null) {
+                                    sharedPreferences =
+                                        await SharedPreferences.getInstance();
+                                    await sharedPreferences.setString(
+                                        "token", result.toString());
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                MainScreen()),
+                                        (Route<dynamic> route) => false);
+                                  } else {
+                                    Scaffold.of(context)
+                                        .showSnackBar(InvalidsnackBar);
                                   }
-                                  else{
-                                    Scaffold.of(context).showSnackBar(InvalidsnackBar);
-                                  }
-                                }
-                                else{
-                                  Scaffold.of(context).showSnackBar(ProperlysnackBar);
+                                } else {
+                                  Scaffold.of(context)
+                                      .showSnackBar(ProperlysnackBar);
                                 }
                                 progress.dismiss();
                               },
                               shape: CircleBorder(),
-                              child: Icon(Icons.arrow_forward, color: Colors.white,semanticLabel: "Submit", size: 30.0,),
+                              child: Icon(
+                                Icons.arrow_forward,
+                                color: Colors.white,
+                                semanticLabel: "Submit",
+                                size: 30.0,
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 40.0,),
+                    SizedBox(
+                      height: 40.0,
+                    ),
                     Column(
                       children: <Widget>[
                         Container(
@@ -111,26 +139,25 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                           width: double.infinity,
                           child: RaisedButton(
                             color: Colors.deepOrange,
-                            onPressed: () async{
+                            onPressed: () async {
                               final progress = ProgressHUD.of(context);
                               progress.showWithText("Sending OTP");
                               String result;
-                              try{
-                                result = await LoginHelper.sendOTP(widget.phoneNumber);
-                              }
-                              catch(e){
+                              try {
+                                result = await LoginHelper.sendOTP(
+                                    widget.phoneNumber);
+                              } catch (e) {
                                 print(e);
-                              }
-                              finally{
+                              } finally {
                                 progress.dismiss();
-                                if(result != null){
-                                  Scaffold.of(context).showSnackBar(ResendsnackBar);
+                                if (result != null) {
+                                  Scaffold.of(context)
+                                      .showSnackBar(ResendsnackBar);
                                 }
                               }
-
                             },
-
-                            child: Text("Resend OTP", style: TextStyle(color: Colors.white)),
+                            child: Text("Resend OTP",
+                                style: TextStyle(color: Colors.white)),
                           ),
                         ),
                         Container(
@@ -139,11 +166,14 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                           child: RaisedButton(
                             color: Colors.deepOrange,
                             onPressed: () {
-                              Navigator.pushReplacement(context, MaterialPageRoute(
-                                builder: (context) => PhoneSignInScreen(),
-                              ));
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PhoneSignInScreen(),
+                                  ));
                             },
-                            child: Text("Change Mobile Number", style: TextStyle(color: Colors.white)),
+                            child: Text("Change Mobile Number",
+                                style: TextStyle(color: Colors.white)),
                           ),
                         )
                       ],
@@ -158,19 +188,14 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
     );
   }
 
-
-
-
-
   Widget onlySelectedBorderPinPut() {
     BoxDecoration pinPutDecoration = BoxDecoration(
-      color: Color.fromRGBO(235, 236, 237, 1),
-      borderRadius: BorderRadius.circular(15),
+        color: Color.fromRGBO(235, 236, 237, 1),
+        borderRadius: BorderRadius.circular(15),
         border: Border.all(
           width: 1,
           color: boxBorder,
-        )
-    );
+        ));
 
     return PinPut(
       fieldsCount: 4,
