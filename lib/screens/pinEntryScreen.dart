@@ -10,11 +10,9 @@ import 'package:d_project/networkUtils/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PinEntryScreen extends StatefulWidget {
-  PinEntryScreen({this.phoneNumber, this.userName});
+  PinEntryScreen({this.phoneNumber});
   @required
   String phoneNumber;
-  @required
-  String userName;
   @override
   _PinEntryScreenState createState() => _PinEntryScreenState();
 }
@@ -94,9 +92,7 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                                 if (entered) {
                                   //condition for checking otp
                                   var result = await LoginHelper.verifyOtp(
-                                      userOTP.toString(),
-                                      widget.phoneNumber,
-                                      widget.userName);
+                                      userOTP.toString(), widget.phoneNumber);
                                   if (result != null) {
                                     sharedPreferences =
                                         await SharedPreferences.getInstance();

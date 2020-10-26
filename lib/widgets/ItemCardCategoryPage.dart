@@ -50,7 +50,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
   bool toggle = true;
   bool loading = false;
   void _toggle() {
-    print("toggle called");
+    //print("toggle called");
     setState(() {
       toggle = !toggle;
       loading = !loading;
@@ -370,17 +370,17 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                 // ),
                 //if (item.discount.toString() < -100)
                 Container(
-                  height: 45,
-                  width: 45,
-                  //margin: EdgeInsets.only(top: 10, left: 10),
+                  height: 40,
+                  width: 40,
+                  margin: EdgeInsets.only(bottom: 15, right: 15),
                   child: ClipPath(
                     clipper: StarClipper(14),
                     child: Container(
                       color: Colors.red[500],
                       child: Center(
                         child: Text(
-                          item.discount.toString(),
-                          style: TextStyle(fontSize: 17),
+                          ' ${item.discount.toString()}%',
+                          style: TextStyle(fontSize: 15),
                         ),
                       ),
                     ),
@@ -413,6 +413,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
             widget.item.ourPrice = item.ouuPrice;
             widget.item.upcCode = item.upcCode;
             widget.item.unit = item.unit;
+            widget.item.discount = item.discount;
             this._value = item;
           });
         },

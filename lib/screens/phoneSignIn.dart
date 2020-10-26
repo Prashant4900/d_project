@@ -18,12 +18,9 @@ class PhoneSignInScreen extends StatefulWidget {
 class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
   final NumbersnackBar =
       SnackBar(content: Text('Please Enter a Valid Mobile Number'));
-  final UsernamesnackBar =
-      SnackBar(content: Text('Please Enter a Valid User Name'));
   loginHelper LoginHelper = loginHelper();
   String btnText = "Request OTP";
   String phoneNumber = "";
-  String userName = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,14 +45,6 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                         ListTile(
                           title: TextField(
                             decoration: InputDecoration(
-                                labelText: "Enter User Name",
-                                icon: Icon(Icons.person)),
-                            onChanged: (value) => userName = value,
-                          ),
-                        ),
-                        ListTile(
-                          title: TextField(
-                            decoration: InputDecoration(
                                 prefix: Text("+91"),
                                 labelText: "Enter Phone Number",
                                 icon: Icon(Icons.phone)),
@@ -70,44 +59,34 @@ class _PhoneSignInScreenState extends State<PhoneSignInScreen> {
                           child: RaisedButton(
                             onPressed: () async {
                               Pattern numberPattern = r'^(?:[+0]9)?[0-9]{10}$';
-                              Pattern usernamePattern =
-                                  r'^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$';
                               RegExp numberRegex = RegExp(numberPattern);
-                              RegExp usernameRegex = RegExp(usernamePattern);
-                              if (usernameRegex.hasMatch(userName)) {
-                                if (numberRegex.hasMatch(phoneNumber)) {
-                                  final progress = ProgressHUD.of(context);
-                                  progress.showWithText("Sending OTP");
-                                  String result;
-                                  try {
-                                    result =
-                                        await LoginHelper.sendOTP(phoneNumber);
-                                  } catch (e) {
-                                    print(e);
-                                  } finally {
-                                    progress.dismiss();
-                                    if (result != null) {
-                                      var jsonFile =
-                                          json.decode(result.toString());
-                                      var code = jsonFile["otp"];
-                                      print("Code" + code.toString());
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                PinEntryScreen(
-                                                    phoneNumber: phoneNumber,
-                                                    userName: userName),
-                                          ));
-                                    }
+                              if (numberRegex.hasMatch(phoneNumber)) {
+                                final progress = ProgressHUD.of(context);
+                                progress.showWithText("Sending OTP");
+                                String result;
+                                try {
+                                  result =
+                                      await LoginHelper.sendOTP(phoneNumber);
+                                } catch (e) {
+                                  print(e);
+                                } finally {
+                                  progress.dismiss();
+                                  if (result != null) {
+                                    var jsonFile =
+                                        json.decode(result.toString());
+                                    var code = jsonFile["otp"];
+                                    print("Code" + code.toString());
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => PinEntryScreen(
+                                              phoneNumber: phoneNumber),
+                                        ));
                                   }
-                                } else {
-                                  Scaffold.of(context)
-                                      .showSnackBar(NumbersnackBar);
                                 }
                               } else {
                                 Scaffold.of(context)
-                                    .showSnackBar(UsernamesnackBar);
+                                    .showSnackBar(NumbersnackBar);
                               }
                             },
                             child: Text(
