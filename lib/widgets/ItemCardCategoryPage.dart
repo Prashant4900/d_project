@@ -77,7 +77,7 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
     var bloc = Provider.of<CardData>(context);
     Item item = widget.item;
     int count =
-        bloc.cartItems[item.upcCode] == null ? 0 : bloc.cartItems[item.upcCode];
+    bloc.cartItems[item.upcCode] == null ? 0 : bloc.cartItems[item.upcCode];
     int count2 = count;
 
     if (item.discount <= 0) {
@@ -146,72 +146,72 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                 ),
                                 child: Builder(
                                     builder: (contextt) => Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            count > 0
-                                                ? InkWell(
-                                                    onTap: () async {
-                                                      if (!loading) {
-                                                        _toggle();
-                                                        Future<void> future = bloc
-                                                            .reduceToCartFutSubCat(
-                                                                item.upcCode);
-                                                        future.then((value) => {
-                                                              Timer(
-                                                                  Duration(
-                                                                      milliseconds:
-                                                                          1000),
-                                                                  () {
-                                                                // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
-                                                                _toggle();
-                                                              })
-                                                            });
-                                                      }
-                                                    },
-                                                    child: Icon(
-                                                      Icons.remove,
-                                                      size: 30.0,
-                                                    ),
-                                                  )
-                                                : SizedBox(),
-                                            //
-                                            _getToggleChild(
-                                                bloc.cartItems[
-                                                        widget.item.upcCode] ==
-                                                    null,
-                                                count2),
-                                            InkWell(
-                                              onTap: () async {
-                                                // final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
-                                                // pr.style(
-                                                //   message: 'Updating Quantity',
-                                                //   borderRadius: 10.0,
-                                                //   backgroundColor: Colors.white,
-                                                //   );
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        count > 0
+                                            ? InkWell(
+                                          onTap: () async {
+                                            if (!loading) {
+                                              _toggle();
+                                              Future<void> future = bloc
+                                                  .reduceToCartFutSubCat(
+                                                  item.upcCode);
+                                              future.then((value) => {
+                                                Timer(
+                                                    Duration(
+                                                        milliseconds:
+                                                        1000),
+                                                        () {
+                                                      // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
+                                                      _toggle();
+                                                    })
+                                              });
+                                            }
+                                          },
+                                          child: Icon(
+                                            Icons.remove,
+                                            size: 30.0,
+                                          ),
+                                        )
+                                            : SizedBox(),
+                                        //
+                                        _getToggleChild(
+                                            bloc.cartItems[
+                                            widget.item.upcCode] ==
+                                                null,
+                                            count2),
+                                        InkWell(
+                                          onTap: () async {
+                                            // final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+                                            // pr.style(
+                                            //   message: 'Updating Quantity',
+                                            //   borderRadius: 10.0,
+                                            //   backgroundColor: Colors.white,
+                                            //   );
 
-                                                if (!loading) {
+                                            if (!loading) {
+                                              _toggle();
+                                              Future<void> future =
+                                              bloc.addToCartFutSubCat(
+                                                  item.upcCode);
+
+                                              future.then((value) => {
+                                                Timer(
+                                                    Duration(
+                                                        milliseconds:
+                                                        1000), () {
                                                   _toggle();
-                                                  Future<void> future =
-                                                      bloc.addToCartFutSubCat(
-                                                          item.upcCode);
-
-                                                  future.then((value) => {
-                                                        Timer(
-                                                            Duration(
-                                                                milliseconds:
-                                                                    1000), () {
-                                                          _toggle();
-                                                        })
-                                                      });
-                                                }
-                                              },
-                                              child:
-                                                  Icon(Icons.add, size: 30.0),
-                                            ),
-                                          ],
-                                        )),
+                                                })
+                                              });
+                                            }
+                                          },
+                                          child:
+                                          Icon(Icons.add, size: 30.0),
+                                        ),
+                                      ],
+                                    )),
                               ),
                             ],
                           )
@@ -289,72 +289,72 @@ class _itemCardCategoryPageState extends State<itemCardCategoryPage> {
                                 ),
                                 child: Builder(
                                     builder: (contextt) => Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            count > 0
-                                                ? InkWell(
-                                                    onTap: () async {
-                                                      if (!loading) {
-                                                        _toggle();
-                                                        Future<void> future = bloc
-                                                            .reduceToCartFutSubCat(
-                                                                item.upcCode);
-                                                        future.then((value) => {
-                                                              Timer(
-                                                                  Duration(
-                                                                      milliseconds:
-                                                                          1000),
-                                                                  () {
-                                                                // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
-                                                                _toggle();
-                                                              })
-                                                            });
-                                                      }
-                                                    },
-                                                    child: Icon(
-                                                      Icons.remove,
-                                                      size: 30.0,
-                                                    ),
-                                                  )
-                                                : SizedBox(),
-                                            //
-                                            _getToggleChild(
-                                                bloc.cartItems[
-                                                        widget.item.upcCode] ==
-                                                    null,
-                                                count2),
-                                            InkWell(
-                                              onTap: () async {
-                                                // final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
-                                                // pr.style(
-                                                //   message: 'Updating Quantity',
-                                                //   borderRadius: 10.0,
-                                                //   backgroundColor: Colors.white,
-                                                //   );
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        count > 0
+                                            ? InkWell(
+                                          onTap: () async {
+                                            if (!loading) {
+                                              _toggle();
+                                              Future<void> future = bloc
+                                                  .reduceToCartFutSubCat(
+                                                  item.upcCode);
+                                              future.then((value) => {
+                                                Timer(
+                                                    Duration(
+                                                        milliseconds:
+                                                        1000),
+                                                        () {
+                                                      // Navigator.of(contextt,rootNavigator: true).pop();//close the dialoge
+                                                      _toggle();
+                                                    })
+                                              });
+                                            }
+                                          },
+                                          child: Icon(
+                                            Icons.remove,
+                                            size: 30.0,
+                                          ),
+                                        )
+                                            : SizedBox(),
+                                        //
+                                        _getToggleChild(
+                                            bloc.cartItems[
+                                            widget.item.upcCode] ==
+                                                null,
+                                            count2),
+                                        InkWell(
+                                          onTap: () async {
+                                            // final ProgressDialog pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+                                            // pr.style(
+                                            //   message: 'Updating Quantity',
+                                            //   borderRadius: 10.0,
+                                            //   backgroundColor: Colors.white,
+                                            //   );
 
-                                                if (!loading) {
+                                            if (!loading) {
+                                              _toggle();
+                                              Future<void> future =
+                                              bloc.addToCartFutSubCat(
+                                                  item.upcCode);
+
+                                              future.then((value) => {
+                                                Timer(
+                                                    Duration(
+                                                        milliseconds:
+                                                        1000), () {
                                                   _toggle();
-                                                  Future<void> future =
-                                                      bloc.addToCartFutSubCat(
-                                                          item.upcCode);
-
-                                                  future.then((value) => {
-                                                        Timer(
-                                                            Duration(
-                                                                milliseconds:
-                                                                    1000), () {
-                                                          _toggle();
-                                                        })
-                                                      });
-                                                }
-                                              },
-                                              child:
-                                                  Icon(Icons.add, size: 30.0),
-                                            ),
-                                          ],
-                                        )),
+                                                })
+                                              });
+                                            }
+                                          },
+                                          child:
+                                          Icon(Icons.add, size: 30.0),
+                                        ),
+                                      ],
+                                    )),
                               ),
                             ],
                           )
