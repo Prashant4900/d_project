@@ -57,8 +57,11 @@ class Item {
         subCategories = true;
         subItemsList =
             rest.map<subItem>((json) => subItem.fromJson(json)).toList();
-        subItem original =
-            subItem(upcCode: upcCode, ouuPrice: ourPrice, unit: unit);
+        subItem original = subItem(
+            upcCode: upcCode,
+            ouuPrice: ourPrice,
+            unit: unit,
+            discount: discount);
         subItemsList.add(original);
       }
     } else {
@@ -124,8 +127,15 @@ class subItem {
   double ouuPrice;
   String upcCode;
   String unit;
+  int discount;
 
-  subItem({this.name, this.brandName, this.ouuPrice, this.upcCode, this.unit});
+  subItem(
+      {this.name,
+      this.brandName,
+      this.ouuPrice,
+      this.upcCode,
+      this.unit,
+      this.discount});
 
   factory subItem.fromJson(Map<String, dynamic> json) {
     return subItem(
@@ -133,6 +143,7 @@ class subItem {
         ouuPrice: json["price_per_unit"],
         brandName: json["brand_name"],
         upcCode: json["item_upc"],
-        unit: json["unit"]);
+        unit: json["unit"],
+        discount: json["discount"]);
   }
 }

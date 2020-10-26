@@ -18,12 +18,11 @@ class loginHelper {
     }
   }
 
-  Future<int> verifyOtp(String otp, String number, String username) async {
-    var url = 'https://purchx.store/api/verify_otp_testing';
+  Future<int> verifyOtp(String otp, String number) async {
+    var url = 'https://purchx.store/api/verify_otp';
     var response = await http.post(url, body: {
       "phone_no": number,
       "otp": otp,
-      "username": username,
     });
     var jsonFile = json.decode(response.body.toString());
     var code = jsonFile["message"];

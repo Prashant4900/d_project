@@ -360,7 +360,7 @@ class _CartItemViewState extends State<CartItemView> {
                       color: Colors.red[500],
                       child: Center(
                         child: Text(
-                          item.discount.toString(),
+                          ' ${widget.item.discount.toString()}%',
                           style: TextStyle(fontSize: 17),
                         ),
                       ),
